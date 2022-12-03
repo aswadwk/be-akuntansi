@@ -21,6 +21,7 @@ return new class extends Migration
         Schema::create('journals', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->char('code');
+            $table->timestamp('date');
             $table->decimal('amount', 15, 2);
             $table->enum('type', ['D', 'C'])->default('D');
             $table->text('description')->nullable();
