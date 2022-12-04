@@ -6,11 +6,15 @@ use Illuminate\Support\Str;
 
 trait Uuid
 {
-    protected static function bootUsesUuid()
+    protected static function boot()
     {
+        parent::boot();
+
         static::creating(function ($model) {
-            if (! $model->getKey()) {
-                $model->{$model->getKeyName()} = (string) Str::orderedUuid();
+            try {
+                $model->id = (string) Str::orderedUuid(); // generate uuid
+            } catch (\Exception $e) {
+                abort(500, $e->getMessage());
             }
         });
     }
