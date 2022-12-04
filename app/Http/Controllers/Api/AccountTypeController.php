@@ -34,4 +34,20 @@ class AccountTypeController extends Controller
             'Berhasil'
         );
     }
+
+    public function update(AccountTypeRequest $request, $id){
+
+        return  ResponseFormatter::success(
+            $this->service->update($id, $request->validated()),
+            'Berhasil. Data di Update'
+        );
+    }
+
+    public function delete($id){
+
+        return  ResponseFormatter::success(
+            $this->service->delete($id),
+            'Berhasil. Data di delete'
+        );
+    }
 }

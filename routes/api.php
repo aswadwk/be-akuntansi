@@ -34,6 +34,8 @@ Route::prefix('v1')->middleware('auth:api', 'user.id')->group( function (){
     Route::controller(AccountTypeController::class)->group(function (){
         Route::get('account-types/{id?}', 'index')->name('account-type.index');
         Route::post('account-types', 'store')->name('account-type.store');
+        Route::patch('account-types/{id}', 'update')->name('account-type.update');
+        Route::delete('account-types/{id}', 'delete')->name('account-type.delete');
     });
 
     Route::controller(AccountController::class)->group(function (){

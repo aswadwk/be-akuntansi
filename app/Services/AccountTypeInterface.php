@@ -8,6 +8,10 @@ interface AccountTypeInterface {
 
     public function store($attr);
 
+    public function update($id, $attr);
+
+    public function delete($id);
+
 }
 
 
