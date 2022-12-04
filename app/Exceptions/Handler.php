@@ -57,7 +57,7 @@ class Handler extends ExceptionHandler
                 return ResponseFormatter::error($e->getMessage(), $e->validator->getMessageBag()->getMessages(), 400);
             }
 
-            return ResponseFormatter::error(null, 'Maaf, kesalahan pada server.', 500);
+            // return ResponseFormatter::error(null, 'Maaf, kesalahan pada server.', 500);
         });
 
     }

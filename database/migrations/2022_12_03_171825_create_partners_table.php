@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('name');
             $table->enum('account_type', ['HUTANG', 'PITANG'])->default('HUTANG');
             $table->enum('type', ['D', 'C'])->default('D');
-            $table->text('description');
+            $table->text('description')->nullable();
 
             $table->uuid('user_id');
             $table->foreign('user_id')

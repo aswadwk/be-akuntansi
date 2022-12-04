@@ -19,7 +19,7 @@ return new class extends Migration
             $table->char('code');
             $table->string('name');
             $table->enum('position_normal', ['D', 'C'])->default('D');
-            $table->text('description');
+            $table->text('description')->nullable();
 
             $table->uuid('user_id');
             $table->foreign('user_id')

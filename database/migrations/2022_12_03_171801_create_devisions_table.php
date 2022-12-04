@@ -18,7 +18,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->char('code');
             $table->string('name');
-            $table->text('description');
+            $table->text('description')->nullable();
 
             $table->uuid('user_id');
             $table->foreign('user_id')

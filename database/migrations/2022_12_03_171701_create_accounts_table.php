@@ -19,7 +19,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->char('code');
             $table->string('name');
-            $table->text('description');
+            $table->text('description')->nullable();
 
             $table->uuid('account_type_id');
             $table->foreign('account_type_id')
