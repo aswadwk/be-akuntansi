@@ -2,7 +2,10 @@
 
 namespace App\Exceptions;
 
+use App\Helpers\ResponseFormatter;
+use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Validation\ValidationException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -46,5 +49,16 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+
+        $this->renderable(function (Exception $e) {
+
+            // validate Error
+            if ($e instanceof ValidationException) {
+                return ResponseFormatter::error($e->getMessage(), $e->validator->getMessageBag()->getMessages(), 400);
+            }
+
+            return ResponseFormatter::error(null, 'Maaf, kesalahan pada server.', 500);
+        });
+
     }
 }
