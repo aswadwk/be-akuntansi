@@ -11,4 +11,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Account extends Model
 {
     use HasFactory, Uuid, SoftDeletes, Timestamp;
+
+    public $guarded = [];
 }

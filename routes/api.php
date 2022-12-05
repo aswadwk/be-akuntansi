@@ -40,6 +40,9 @@ Route::prefix('v1')->middleware('auth:api', 'user.id')->group( function (){
 
     Route::controller(AccountController::class)->group(function (){
         Route::get('accounts/{id?}', 'index')->name('account.index');
+        Route::post('accounts', 'store')->name('account.store');
+        Route::patch('accounts/{id}', 'update')->name('account.update');
+        Route::delete('accounts/{id}', 'delete')->name('account.delete');
     });
 
 });
