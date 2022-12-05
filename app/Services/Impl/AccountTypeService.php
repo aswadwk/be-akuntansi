@@ -41,6 +41,10 @@ class AccountTypeService implements AccountTypeInterface{
     {
         $accountType = AccountType::find($id);
 
+        if($this->codeIsExists($attr['code'], $id))
+
+            throw ValidationException::withMessages(['code' => 'Kode tidak tersedia']);
+
         if($accountType){
             $accountType->update($attr);
 
@@ -63,8 +67,15 @@ class AccountTypeService implements AccountTypeInterface{
         return false;
     }
 
-    public function codeIsExists($code):bool{
-        return AccountType::where('code', $code)->exists();
+    public function codeIsExists($code, $id=null):bool{
+
+        $account = AccountType::query();
+        if($id){
+            $account->where('id','!=', $id);
+        }
+
+        return $account->where('code', $code)
+            ->exists();
     }
 }
 
