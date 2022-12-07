@@ -3,7 +3,6 @@
 namespace App\Services\Impl;
 
 use App\Models\Account;
-use App\Models\AccountType;
 use App\Services\AccountService as AccountServiceInterface;
 use Illuminate\Validation\ValidationException;
 

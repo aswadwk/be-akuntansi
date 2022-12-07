@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AccountController;
 use App\Http\Controllers\Api\AccountTypeController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\PartnerController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -43,6 +44,14 @@ Route::prefix('v1')->middleware('auth:api', 'user.id')->group( function (){
         Route::post('accounts', 'store')->name('account.store');
         Route::patch('accounts/{id}', 'update')->name('account.update');
         Route::delete('accounts/{id}', 'delete')->name('account.delete');
+    });
+
+    Route::controller(PartnerController::class)->group(function (){
+        Route::get('partners', 'index')->name('partner.index');
+        Route::get('partners/{id}', 'show')->name('partner.show');
+        Route::post('partners', 'store')->name('partner.store');
+        Route::patch('partners/{id}', 'update')->name('partner.update');
+        Route::delete('partners/{id}', 'delete')->name('partner.delete');
     });
 
 });
