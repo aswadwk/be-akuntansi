@@ -1,0 +1,26 @@
+{
+    "preset": "psr12",
+    "rules": {
+        "array_indentation": true,
+        "array_syntax": {
+            "syntax": "short"
+        },
+        "binary_operator_spaces":{
+            "operators": {
+                "=>": "align_single_space_minimal"
+            }
+        },
+        "blank_line_before_statement": {
+            "statements": [
+                "break",
+                "continue",
+                "declare",
+                "return",
+                "throw",
+                "try"
+            ]
+        },
+        "linebreak_after_opening_tag": false,
+        "no_unused_imports": true
+    }
+}
