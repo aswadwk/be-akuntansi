@@ -8,7 +8,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Devision extends Model
+class Division extends Model
 {
     use HasFactory, Uuid, SoftDeletes, Timestamp;
+
+    public $guarded = [];
 }

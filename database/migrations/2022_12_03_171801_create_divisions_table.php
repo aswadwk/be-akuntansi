@@ -14,7 +14,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('devisions', function (Blueprint $table) {
+        Schema::create('divisions', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->char('code');
             $table->string('name');
@@ -38,6 +38,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('devisions');
+        Schema::dropIfExists('divisions');
     }
 };
