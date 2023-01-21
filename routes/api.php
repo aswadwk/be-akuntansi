@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AccountController;
 use App\Http\Controllers\Api\AccountTypeController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\DivisionController;
 use App\Http\Controllers\Api\PartnerController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -22,7 +23,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::prefix('v1')->middleware('auth:api', 'user.id')->group( function (){
+Route::prefix('v1')->middleware(['auth:api', 'user.id'])->group( function (){
 
     Route::controller(AuthController::class)->group(function (){
         Route::post('register', 'register')->name('auth.register')->withoutMiddleware('auth:api', 'user.id');
@@ -52,6 +53,14 @@ Route::prefix('v1')->middleware('auth:api', 'user.id')->group( function (){
         Route::post('partners', 'store')->name('partner.store');
         Route::patch('partners/{id}', 'update')->name('partner.update');
         Route::delete('partners/{id}', 'delete')->name('partner.delete');
+    });
+
+    Route::controller(DivisionController::class)->group(function (){
+        Route::get('divisions/{id?}', 'index')->name('division.index');
+        Route::get('divisions/{id}', 'show')->name('division.show');
+        Route::post('divisions', 'store')->name('division.store');
+        Route::patch('divisions/{id}', 'update')->name('division.update');
+        Route::delete('divisions/{id}', 'delete')->name('division.delete');
     });
 
 });

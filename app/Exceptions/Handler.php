@@ -4,6 +4,7 @@ namespace App\Exceptions;
 
 use App\Helpers\ResponseFormatter;
 use Exception;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Validation\ValidationException;
 use Throwable;
@@ -50,15 +51,23 @@ class Handler extends ExceptionHandler
             //
         });
 
-        $this->renderable(function (Exception $e) {
-
+        $this->renderable(function (Exception $e, $request) {
             // validate Error
-            if ($e instanceof ValidationException) {
-                return ResponseFormatter::error($e->getMessage(), $e->validator->getMessageBag()->getMessages(), 400);
+            if(! $request->expectsJson()){
+                if ($e instanceof ValidationException) {
+                    return ResponseFormatter::error($e->getMessage(), $e->validator->getMessageBag()->getMessages(), 400);
+                }
             }
 
             // return ResponseFormatter::error(null, 'Maaf, kesalahan pada server.', 500);
         });
 
+    }
+
+    protected function unauthenticated($request, AuthenticationException $exception)
+    {
+        if ($request->expectsJson()) {
+            return ResponseFormatter::error($exception->getMessage(), $exception->getMessage(), 401);
+        }
     }
 }
