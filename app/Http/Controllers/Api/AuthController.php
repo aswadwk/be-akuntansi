@@ -33,9 +33,6 @@ class AuthController extends Controller
         ]);
 
         $token = $this->service->login($credential);
-        if(! $token){
-            return ResponseFormatter::error('Unauthentication', null, 401);
-        }
 
         return ResponseFormatter::success($token, 'Berhasil Registrasi User', 201);
     }

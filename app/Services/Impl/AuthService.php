@@ -2,6 +2,7 @@
 
 namespace App\Services\Impl;
 
+use App\Exceptions\AuthenticationError;
 use App\Models\User;
 use App\Services\AuthServiceInterface;
 use Illuminate\Support\Facades\Hash;
@@ -26,7 +27,7 @@ class AuthService implements AuthServiceInterface{
         $token = auth('api')->attempt($credential);
 
         if(! $token){
-            return false;
+            throw new AuthenticationError();
         }
 
         return $this->respondWithToken($token);
