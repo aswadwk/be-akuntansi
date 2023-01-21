@@ -2,6 +2,7 @@
 
 namespace App\Services\Impl;
 
+use App\Exceptions\NotFoundError;
 use App\Models\Account;
 use App\Services\AccountService as AccountServiceInterface;
 use Illuminate\Validation\ValidationException;
@@ -51,7 +52,7 @@ class AccountService implements AccountServiceInterface{
             return $account;
         }
 
-        return false;
+        throw new NotFoundError('account tidak di temukan');
     }
 
     public function delete($id)
