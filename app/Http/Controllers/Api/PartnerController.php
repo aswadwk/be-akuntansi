@@ -13,11 +13,12 @@ class PartnerController extends Controller
 
     public function __construct(
         PartnerService $service,
-    ){
+    ) {
         $this->service = $service;
     }
 
-    public function index(){
+    public function index()
+    {
 
         return  ResponseFormatter::success(
             $this->service->get(),
@@ -25,11 +26,12 @@ class PartnerController extends Controller
         );
     }
 
-    public function show($id){
-
+    public function show($id)
+    {
     }
 
-    public function store(PartnerRequest $request){
+    public function store(PartnerRequest $request)
+    {
 
         return  ResponseFormatter::success(
             $this->service->store($request->validated()),
@@ -37,16 +39,20 @@ class PartnerController extends Controller
         );
     }
 
-    public function update(){
-
+    public function update(PartnerRequest $request)
+    {
+        return  ResponseFormatter::success(
+            $this->service->store($request->validated()),
+            'Berhasil'
+        );
     }
 
-    public function delete($id){
+    public function delete($id)
+    {
 
         return  ResponseFormatter::success(
             $this->service->delete($id),
             'Berhasil'
         );
     }
-
 }
