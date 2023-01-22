@@ -13,7 +13,13 @@ class TransactionService implements TransactionServiceInterface
 {
     public function getAllTransactions()
     {
-        $transactions = Transaction::with(['journals'])->get();
+        $transactions = Transaction::with([
+            'journals',
+            'journals.account',
+            'journals.division',
+            'journals.partner',
+            ])
+            ->get();
 
         return $transactions;
     }
@@ -25,9 +31,14 @@ class TransactionService implements TransactionServiceInterface
         return $transaction;
     }
 
-    public function show($id)
+    public function getTransactionById($id)
     {
-        $transaction = Transaction::findOrFail($id);
+        $transaction = Transaction::with([
+            'journals',
+            'journals.account',
+            'journals.division',
+            'journals.partner',
+        ])->find($id);
 
         return $transaction;
     }

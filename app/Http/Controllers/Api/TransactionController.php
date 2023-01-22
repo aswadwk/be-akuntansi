@@ -30,4 +30,12 @@ class TransactionController extends Controller
             'transaction success updated.'
         );
     }
+
+    public function show($transactionId){
+
+        return ResponseFormatter::success(
+            $this->service->getTransactionById($transactionId),
+            'success get transaction by id.'
+        );
+    }
 }

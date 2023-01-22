@@ -10,7 +10,7 @@ interface TransactionServiceInterface {
 
     public function store($attrs);
 
-    public function show($id);
+    public function getTransactionById($id);
 
     public function update($attrs, $id);
 
