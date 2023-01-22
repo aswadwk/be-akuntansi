@@ -53,7 +53,7 @@ class Handler extends ExceptionHandler
 
         $this->renderable(function (Exception $e, $request) {
             // validate Error
-            if(! $request->expectsJson()){
+            if($request->expectsJson()){
                 if ($e instanceof ValidationException) {
                     return ResponseFormatter::error($e->getMessage(), $e->validator->getMessageBag()->getMessages(), 400);
                 }

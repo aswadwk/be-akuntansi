@@ -11,4 +11,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Transaction extends Model
 {
     use HasFactory, Uuid, SoftDeletes, Timestamp;
+
+    protected $fillable = [
+        'code',
+        'user_id',
+    ];
+
+    public function journals(){
+        return $this->hasMany(Journal::class);
+    }
 }
