@@ -13,4 +13,19 @@ class Journal extends Model
     use HasFactory, Uuid, SoftDeletes, Timestamp;
 
     protected $guarded = [];
+
+    public function account()
+    {
+        return $this->belongsTo(Account::class);
+    }
+
+    public function division()
+    {
+        return $this->belongsTo(Division::class);
+    }
+
+    public function partner()
+    {
+        return $this->belongsTo(Partner::class);
+    }
 }

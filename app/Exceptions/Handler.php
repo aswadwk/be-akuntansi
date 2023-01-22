@@ -7,6 +7,7 @@ use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -56,6 +57,11 @@ class Handler extends ExceptionHandler
             if($request->expectsJson()){
                 if ($e instanceof ValidationException) {
                     return ResponseFormatter::error($e->getMessage(), $e->validator->getMessageBag()->getMessages(), 400);
+                }
+
+                if($e instanceof NotFoundHttpException){
+
+                    return ResponseFormatter::error('Maaf, data tidak ditemukan.', $e->getMessage(), 404);
                 }
             }
 
