@@ -11,4 +11,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Journal extends Model
 {
     use HasFactory, Uuid, SoftDeletes, Timestamp;
+
+    protected $guarded = [];
 }

@@ -12,5 +12,5 @@ class Partner extends Model
 {
     use HasFactory, Uuid, SoftDeletes, Timestamp;
 
-    public $guarded;
+    public $guarded = [];
 }
