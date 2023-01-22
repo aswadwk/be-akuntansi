@@ -43,6 +43,9 @@ class JournalRequest extends FormRequest
 
             '*.description' => 'nullable|string',
             // 'user_id' => 'nullable|string',
+
+            // when route /transaction then add journal_id
+            '*.journal_id' => 'nullable|string',
         ];
     }
 }

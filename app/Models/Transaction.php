@@ -16,4 +16,8 @@ class Transaction extends Model
         'code',
         'user_id',
     ];
+
+    public function journals(){
+        return $this->hasMany(Journal::class);
+    }
 }

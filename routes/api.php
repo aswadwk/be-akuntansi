@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\DivisionController;
 use App\Http\Controllers\Api\JournalController;
 use App\Http\Controllers\Api\PartnerController;
+use App\Http\Controllers\Api\TransactionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -65,9 +66,16 @@ Route::prefix('v1')->middleware(['auth:api', 'user.id'])->group( function (){
     });
 
     Route::controller(JournalController::class)->group(function (){
-        Route::get('journals/{id}', 'show')->name('journal.show');
+        Route::get('journals/{id?}', 'show')->name('journal.show');
         Route::post('journals', 'store')->name('journal.store')->withoutMiddleware('user.id');
         Route::patch('journals/{id}', 'update')->name('journal.update');
+    });
+
+    Route::controller(TransactionController::class)->group(function (){
+        Route::get('transactions', 'index')->name('transaction.index');
+        Route::get('transactions/{id}', 'show')->name('transaction.show');
+        Route::post('transactions', 'store')->name('transaction.store')->withoutMiddleware('user.id');
+        Route::patch('transactions/{id}', 'update')->name('transaction.update')->withoutMiddleware('user.id');
     });
 
 });
