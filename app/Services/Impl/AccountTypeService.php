@@ -8,33 +8,33 @@ use Illuminate\Validation\ValidationException;
 
 class AccountTypeService implements AccountTypeInterface{
 
-    public function search($id=null, $attr){
+    public function search($id=null, $attrs){
 
-        $code = $attr['code'] ?? null;
-        $name = $attr['name'] ?? null;
+        $code = $attrs['code'] ?? null;
+        $name = $attrs['name'] ?? null;
 
         if($id){
-            return AccountType::find($id);
+            return AccountType::with('createdBy')->find($id);
         }
 
         if($code){
-            return AccountType::where('code', $code)->first();
+            return AccountType::with('createdBy')->where('code', $code)->first();
         }
 
-        $accountType= AccountType::query();
+        $accountType= AccountType::with('createdBy');
         if($name)
             $accountType->where('name', 'like', '%'.$name.'%');
 
         return $accountType->get();
     }
 
-    public function store($attr)
+    public function store($attrs)
     {
-        if($this->codeIsExists($attr['code']))
+        if($this->codeIsExists($attrs['code']))
 
             throw ValidationException::withMessages(['code' => 'Kode tidak tersedia']);
 
-        return AccountType::create($attr);
+        return AccountType::create($attrs);
     }
 
     public function update($id, $attr)
