@@ -22,10 +22,13 @@ class AccountTypeService implements AccountTypeInterface{
         }
 
         $accountType= AccountType::with('createdBy');
+
         if($name)
             $accountType->where('name', 'like', '%'.$name.'%');
 
-        return $accountType->get();
+        $accountType->orderBy('created_at', 'desc');
+
+        return $accountType->paginate($attrs['per_page'] ?? 10);
     }
 
     public function store($attrs)

@@ -25,7 +25,9 @@ class AccountTypeSearchRequest extends FormRequest
     {
         return [
             'name' => 'nullable|string',
-            'code' => 'nullable|min:3'
+            'code' => 'nullable|min:3',
+            'per_page' => 'nullable|integer',
+            'page' => 'nullable|integer',
         ];
     }
 }

@@ -26,7 +26,9 @@ class AccountService implements AccountServiceInterface{
         if($name)
             $account->where('name', 'like', '%'.$name.'%');
 
-        return $account->get();
+        $account->orderBy('created_at', 'desc');
+
+        return $account->paginate($attrs['per_page'] ?? 10);
     }
 
     public function store($attr)
