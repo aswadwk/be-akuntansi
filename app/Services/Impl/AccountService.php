@@ -7,24 +7,25 @@ use App\Models\Account;
 use App\Services\AccountService as AccountServiceInterface;
 use Illuminate\Validation\ValidationException;
 
-class AccountService implements AccountServiceInterface{
-
-    public function search($id=null, $attr){
-
+class AccountService implements AccountServiceInterface
+{
+    public function search($id = null, $attr)
+    {
         $code = $attr['code'] ?? null;
         $name = $attr['name'] ?? null;
 
-        if($id){
+        if ($id) {
             return Account::find($id);
         }
 
-        if($code){
+        if ($code) {
             return Account::where('code', $code)->first();
         }
 
         $account = Account::query();
-        if($name)
+        if ($name) {
             $account->where('name', 'like', '%'.$name.'%');
+        }
 
         $account->orderBy('created_at', 'desc');
 
@@ -33,9 +34,9 @@ class AccountService implements AccountServiceInterface{
 
     public function store($attr)
     {
-        if($this->codeIsExists($attr['code']))
-
+        if ($this->codeIsExists($attr['code'])) {
             throw ValidationException::withMessages(['code' => 'Kode tidak tersedia']);
+        }
 
         return Account::create($attr);
     }
@@ -44,11 +45,11 @@ class AccountService implements AccountServiceInterface{
     {
         $account = Account::find($id);
 
-        if($this->codeIsExists($attr['code'], $id))
-
+        if ($this->codeIsExists($attr['code'], $id)) {
             throw ValidationException::withMessages(['code' => 'Kode tidak tersedia']);
+        }
 
-        if($account){
+        if ($account) {
             $account->update($attr);
 
             return $account;
@@ -61,7 +62,7 @@ class AccountService implements AccountServiceInterface{
     {
         $account = Account::find($id);
 
-        if($account){
+        if ($account) {
             $account->delete();
 
             return $account;
@@ -70,11 +71,11 @@ class AccountService implements AccountServiceInterface{
         return false;
     }
 
-    public function codeIsExists($code, $id=null):bool{
-
+    public function codeIsExists($code, $id = null): bool
+    {
         $account = Account::query();
-        if($id){
-            $account->where('id','!=', $id);
+        if ($id) {
+            $account->where('id', '!=', $id);
         }
 
         return $account->where('code', $code)
@@ -83,4 +84,4 @@ class AccountService implements AccountServiceInterface{
 }
 
 
-;?>
+;

@@ -7,10 +7,10 @@ use App\Models\Partner;
 use App\Services\PartnerService as PartnerServiceInterface;
 use Illuminate\Validation\ValidationException;
 
-class PartnerService implements PartnerServiceInterface {
-
-    public function get(){
-
+class PartnerService implements PartnerServiceInterface
+{
+    public function get()
+    {
         return Partner::all();
     }
 
@@ -21,9 +21,9 @@ class PartnerService implements PartnerServiceInterface {
 
     public function store($attr)
     {
-        if($this->codeIsExists($attr['code']))
-
+        if ($this->codeIsExists($attr['code'])) {
             throw ValidationException::withMessages(['code' => 'Kode tidak tersedia']);
+        }
 
         return Partner::create($attr);
     }
@@ -32,11 +32,11 @@ class PartnerService implements PartnerServiceInterface {
     {
         $partner = Partner::find($id);
 
-        if($this->codeIsExists($attrs['code'], $id))
-
+        if ($this->codeIsExists($attrs['code'], $id)) {
             throw ValidationException::withMessages(['code' => 'Kode tidak tersedia']);
+        }
 
-        if($partner){
+        if ($partner) {
             $partner->update($attrs);
 
             return $partner;
@@ -49,7 +49,7 @@ class PartnerService implements PartnerServiceInterface {
     {
         $partner = Partner::find($id);
 
-        if($partner){
+        if ($partner) {
             $partner->delete();
 
             return $partner;
@@ -58,18 +58,17 @@ class PartnerService implements PartnerServiceInterface {
         throw new NotFoundError('parner tidak di temukan');
     }
 
-    public function codeIsExists($code, $id=null):bool{
-
+    public function codeIsExists($code, $id = null): bool
+    {
         $account = Partner::query();
-        if($id){
-            $account->where('id','!=', $id);
+        if ($id) {
+            $account->where('id', '!=', $id);
         }
 
         return $account->where('code', $code)
             ->exists();
     }
-
 }
 
 
-;?>
+;

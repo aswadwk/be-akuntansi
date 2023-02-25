@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-interface AuthServiceInterface {
-
+interface AuthServiceInterface
+{
     public function register($attr);
 
     public function login($credential);
@@ -16,4 +16,4 @@ interface AuthServiceInterface {
 }
 
 
-;?>
+;

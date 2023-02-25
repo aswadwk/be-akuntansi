@@ -5,9 +5,8 @@ namespace App\Services\Impl;
 use App\Models\Journal;
 use App\Services\JournalServiceInterface;
 
-class JournalService  implements JournalServiceInterface
+class JournalService implements JournalServiceInterface
 {
-
     public function store($attrs)
     {
         // Generate transaction code
@@ -15,7 +14,7 @@ class JournalService  implements JournalServiceInterface
 
         // insert transaction
         $attrTransaction = [
-            'code' => $transactionCode,
+            'code'    => $transactionCode,
             'user_id' => auth()->user()->id,
         ];
 
@@ -26,14 +25,14 @@ class JournalService  implements JournalServiceInterface
         foreach ($attrs as $attr) {
             // Create journal array
             $journal = [
-                'code' => $this->generateJournalCode($journalCount),
-                'date' => $attr['date'],
-                'amount' => $attr['amount'],
-                'account_id' => $attr['account_id'],
+                'code'           => $this->generateJournalCode($journalCount),
+                'date'           => $attr['date'],
+                'amount'         => $attr['amount'],
+                'account_id'     => $attr['account_id'],
                 'transaction_id' => $transaction->id,
-                'description' => $attr['description'],
-                'type' => $attr['type'],
-                'user_id' => auth()->user()->id,
+                'description'    => $attr['description'],
+                'type'           => $attr['type'],
+                'user_id'        => auth()->user()->id,
             ];
 
             // Check for division_id
@@ -56,8 +55,8 @@ class JournalService  implements JournalServiceInterface
 
     public function generateJournalCode($num)
     {
-
         $code = 'JRNL-' . date('Ymd') . '-' . $num;
+
         return $code;
     }
 };

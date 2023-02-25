@@ -19,7 +19,6 @@ class PartnerController extends Controller
 
     public function index()
     {
-
         return  ResponseFormatter::success(
             $this->service->get(),
             'Berhasil'
@@ -32,7 +31,6 @@ class PartnerController extends Controller
 
     public function store(PartnerRequest $request)
     {
-
         return  ResponseFormatter::success(
             $this->service->store($request->validated()),
             'Berhasil'
@@ -49,7 +47,6 @@ class PartnerController extends Controller
 
     public function delete($id)
     {
-
         return  ResponseFormatter::success(
             $this->service->delete($id),
             'Berhasil'

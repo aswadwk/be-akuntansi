@@ -6,25 +6,26 @@ use App\Models\AccountType;
 use App\Services\AccountTypeInterface;
 use Illuminate\Validation\ValidationException;
 
-class AccountTypeService implements AccountTypeInterface{
-
-    public function search($id=null, $attrs){
-
+class AccountTypeService implements AccountTypeInterface
+{
+    public function search($id = null, $attrs)
+    {
         $code = $attrs['code'] ?? null;
         $name = $attrs['name'] ?? null;
 
-        if($id){
+        if ($id) {
             return AccountType::with('createdBy')->find($id);
         }
 
-        if($code){
+        if ($code) {
             return AccountType::with('createdBy')->where('code', $code)->first();
         }
 
-        $accountType= AccountType::with('createdBy');
+        $accountType = AccountType::with('createdBy');
 
-        if($name)
+        if ($name) {
             $accountType->where('name', 'like', '%'.$name.'%');
+        }
 
         $accountType->orderBy('created_at', 'desc');
 
@@ -33,9 +34,9 @@ class AccountTypeService implements AccountTypeInterface{
 
     public function store($attrs)
     {
-        if($this->codeIsExists($attrs['code']))
-
+        if ($this->codeIsExists($attrs['code'])) {
             throw ValidationException::withMessages(['code' => 'Kode tidak tersedia']);
+        }
 
         return AccountType::create($attrs);
     }
@@ -44,11 +45,11 @@ class AccountTypeService implements AccountTypeInterface{
     {
         $accountType = AccountType::find($id);
 
-        if($this->codeIsExists($attr['code'], $id))
-
+        if ($this->codeIsExists($attr['code'], $id)) {
             throw ValidationException::withMessages(['code' => 'Kode tidak tersedia']);
+        }
 
-        if($accountType){
+        if ($accountType) {
             $accountType->update($attr);
 
             return $accountType;
@@ -61,7 +62,7 @@ class AccountTypeService implements AccountTypeInterface{
     {
         $accountType = AccountType::find($id);
 
-        if($accountType){
+        if ($accountType) {
             $accountType->delete();
 
             return $accountType;
@@ -70,11 +71,11 @@ class AccountTypeService implements AccountTypeInterface{
         return false;
     }
 
-    public function codeIsExists($code, $id=null):bool{
-
+    public function codeIsExists($code, $id = null): bool
+    {
         $account = AccountType::query();
-        if($id){
-            $account->where('id','!=', $id);
+        if ($id) {
+            $account->where('id', '!=', $id);
         }
 
         return $account->where('code', $code)
@@ -83,4 +84,4 @@ class AccountTypeService implements AccountTypeInterface{
 }
 
 
-;?>
+;

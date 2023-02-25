@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-interface AccountTypeInterface {
-
+interface AccountTypeInterface
+{
     public function search($id, $attr);
 
     public function store($attr);
@@ -11,8 +11,7 @@ interface AccountTypeInterface {
     public function update($id, $attr);
 
     public function delete($id);
-
 }
 
 
-;?>
+;

@@ -2,13 +2,12 @@
 
 namespace App\Services;
 
-interface JournalServiceInterface {
-
+interface JournalServiceInterface
+{
     public function store($attrs);
 
     public function generateJournalCode($num);
-
 }
 
 
-;?>
+;

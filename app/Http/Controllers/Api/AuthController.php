@@ -12,14 +12,14 @@ use Illuminate\Http\Request;
 class AuthController extends Controller
 {
     protected $service;
-     /**
-     * Create a new AuthController instance.
-     *
-     * @return void
-     */
+    /**
+    * Create a new AuthController instance.
+    *
+    * @return void
+    */
     public function __construct(
         AuthService $service,
-    ){
+    ) {
         $this->service = $service;
     }
 
@@ -49,7 +49,7 @@ class AuthController extends Controller
         ]);
 
         $token = $this->service->login($credential);
-        if(! $token){
+        if (! $token) {
             return ResponseFormatter::error('Unauthentication', null, 401);
         }
 
@@ -64,6 +64,7 @@ class AuthController extends Controller
     public function me(Request $request)
     {
         $user = $this->service->me($request->token);
+
         return ResponseFormatter::success($user, 'Berhasil');
     }
 
@@ -88,5 +89,4 @@ class AuthController extends Controller
     {
         return $this->respondWithToken(auth('api')->refresh());
     }
-
 }

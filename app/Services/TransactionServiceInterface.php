@@ -2,11 +2,11 @@
 
 namespace App\Services;
 
-interface TransactionServiceInterface {
-
+interface TransactionServiceInterface
+{
     public function getAllTransactions();
 
-    public function generateTransactionCode() : string;
+    public function generateTransactionCode(): string;
 
     public function store($attrs);
 
@@ -18,4 +18,4 @@ interface TransactionServiceInterface {
 }
 
 
-;?>
+;

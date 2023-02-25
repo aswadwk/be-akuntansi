@@ -8,12 +8,11 @@ use App\Services\AuthServiceInterface;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
-class AuthService implements AuthServiceInterface{
-
+class AuthService implements AuthServiceInterface
+{
     public function register($attr)
     {
-        if($this->emailIsExist($attr['email'])){
-
+        if ($this->emailIsExist($attr['email'])) {
             throw ValidationException::withMessages(['email' => 'Email tidak tersedia']);
         }
 
@@ -22,25 +21,24 @@ class AuthService implements AuthServiceInterface{
         return  User::create($attr);
     }
 
-    public function login($credential){
-
+    public function login($credential)
+    {
         $token = auth('api')->attempt($credential);
 
-        if(! $token){
+        if (! $token) {
             throw new AuthenticationError();
         }
 
         return $this->respondWithToken($token);
     }
 
-    public function refreshToken($olToken){
-
+    public function refreshToken($olToken)
+    {
         return auth('api')->refresh();
     }
 
     public function logout($token)
     {
-
     }
 
     public function me($token)
@@ -51,18 +49,18 @@ class AuthService implements AuthServiceInterface{
     protected function respondWithToken($token)
     {
         return [
-            'token_type' => 'bearer',
+            'token_type'   => 'bearer',
             'access_token' => $token,
-            'expires_in' => auth('api')->factory()->getTTL() * 60
+            'expires_in'   => auth('api')->factory()->getTTL() * 60
         ];
     }
 
-    public function emailIsExist($email):bool{
-
+    public function emailIsExist($email): bool
+    {
         return User::where('email', $email)->exists();
     }
 }
 
 
 
-;?>
+;

@@ -14,36 +14,36 @@ class AccountController extends Controller
 
     public function __construct(
         AccountService $service
-    ){
+    ) {
         $this->service = $service;
     }
 
-    public function index(Request $request,$id=null){
-
+    public function index(Request $request, $id = null)
+    {
         return  ResponseFormatter::success(
             $this->service->search($id, $request->all()),
             'Berhasil'
         );
     }
 
-    public function store(AccountRequest $request){
-
+    public function store(AccountRequest $request)
+    {
         return  ResponseFormatter::success(
             $this->service->store($request->validated()),
             'Berhasil'
         );
     }
 
-    public function update(AccountRequest $request, $id){
-
+    public function update(AccountRequest $request, $id)
+    {
         return  ResponseFormatter::success(
             $this->service->update($id, $request->validated()),
             'Berhasil'
         );
     }
 
-    public function delete($id){
-
+    public function delete($id)
+    {
         return  ResponseFormatter::success(
             $this->service->delete($id),
             'Berhasil'

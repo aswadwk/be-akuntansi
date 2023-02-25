@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-interface PartnerService{
-
+interface PartnerService
+{
     public function get();
 
     public function getById($id);
@@ -15,4 +15,4 @@ interface PartnerService{
     public function delete($id);
 }
 
-;?>
+;

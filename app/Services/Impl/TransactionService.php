@@ -18,7 +18,7 @@ class TransactionService implements TransactionServiceInterface
             'journals.account',
             'journals.division',
             'journals.partner',
-            ])
+        ])
             ->get();
 
         return $transactions;
@@ -66,7 +66,6 @@ class TransactionService implements TransactionServiceInterface
                         unset($attr['journal_id']);
                         $journal->update($attr);
                     }
-
                 });
 
                 return $transaction;

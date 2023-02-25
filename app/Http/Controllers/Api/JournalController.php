@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Helpers\ResponseFormatter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\JournalRequest;
-use Illuminate\Http\Request;
 
 class JournalController extends Controller
 {
@@ -16,11 +15,12 @@ class JournalController extends Controller
         $this->service = app('JournalService');
     }
 
-    public function index(){
-
+    public function index()
+    {
     }
 
-    public function store(JournalRequest $request){
+    public function store(JournalRequest $request)
+    {
         // dd($request->validated());
 
         return ResponseFormatter::success(

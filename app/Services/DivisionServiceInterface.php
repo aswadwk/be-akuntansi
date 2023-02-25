@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-interface DivisionServiceInterface {
-
+interface DivisionServiceInterface
+{
     public function store($attrs);
 
     public function update($id, $attrs);
@@ -13,7 +13,6 @@ interface DivisionServiceInterface {
     public function show($id);
 
     public function search($id, $attrs);
-
 }
 
 
