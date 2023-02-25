@@ -11,7 +11,7 @@ class ClientError extends Exception
     {
         $this->message = $message;
         $this->code = $code;
-        $this->name = 'InvariantError';
+        $this->name = 'ClientError';
     }
 
     public function render()

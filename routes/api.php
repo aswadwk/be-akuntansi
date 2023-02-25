@@ -66,6 +66,7 @@ Route::prefix('v1')->middleware(['auth:api', 'user.id'])->group( function (){
     });
 
     Route::controller(JournalController::class)->group(function (){
+        Route::get('journals', 'index')->name('journal.index');
         Route::post('journals', 'store')->name('journal.store')->withoutMiddleware('user.id');
     });
 

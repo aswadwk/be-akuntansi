@@ -65,7 +65,11 @@ class Handler extends ExceptionHandler
                 }
             }
 
-            // return ResponseFormatter::error(null, 'Maaf, kesalahan pada server.', 500);
+            if(config('app.debug')){
+                return dd($e);
+            }
+
+            return ResponseFormatter::error(null, 'Maaf, kesalahan pada server.', 500);
         });
 
     }
