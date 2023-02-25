@@ -18,6 +18,11 @@ class DivisionService implements DivisionServiceInterface
             return Division::find($id);
         }
 
+        if(isset($attrs['all'])){
+
+            return Division::get();
+        }
+
         if ($code) {
             return Division::where('code', $code)->first();
         }

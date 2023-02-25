@@ -10,11 +10,17 @@ class AccountTypeService implements AccountTypeInterface
 {
     public function search($id = null, $attrs)
     {
+
         $code = $attrs['code'] ?? null;
         $name = $attrs['name'] ?? null;
 
         if ($id) {
             return AccountType::with('createdBy')->find($id);
+        }
+
+        if(isset($attrs['all'])){
+
+            return AccountType::with('createdBy')->get();
         }
 
         if ($code) {

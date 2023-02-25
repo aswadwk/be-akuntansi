@@ -24,6 +24,7 @@ class AccountTypeSearchRequest extends FormRequest
     public function rules()
     {
         return [
+            'all' => 'nullable|boolean',
             'name' => 'nullable|string',
             'code' => 'nullable|min:3',
             'per_page' => 'nullable|integer',

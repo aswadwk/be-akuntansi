@@ -7,6 +7,7 @@ use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Validation\ValidationException;
+use PHPOpenSourceSaver\JWTAuth\Exceptions\TokenBlacklistedException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
@@ -53,25 +54,35 @@ class Handler extends ExceptionHandler
         });
 
         $this->renderable(function (Exception $e, $request) {
-            // validate Error
-            if($request->expectsJson()){
-                if ($e instanceof ValidationException) {
-                    return ResponseFormatter::error($e->getMessage(), $e->validator->getMessageBag()->getMessages(), 400);
-                }
 
-                if($e instanceof NotFoundHttpException){
-
-                    return ResponseFormatter::error('Maaf, data tidak ditemukan.', $e->getMessage(), 404);
-                }
+            if($e instanceof AuthenticationException){
+                return ResponseFormatter::error($e->getMessage(), $e->getMessage(), 401);
             }
 
-            if(config('app.debug')){
+            // validate Error
+            if ($e instanceof TokenBlacklistedException) {
+                return ResponseFormatter::error('Maaf, token di blokir.', $e->getMessage(), 401);
+            }
+
+            // validate Error
+            if ($e instanceof ValidationException) {
+                return ResponseFormatter::error($e->getMessage(), $e->validator->getMessageBag()->getMessages(), 400);
+            }
+
+            if ($e instanceof NotFoundHttpException) {
+                return ResponseFormatter::error('data not found', null, $e->getStatusCode());
+            }
+
+            if ($e instanceof ClientError) {
+                return ResponseFormatter::error($e->getMessage(), null, 404);
+            }
+
+            if (config('app.debug')) {
                 return dd($e);
             }
 
             return ResponseFormatter::error(null, 'Maaf, kesalahan pada server.', 500);
         });
-
     }
 
     protected function unauthenticated($request, AuthenticationException $exception)

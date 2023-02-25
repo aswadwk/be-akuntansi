@@ -18,6 +18,11 @@ class AccountService implements AccountServiceInterface
             return Account::find($id);
         }
 
+        if(isset($attr['all'])){
+
+            return Account::get();
+        }
+
         if ($code) {
             return Account::where('code', $code)->first();
         }

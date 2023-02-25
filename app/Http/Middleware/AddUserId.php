@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Exceptions\AuthenticationError;
 use Closure;
 use Illuminate\Http\Request;
 
@@ -21,8 +22,10 @@ class AddUserId
                 'user_id' => auth()->user()->id,
             ]);
 
+            return $next($request);
         }
 
-        return $next($request);
+        throw new AuthenticationError('you are not logged in.');
+
     }
 }

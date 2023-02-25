@@ -14,25 +14,8 @@ class RoleSeeder extends Seeder
      */
     public function run()
     {
-        Role::insert([
-            [
-                'name'       => 'super user',
-                'guard_name' => 'web',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'name'       => 'akuntan',
-                'guard_name' => 'web',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'name'       => 'user',
-                'guard_name' => 'web',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-        ]);
+        Role::create(['name' => 'super user', 'guard_name' => 'api']);
+        Role::create(['name' => 'akuntan', 'guard_name' => 'api']);
+        Role::create(['name' => 'user', 'guard_name' => 'api']);
     }
 }
