@@ -38,14 +38,14 @@ Route::prefix('v1')->middleware(['auth:api', 'user.id'])->group( function (){
     Route::controller(AccountTypeController::class)->group(function (){
         Route::get('account-types/{id?}', 'index')->name('account-type.index');
         Route::post('account-types', 'store')->name('account-type.store');
-        Route::patch('account-types/{id}', 'update')->name('account-type.update');
+        Route::put('account-types/{id}', 'update')->name('account-type.update');
         Route::delete('account-types/{id}', 'delete')->name('account-type.delete');
     });
 
     Route::controller(AccountController::class)->group(function (){
         Route::get('accounts/{id?}', 'index')->name('account.index');
         Route::post('accounts', 'store')->name('account.store');
-        Route::patch('accounts/{id}', 'update')->name('account.update');
+        Route::put('accounts/{id}', 'update')->name('account.update');
         Route::delete('accounts/{id}', 'delete')->name('account.delete');
     });
 
@@ -53,7 +53,7 @@ Route::prefix('v1')->middleware(['auth:api', 'user.id'])->group( function (){
         Route::get('partners', 'index')->name('partner.index');
         Route::get('partners/{id}', 'show')->name('partner.show');
         Route::post('partners', 'store')->name('partner.store');
-        Route::patch('partners/{id}', 'update')->name('partner.update');
+        Route::put('partners/{id}', 'update')->name('partner.update');
         Route::delete('partners/{id}', 'delete')->name('partner.delete');
     });
 
@@ -61,7 +61,7 @@ Route::prefix('v1')->middleware(['auth:api', 'user.id'])->group( function (){
         Route::get('divisions/{id?}', 'index')->name('division.index');
         Route::get('divisions/{id}', 'show')->name('division.show');
         Route::post('divisions', 'store')->name('division.store');
-        Route::patch('divisions/{id}', 'update')->name('division.update');
+        Route::put('divisions/{id}', 'update')->name('division.update');
         Route::delete('divisions/{id}', 'delete')->name('division.delete');
     });
 
@@ -74,7 +74,7 @@ Route::prefix('v1')->middleware(['auth:api', 'user.id'])->group( function (){
         Route::get('transactions', 'index')->name('transaction.index');
         Route::get('transactions/{id}', 'show')->name('transaction.show');
         Route::post('transactions', 'store')->name('transaction.store')->withoutMiddleware('user.id');
-        Route::patch('transactions/{id}', 'update')->name('transaction.update')->withoutMiddleware('user.id');
+        Route::put('transactions/{id}', 'update')->name('transaction.update')->withoutMiddleware('user.id');
     });
 
 });
