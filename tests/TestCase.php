@@ -4,6 +4,7 @@ namespace Tests;
 
 use App\Models\Account;
 use App\Models\AccountType;
+use App\Models\Partner;
 use App\Models\User;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
@@ -56,6 +57,17 @@ abstract class TestCase extends BaseTestCase
             'code' => '123',
             'name' => 'Account 1',
             'account_type_id' => $this->accountType->id,
+            'user_id' =>  $this->user->id
+        ]);
+    }
+
+    public function createParner()
+    {
+        return Partner::create([
+            'code' => '999999',
+            'name' => 'Partner 1',
+            'description' => 'Partner 1 description',
+            'account_type' => 'HUTANG', // can be HUTANG or PIUTANG
             'user_id' =>  $this->user->id
         ]);
     }
