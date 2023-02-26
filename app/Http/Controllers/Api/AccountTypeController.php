@@ -6,6 +6,7 @@ use App\Helpers\ResponseFormatter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AccountTypeRequest;
 use App\Http\Requests\AccountTypeSearchRequest;
+use App\Http\Requests\updateAccountTypeRequest;
 use App\Services\Impl\AccountTypeService;
 
 class AccountTypeController extends Controller
@@ -28,14 +29,13 @@ class AccountTypeController extends Controller
 
     public function store(AccountTypeRequest $request)
     {
-        // dd($request->all());
         return  ResponseFormatter::success(
             $this->service->store($request->validated()),
             'Berhasil'
         );
     }
 
-    public function update(AccountTypeRequest $request, $id)
+    public function update(updateAccountTypeRequest $request, $id)
     {
         return  ResponseFormatter::success(
             $this->service->update($id, $request->validated()),

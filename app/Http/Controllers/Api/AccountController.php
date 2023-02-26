@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Helpers\ResponseFormatter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AccountRequest;
+use App\Http\Requests\UpdateAccountRequest;
 use App\Services\Impl\AccountService;
 use Illuminate\Http\Request;
 
@@ -34,11 +35,11 @@ class AccountController extends Controller
         );
     }
 
-    public function update(AccountRequest $request, $id)
+    public function update(UpdateAccountRequest $request, $id)
     {
         return  ResponseFormatter::success(
             $this->service->update($id, $request->validated()),
-            'Berhasil'
+            'Akun berhasil di update'
         );
     }
 

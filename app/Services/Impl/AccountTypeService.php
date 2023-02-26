@@ -2,6 +2,7 @@
 
 namespace App\Services\Impl;
 
+use App\Exceptions\InvariantError;
 use App\Models\AccountType;
 use App\Services\AccountTypeInterface;
 use Illuminate\Validation\ValidationException;
@@ -49,19 +50,33 @@ class AccountTypeService implements AccountTypeInterface
 
     public function update($id, $attr)
     {
+        if(empty(array_filter($attr))){
+            throw new InvariantError('tidak ada data yang di update, pastikan anda mengirimkan data yang akan di update');
+        }
+
         $accountType = AccountType::find($id);
 
-        if ($this->codeIsExists($attr['code'], $id)) {
-            throw ValidationException::withMessages(['code' => 'Kode tidak tersedia']);
+        if(isset($attr['code'])){
+            if ($this->codeIsExists($attr['code'], $id)) {
+                throw ValidationException::withMessages(['code' => 'kode tidak tersedia']);
+            }
+
+            $accountType->code = $attr['code'];
         }
 
-        if ($accountType) {
-            $accountType->update($attr);
-
-            return $accountType;
+        if(isset($attr['name'])){
+            $accountType->name = $attr['name'];
         }
 
-        return false;
+        if(isset($attr['position_normal'])){
+            $accountType->position_normal = $attr['position_normal'];
+        }
+
+        if(isset($attr['description'])){
+            $accountType->description = $attr['description'];
+        }
+
+        return $accountType->save();
     }
 
     public function delete($id)

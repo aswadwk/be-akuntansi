@@ -2,8 +2,10 @@
 
 namespace App\Services\Impl;
 
+use App\Exceptions\InvariantError;
 use App\Exceptions\NotFoundError;
 use App\Models\Account;
+use App\Models\AccountType;
 use App\Services\AccountService as AccountServiceInterface;
 use Illuminate\Validation\ValidationException;
 
@@ -18,7 +20,7 @@ class AccountService implements AccountServiceInterface
             return Account::find($id);
         }
 
-        if(isset($attr['all'])){
+        if (isset($attr['all'])) {
 
             return Account::get();
         }
@@ -29,7 +31,7 @@ class AccountService implements AccountServiceInterface
 
         $account = Account::query();
         if ($name) {
-            $account->where('name', 'like', '%'.$name.'%');
+            $account->where('name', 'like', '%' . $name . '%');
         }
 
         $account->orderBy('created_at', 'desc');
@@ -50,17 +52,35 @@ class AccountService implements AccountServiceInterface
     {
         $account = Account::find($id);
 
-        if ($this->codeIsExists($attr['code'], $id)) {
-            throw ValidationException::withMessages(['code' => 'Kode tidak tersedia']);
+        if (empty(array_filter($attr))) {
+            throw new InvariantError('tidak ada data yang di update, pastikan anda mengirimkan data yang akan di update');
         }
 
-        if ($account) {
-            $account->update($attr);
+        if (isset($attr['code'])) {
+            if ($this->codeIsExists($attr['code'], $id)) {
+                throw ValidationException::withMessages(['code' => 'Kode tidak tersedia']);
+            }
 
-            return $account;
+            $account->code = $attr['code'];
         }
 
-        throw new NotFoundError('account tidak di temukan');
+        if (isset($attr['name'])) {
+            $account->name = $attr['name'];
+        }
+
+        if (isset($attr['description'])) {
+            $account->description = $attr['description'];
+        }
+
+        if (isset($attr['account_type_id'])) {
+            if (!AccountType::find($attr['account_type_id'])) {
+                throw new NotFoundError('account type tidak di temukan');
+            }
+
+            $account->account_type_id = $attr['account_type_id'];
+        }
+
+        $account->save();
     }
 
     public function delete($id)
@@ -86,7 +106,4 @@ class AccountService implements AccountServiceInterface
         return $account->where('code', $code)
             ->exists();
     }
-}
-
-
-;
+};
