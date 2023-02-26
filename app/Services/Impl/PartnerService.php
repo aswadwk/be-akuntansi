@@ -2,6 +2,7 @@
 
 namespace App\Services\Impl;
 
+use App\Exceptions\InvariantError;
 use App\Exceptions\NotFoundError;
 use App\Models\Partner;
 use App\Services\PartnerService as PartnerServiceInterface;
@@ -9,14 +10,29 @@ use Illuminate\Validation\ValidationException;
 
 class PartnerService implements PartnerServiceInterface
 {
-    public function get()
+    public function search($parnerId, $attrs)
     {
-        return Partner::all();
-    }
+        if($parnerId) {
+            $partner = Partner::find($parnerId);
 
-    public function getById($id)
-    {
-        return Partner::find($id);
+            if ($partner) {
+                return $partner;
+            }
+
+            throw new NotFoundError('parner tidak di temukan');
+        }
+
+        $parners = Partner::query();
+
+        if (isset($attrs['name'])) {
+            $parners->where('name', 'like', "%{$attrs['name']}%");
+        }
+
+        if(isset($attrs['all']) && $attrs['all'] == true) {
+            return $parners->get();
+        }
+
+        return $parners->paginate($attrs['per_page'] ?? 10);
     }
 
     public function store($attr)
@@ -32,17 +48,39 @@ class PartnerService implements PartnerServiceInterface
     {
         $partner = Partner::find($id);
 
-        if ($this->codeIsExists($attrs['code'], $id)) {
-            throw ValidationException::withMessages(['code' => 'Kode tidak tersedia']);
+        if(empty(array_filter($attrs))) {
+            throw new InvariantError('tidak ada data yang di ubah');
         }
 
-        if ($partner) {
-            $partner->update($attrs);
+        if(isset($attrs['code'])){
 
-            return $partner;
+            if ($this->codeIsExists($attrs['code'], $id)) {
+                throw ValidationException::withMessages(['code' => 'Kode tidak tersedia']);
+            }
         }
 
-        throw new NotFoundError('parner tidak di temukan');
+        if(isset($attrs['user_id'])) {
+            $partner->user_id = $attrs['user_id'];
+        }
+
+        if(isset($attrs['code'])) {
+            $partner->code = $attrs['code'];
+        }
+
+        if(isset($attrs['name'])) {
+            $partner->name = $attrs['name'];
+        }
+
+        if(isset($attrs['type'])) {
+            $partner->type = $attrs['type'];
+        }
+
+        if(isset($attrs['description'])) {
+            $partner->type = $attrs['description'];
+        }
+
+        $partner->save();
+
     }
 
     public function delete($id)

@@ -4,9 +4,7 @@ namespace App\Services;
 
 interface PartnerService
 {
-    public function get();
-
-    public function getById($id);
+    public function search($parnerId, $attrs);
 
     public function store($attr);
 

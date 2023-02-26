@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Helpers\ResponseFormatter;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\GetPartnerRequest;
 use App\Http\Requests\PartnerRequest;
+use App\Http\Requests\UpdatePartnerRequest;
 use App\Services\Impl\PartnerService;
 
 class PartnerController extends Controller
@@ -17,31 +19,27 @@ class PartnerController extends Controller
         $this->service = $service;
     }
 
-    public function index()
+    public function index(GetPartnerRequest $request, $parnerId = null)
     {
         return  ResponseFormatter::success(
-            $this->service->get(),
+            $this->service->search($parnerId, $request->validated()),
             'Berhasil'
         );
-    }
-
-    public function show($id)
-    {
     }
 
     public function store(PartnerRequest $request)
     {
         return  ResponseFormatter::success(
             $this->service->store($request->validated()),
-            'Berhasil'
+            'Partner berhasil ditambahkan.'
         );
     }
 
-    public function update(PartnerRequest $request)
+    public function update(UpdatePartnerRequest $request)
     {
         return  ResponseFormatter::success(
             $this->service->store($request->validated()),
-            'Berhasil'
+            'Partner berhasil diubah.'
         );
     }
 

@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class PartnerRequest extends FormRequest
+class GetPartnerRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,11 +24,10 @@ class PartnerRequest extends FormRequest
     public function rules()
     {
         return [
-            'user_id' => 'required|string',
-            'code' => 'required|string|min:3',
-            'name' => 'required|string|min:3',
-            'description' => 'nullable|string',
-            'type' => 'in:D,C',
+            'all' => 'nullable|boolean',
+            'name' => 'nullable|string',
+            'per_page' => 'nullable|integer',
+            'page' => 'nullable|integer',
         ];
     }
 }

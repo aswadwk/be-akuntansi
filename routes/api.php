@@ -50,8 +50,7 @@ Route::prefix('v1')->middleware(['auth:api', 'user.id'])->group( function (){
     });
 
     Route::controller(PartnerController::class)->group(function (){
-        Route::get('partners', 'index')->name('partner.index');
-        Route::get('partners/{id}', 'show')->name('partner.show');
+        Route::get('partners/{parnerId?}', 'index')->name('partner.index');
         Route::post('partners', 'store')->name('partner.store');
         Route::put('partners/{id}', 'update')->name('partner.update');
         Route::delete('partners/{id}', 'delete')->name('partner.delete');

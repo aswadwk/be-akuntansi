@@ -108,10 +108,8 @@ class PartnerTest extends TestCase
 
         $response = $this->postJson('/api/v1/partners', [
             'name' => 'Partner 1',
-            'address' => 'Address 1',
-            'phone' => 'Phone 1',
-            'email' => 'Email 1',
-            'website' => 'Website 1',
+            'code' => '999999',
+            'account_type' => 'PIUTANG',
             'description' => 'Description 1',
         ]);
 
@@ -135,6 +133,7 @@ class PartnerTest extends TestCase
 
         $response = $this->putJson('/api/v1/partners/' . $partner->id, [
             'name' => 'Partner 1',
+            'code' => '99999999',
             'account_type' => 'PIUTANG',
             'description' => 'Description 1',
         ]);
@@ -146,8 +145,9 @@ class PartnerTest extends TestCase
         $this->assertArrayHasKey('data', $responseData);
         $this->assertIsArray($responseData['data']);
         $this->assertNotEmpty($responseData['data']);
-        $this->assertNotEmpty($responseData['data']['id']);
-        $this->assertNotEmpty($responseData['data']['name']);
+
+        $this->assertEquals($responseData['status'], true);
+        $this->assertEquals($responseData['message'], 'Partner berhasil diubah.');
     }
 
     /** @test */
