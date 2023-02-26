@@ -11,28 +11,22 @@ class DivisionService implements DivisionServiceInterface
 {
     public function search($id = null, $attrs)
     {
-        $code = $attrs['code'] ?? null;
-        $name = $attrs['name'] ?? null;
-
         if ($id) {
             return Division::find($id);
         }
 
-        if(isset($attrs['all'])){
+        if (isset($attrs['all']) && $attrs['all'] == true) {
 
             return Division::get();
         }
 
-        if ($code) {
-            return Division::where('code', $code)->first();
-        }
-
         $division = Division::query();
-        if ($name) {
-            $division->where('name', 'like', '%'.$name.'%');
+
+        if (isset($name)) {
+            $division->where('name', 'like', '%' . $name . '%');
         }
 
-        return $division->get();
+        return $division->paginate($attrs['per_page'] ?? 10);
     }
 
     public function store($attrs)
@@ -85,6 +79,4 @@ class DivisionService implements DivisionServiceInterface
 
         return $division->exists();
     }
-}
-
-;
+};

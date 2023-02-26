@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Helpers\ResponseFormatter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\DivisionRequest;
+use App\Http\Requests\GetDivisionRequest;
 use Illuminate\Http\Request;
 
 class DivisionController extends Controller
@@ -16,10 +17,10 @@ class DivisionController extends Controller
         $this->service = app('DevisionService');
     }
 
-    public function index(Request $request, $id = null)
+    public function index(GetDivisionRequest $request, $id = null)
     {
         return ResponseFormatter::success(
-            $this->service->search($id, $request->all()),
+            $this->service->search($id, $request->validated()),
             'success get all division'
         );
     }
@@ -37,6 +38,14 @@ class DivisionController extends Controller
         return ResponseFormatter::success(
             $this->service->update($id, $request->validated()),
             'success update division'
+        );
+    }
+
+    public function delete($parnerId)
+    {
+        return ResponseFormatter::success(
+            $this->service->delete($parnerId),
+            'success delete division'
         );
     }
 }

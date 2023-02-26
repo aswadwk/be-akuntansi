@@ -4,6 +4,7 @@ namespace Tests;
 
 use App\Models\Account;
 use App\Models\AccountType;
+use App\Models\Division;
 use App\Models\Partner;
 use App\Models\User;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
@@ -68,6 +69,16 @@ abstract class TestCase extends BaseTestCase
             'name' => 'Partner 1',
             'description' => 'Partner 1 description',
             'account_type' => 'HUTANG', // can be HUTANG or PIUTANG
+            'user_id' =>  $this->user->id
+        ]);
+    }
+
+    public function createDivision(){
+
+        return Division::create([
+            'code' => '999999',
+            'name' => 'Division 1',
+            'description' => 'Division 1 description',
             'user_id' =>  $this->user->id
         ]);
     }
