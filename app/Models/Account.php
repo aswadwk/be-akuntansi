@@ -13,4 +13,9 @@ class Account extends Model
     use HasFactory, Uuid, SoftDeletes, Timestamp;
 
     public $guarded = [];
+
+    public function accountType()
+    {
+        return $this->belongsTo(AccountType::class);
+    }
 }
