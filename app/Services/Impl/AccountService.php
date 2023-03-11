@@ -22,14 +22,14 @@ class AccountService implements AccountServiceInterface
 
         if (isset($attr['all'])) {
 
-            return Account::with(['accountType'])->get();
+            return Account::with(['accountType', 'createdBy'])->get();
         }
 
         if ($code) {
-            return Account::with(['accountType'])->where('code', $code)->first();
+            return Account::with(['accountType', 'createdBy'])->where('code', $code)->first();
         }
 
-        $account = Account::with(['accountType']);
+        $account = Account::with(['accountType', 'createdBy']);
         if ($name) {
             $account->where('name', 'like', '%' . $name . '%');
         }
