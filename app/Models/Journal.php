@@ -12,6 +12,9 @@ class Journal extends Model
 {
     use HasFactory, Uuid, SoftDeletes, Timestamp;
 
+    const TYPE_DEBIT = 'D';
+    const TYPE_CREDIT = 'C';
+
     protected $guarded = [];
 
     public function account()

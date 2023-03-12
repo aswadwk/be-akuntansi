@@ -6,6 +6,8 @@ use App\Exceptions\InvariantError;
 use App\Models\Account;
 use App\Models\Journal;
 use App\Services\JournalServiceInterface;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class JournalService implements JournalServiceInterface
 {
@@ -22,53 +24,78 @@ class JournalService implements JournalServiceInterface
             throw new InvariantError('account not found');
         }
 
-        // Generate transaction code
-        $transactionCode = app('TransactionService')->generateTransactionCode();
+        try {
+            DB::beginTransaction();
+            // Generate transaction code
+            $transactionCode = app('TransactionService')->generateTransactionCode();
 
-        // insert transaction
-        $attrTransaction = [
-            'code'    => $transactionCode,
-            'user_id' => auth()->user()->id,
-        ];
-
-        $transaction = app('TransactionService')->store($attrTransaction);
-
-        // Loop through journal attributes
-        $journalCount = 1;
-        foreach ($attrs['journals'] as $attr) {
-            // Create journal array
-            $journal = [
-                'code'           => $this->generateJournalCode($journalCount),
-                'date'           => $attr['date'],
-                'amount'         => $attr['amount'],
-                'account_id'     => $attr['account_id'],
-                'transaction_id' => $transaction->id,
-                'description'    => $attr['description'],
-                'type'           => $attr['type'],
-                'user_id'        => auth()->user()->id,
+            // insert transaction
+            $attrTransaction = [
+                'code'    => $transactionCode,
+                'user_id' => auth('api')->user()->id,
             ];
 
-            // Check for division_id
-            if (isset($attr['division_id'])) {
-                $journal['division_id'] = $attr['division_id'];
+            $transaction = app('TransactionService')->store($attrTransaction);
+
+            // Loop through journal attributes
+            $journalCount = 1;
+            $amountDebet = 0;
+            $amountCredit = 0;
+            foreach ($attrs['journals'] as $attr) {
+                // Create journal array
+                if (isset($attr['date']) && $attr['amount'] && $attr['account_id'] && $attr['type']) {
+                    $journal = [
+                        'code'           => $this->generateJournalCode($journalCount),
+                        'date'           => $attr['date'],
+                        'amount'         => $attr['amount'],
+                        'account_id'     => $attr['account_id'],
+                        'transaction_id' => $transaction->id,
+                        'description'    => $attr['description'],
+                        'type'           => $attr['type'],
+                        'user_id'        => auth()->user()->id,
+                    ];
+
+                    // Check for division_id
+                    if (isset($attr['division_id'])) {
+                        $journal['division_id'] = $attr['division_id'];
+                    }
+
+                    // Check for partner_id
+                    if (isset($attr['partner_id'])) {
+                        $journal['partner_id'] = $attr['partner_id'];
+                    }
+
+                    // Create journal
+                    Journal::create($journal);
+
+                    $journalCount++;
+                    $amountCredit += $attr['type'] === Journal::TYPE_CREDIT ? $attr['amount'] : 0;
+                    $amountDebet += $attr['type'] === Journal::TYPE_DEBIT ? $attr['amount'] : 0;
+                }
             }
 
-            // Check for partner_id
-            if (isset($attr['partner_id'])) {
-                $journal['partner_id'] = $attr['partner_id'];
+            if ($amountCredit !== $amountDebet) {
+                throw new InvariantError('amount debit and credit must be same');
             }
 
-            // Create journal
-            Journal::create($journal);
-            $journalCount++;
+            DB::commit();
+
+            return $transaction;
+        } catch (\Exception $err) {
+            DB::rollBack();
+            Log::error($err->getMessage());
+
+            if($err instanceof InvariantError) {
+                throw $err;
+            }
+
+            throw new InvariantError('failed to create journal');
         }
-
-        return $transaction;
     }
 
     public function generateJournalCode($num)
     {
-        $code = 'JRNL-' . date('Ymd') . '-' . $num;
+        $code = 'JRNL-' . date('Ymd') . '-' . $num . '-' . rand(100, 999);
 
         return $code;
     }
@@ -80,7 +107,8 @@ class JournalService implements JournalServiceInterface
         return $journals;
     }
 
-    public function getJournals($params){
+    public function getJournals($params)
+    {
         $journals = Journal::where('user_id', auth()->user()->id);
 
         if (isset($params['start_date'])) {
