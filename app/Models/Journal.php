@@ -7,6 +7,7 @@ use Carbon\Traits\Timestamp;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Journal extends Model
 {
@@ -30,5 +31,12 @@ class Journal extends Model
     public function partner()
     {
         return $this->belongsTo(Partner::class);
+    }
+
+    protected function amount(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => + ($value),
+        );
     }
 }

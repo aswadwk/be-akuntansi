@@ -109,7 +109,7 @@ class JournalService implements JournalServiceInterface
 
     public function getJournals($params)
     {
-        $journals = Journal::where('user_id', auth()->user()->id);
+        $journals = Journal::with(['account'])->orderBy('created_at', 'desc');
 
         if (isset($params['start_date'])) {
             $journals->where('date', '>=', $params['start_date']);
