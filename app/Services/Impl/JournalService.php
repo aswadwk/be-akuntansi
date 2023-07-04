@@ -50,7 +50,7 @@ class JournalService implements JournalServiceInterface
                         'amount'         => $attr['amount'],
                         'account_id'     => $attr['account_id'],
                         'transaction_id' => $transaction->id,
-                        'description'    => $attr['description'],
+                        'description'    => $attr['description'] ?? null,
                         'type'           => $attr['type'],
                         'user_id'        => auth()->user()->id,
                     ];
