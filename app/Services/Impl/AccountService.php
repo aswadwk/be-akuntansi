@@ -17,7 +17,8 @@ class AccountService implements AccountServiceInterface
         $name = $attr['name'] ?? null;
 
         if ($id) {
-            return Account::find($id);
+            return Account::with(['accountType', 'createdBy'])
+                ->find($id);
         }
 
         if (isset($attr['all'])) {
