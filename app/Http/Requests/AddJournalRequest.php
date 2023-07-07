@@ -24,15 +24,17 @@ class AddJournalRequest extends FormRequest
     public function rules()
     {
         return [
+            'date'        => 'required|date',
+            'description' => 'nullable|string',
             'journals' => 'required|array',
 
-            'journals.*.date'        => 'required|date',
             'journals.*.amount'      => 'required|numeric',
             'journals.*.account_id'  => 'required|string',
             'journals.*.type'        => 'required|in:D,C',
             'journals.*.division_id' => 'nullable|string',
             'journals.*.partner_id'  => 'nullable|string',
-            'journals.*.description' => 'nullable|string',
+            // 'journals.*.date'        => 'required|date',
+            // 'journals.*.description' => 'nullable|string',
         ];
     }
 }

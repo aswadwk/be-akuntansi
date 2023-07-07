@@ -46,11 +46,11 @@ class JournalService implements JournalServiceInterface
                 if (isset($attr['date']) && $attr['amount'] && $attr['account_id'] && $attr['type']) {
                     $journal = [
                         'code'           => $this->generateJournalCode($journalCount),
-                        'date'           => $attr['date'],
+                        'date'           => $attrs['date'],
                         'amount'         => $attr['amount'],
                         'account_id'     => $attr['account_id'],
                         'transaction_id' => $transaction->id,
-                        'description'    => $attr['description'] ?? null,
+                        'description'    => $attrs['description'] ?? null,
                         'type'           => $attr['type'],
                         'user_id'        => auth()->user()->id,
                     ];
@@ -85,7 +85,7 @@ class JournalService implements JournalServiceInterface
             DB::rollBack();
             Log::error($err->getMessage());
 
-            if($err instanceof InvariantError) {
+            if ($err instanceof InvariantError) {
                 throw $err;
             }
 
