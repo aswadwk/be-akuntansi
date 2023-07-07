@@ -21,11 +21,11 @@ class AccountType extends Model
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
-    public function positionNormal(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => $value === 'C' ? 'Credit' : 'Debet',
-            // set: fn($value) => Crypt::encryptString($value),
-        );
-    }
+    // public function positionNormal(): Attribute
+    // {
+    //     return Attribute::make(
+    //         get: fn ($value) => $value === 'C' ? 'Credit' : 'Debet',
+    //         // set: fn($value) => Crypt::encryptString($value),
+    //     );
+    // }
 }
