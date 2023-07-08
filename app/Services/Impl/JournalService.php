@@ -45,7 +45,7 @@ class JournalService implements JournalServiceInterface
             $amountCredit = 0;
             foreach ($attrs['journals'] as $attr) {
                 // Create journal array
-                if (isset($attr['date']) && $attr['amount'] && $attr['account_id'] && $attr['type']) {
+                if (isset($attrs['date']) && $attr['amount'] && $attr['account_id'] && $attr['type']) {
                     $journal = [
                         'code'           => $this->generateJournalCode($journalCount),
                         'date'           => $attrs['date'],
