@@ -32,4 +32,12 @@ class JournalController extends Controller
             'journal berhasil dibuat'
         );
     }
+
+    public function updateJournal(AddJournalRequest $request, $transactionId)
+    {
+        return ResponseFormatter::success(
+            $this->service->updateJournal($request->validated(), $transactionId),
+            'journal berhasil diupdate'
+        );
+    }
 }

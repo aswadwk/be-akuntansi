@@ -17,7 +17,8 @@ class Transaction extends Model
         'user_id',
     ];
 
-    public function journals(){
-        return $this->hasMany(Journal::class);
+    public function journals()
+    {
+        return $this->hasMany(Journal::class, 'transaction_id', 'id');
     }
 }

@@ -11,7 +11,6 @@ interface JournalServiceInterface
     public function getJournalByTransactionId($transactionId);
 
     public function getJournals($params);
-}
 
-
-;
+    public function updateJournal($params, $transactionId);
+};

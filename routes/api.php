@@ -68,13 +68,14 @@ Route::prefix('v1')->middleware(['auth:api', 'user.id'])->group(function () {
     Route::controller(JournalController::class)->group(function () {
         Route::get('journals', 'index')->name('journal.index');
         Route::post('journals', 'store')->name('journal.store')->withoutMiddleware('user.id');
+        Route::put('transactions/{transactionId}/journal', 'updateJournal');
     });
 
     Route::controller(TransactionController::class)->group(function () {
         Route::get('transactions', 'index')->name('transaction.index');
-        Route::get('transactions/{id}', 'show')->name('transaction.show');
+        Route::get('transactions/{transactionId}', 'show')->name('transaction.show');
         Route::post('transactions', 'store')->name('transaction.store')->withoutMiddleware('user.id');
-        Route::put('transactions/{id}', 'update')->name('transaction.update')->withoutMiddleware('user.id');
+        Route::put('transactions/{transactionId}', 'update')->name('transaction.update')->withoutMiddleware('user.id');
     });
 
     Route::controller(ReportController::class)->group(function () {

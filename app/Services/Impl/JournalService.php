@@ -5,9 +5,11 @@ namespace App\Services\Impl;
 use App\Exceptions\InvariantError;
 use App\Models\Account;
 use App\Models\Journal;
+use App\Models\Transaction;
 use App\Services\JournalServiceInterface;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class JournalService implements JournalServiceInterface
 {
@@ -142,5 +144,88 @@ class JournalService implements JournalServiceInterface
         $journals = $journals->paginate(10);
 
         return $journals;
+    }
+
+    public function updateJournal($params, $transactionId)
+    {
+        $transaction = Transaction::where('id', $transactionId)->first();
+
+        if (!$transaction) {
+            throw new NotFoundHttpException('transaction tidak ditemukan');
+        }
+
+        //check all account_id must already exist in one query
+        $accountIds = array_column($params['journals'], 'account_id');
+        $accountIds = array_unique($accountIds);
+        $accountIds = array_values($accountIds);
+
+        $accountExists = Account::whereIn('id', $accountIds)->count();
+
+        if ($accountExists != count($accountIds)) {
+            throw new InvariantError('account not found');
+        }
+
+        try {
+            DB::beginTransaction();
+
+            // delete all journal
+            Journal::where('transaction_id', $transactionId)->delete();
+
+            // Loop through journal attributes
+            $journalCount = 1;
+            $amountDebit = 0;
+            $amountCredit = 0;
+
+            // dd($params['journals']);
+            foreach ($params['journals'] as $param) {
+                // Create journal array
+                if (isset($params['date']) && $param['amount'] && $param['account_id'] && $param['type']) {
+                    $journal = [
+                        'code'           => $this->generateJournalCode($journalCount),
+                        'date'           => $params['date'],
+                        'amount'         => $param['amount'],
+                        'account_id'     => $param['account_id'],
+                        'transaction_id' => $transaction->id,
+                        'description'    => $params['description'] ?? null,
+                        'type'           => $param['type'],
+                        'user_id'        => auth()->user()->id,
+                    ];
+
+                    // Check for division_id
+                    if (isset($param['division_id'])) {
+                        $journal['division_id'] = $param['division_id'];
+                    }
+
+                    // Check for partner_id
+                    if (isset($param['partner_id'])) {
+                        $journal['partner_id'] = $param['partner_id'];
+                    }
+                    // dd($journal);
+                    // Create journal
+                    Journal::create($journal);
+
+                    $journalCount++;
+                    $amountCredit += $param['type'] === Journal::TYPE_CREDIT ? $param['amount'] : 0;
+                    $amountDebit += $param['type'] === Journal::TYPE_DEBIT ? $param['amount'] : 0;
+                }
+            }
+
+            if ($amountCredit !== $amountDebit) {
+                throw new InvariantError('amount debit and credit must be same');
+            }
+
+            DB::commit();
+
+            return $transaction;
+        } catch (\Exception $err) {
+            DB::rollBack();
+            Log::error($err->getMessage());
+
+            if ($err instanceof InvariantError) {
+                throw $err;
+            }
+
+            throw new InvariantError('failed to create journal');
+        }
     }
 };
