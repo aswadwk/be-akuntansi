@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\AccountType;
 
 use App\Models\Account;
 use App\Models\AccountType;
@@ -159,6 +159,4 @@ class AccountTypeTest extends TestCase
 
         $this->assertArrayHasKey('id', $responseData['data']);
     }
-
-
 }
