@@ -22,7 +22,7 @@ class AccountTypeController extends Controller
     public function index(AccountTypeSearchRequest $request, $id = null)
     {
         return  ResponseFormatter::success(
-            $this->service->search($request->validated()),
+            $this->service->search($request->validated(), $id),
             'Berhasil'
         );
     }
@@ -38,7 +38,7 @@ class AccountTypeController extends Controller
     public function update(updateAccountTypeRequest $request, $id)
     {
         return  ResponseFormatter::success(
-            $this->service->update($id, $request->validated(), $id),
+            $this->service->update($id, $request->validated()),
             'Berhasil. Data di Update'
         );
     }
