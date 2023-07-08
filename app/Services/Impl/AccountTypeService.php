@@ -9,7 +9,7 @@ use Illuminate\Validation\ValidationException;
 
 class AccountTypeService implements AccountTypeInterface
 {
-    public function search($id = null, $attrs)
+    public function search($attrs, $id = null)
     {
 
         $code = $attrs['code'] ?? null;
@@ -19,7 +19,7 @@ class AccountTypeService implements AccountTypeInterface
             return AccountType::with('createdBy')->find($id);
         }
 
-        if(isset($attrs['all'])){
+        if (isset($attrs['all'])) {
 
             return AccountType::with('createdBy')->get();
         }
@@ -31,7 +31,7 @@ class AccountTypeService implements AccountTypeInterface
         $accountType = AccountType::with('createdBy');
 
         if ($name) {
-            $accountType->where('name', 'like', '%'.$name.'%');
+            $accountType->where('name', 'like', '%' . $name . '%');
         }
 
         $accountType->orderBy('created_at', 'desc');
@@ -50,13 +50,13 @@ class AccountTypeService implements AccountTypeInterface
 
     public function update($id, $attr)
     {
-        if(empty(array_filter($attr))){
+        if (empty(array_filter($attr))) {
             throw new InvariantError('tidak ada data yang di update, pastikan anda mengirimkan data yang akan di update');
         }
 
         $accountType = AccountType::find($id);
 
-        if(isset($attr['code'])){
+        if (isset($attr['code'])) {
             if ($this->codeIsExists($attr['code'], $id)) {
                 throw ValidationException::withMessages(['code' => 'kode tidak tersedia']);
             }
@@ -64,15 +64,15 @@ class AccountTypeService implements AccountTypeInterface
             $accountType->code = $attr['code'];
         }
 
-        if(isset($attr['name'])){
+        if (isset($attr['name'])) {
             $accountType->name = $attr['name'];
         }
 
-        if(isset($attr['position_normal'])){
+        if (isset($attr['position_normal'])) {
             $accountType->position_normal = $attr['position_normal'];
         }
 
-        if(isset($attr['description'])){
+        if (isset($attr['description'])) {
             $accountType->description = $attr['description'];
         }
 
@@ -102,7 +102,4 @@ class AccountTypeService implements AccountTypeInterface
         return $account->where('code', $code)
             ->exists();
     }
-}
-
-
-;
+};

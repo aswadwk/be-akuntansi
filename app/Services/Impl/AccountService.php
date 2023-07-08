@@ -11,7 +11,7 @@ use Illuminate\Validation\ValidationException;
 
 class AccountService implements AccountServiceInterface
 {
-    public function search($id = null, $attr)
+    public function search($attr, $id = null)
     {
         $code = $attr['code'] ?? null;
         $name = $attr['name'] ?? null;
