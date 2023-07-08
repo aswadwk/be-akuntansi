@@ -11,7 +11,6 @@ class AccountTypeService implements AccountTypeInterface
 {
     public function search($attrs, $id = null)
     {
-
         $code = $attrs['code'] ?? null;
         $name = $attrs['name'] ?? null;
 

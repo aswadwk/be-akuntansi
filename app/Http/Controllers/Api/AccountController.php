@@ -22,7 +22,7 @@ class AccountController extends Controller
     public function index(Request $request, $id = null)
     {
         return  ResponseFormatter::success(
-            $this->service->search($id, $request->all()),
+            $this->service->search($request->all(), $id),
             'Berhasil'
         );
     }
