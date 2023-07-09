@@ -114,11 +114,11 @@ class JournalService implements JournalServiceInterface
         $journals = Journal::with(['account'])->orderBy('created_at', 'desc');
 
         if (isset($params['start_date'])) {
-            $journals->where('date', '>=', $params['start_date']);
+            $journals->whereDate('date', '>=', $params['start_date']);
         }
 
         if (isset($params['end_date'])) {
-            $journals->where('date', '<=', $params['end_date']);
+            $journals->whereDate('date', '<=', $params['end_date']);
         }
 
         if (isset($params['account_id'])) {
