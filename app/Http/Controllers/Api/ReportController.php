@@ -100,7 +100,7 @@ class ReportController extends Controller
             'to' => 'required'
         ]);
 
-        $_neraca_lajur =  DB::select("SELECT a.id, a.name, j.type, j.amount,
+        $_neraca_lajur =  DB::select("SELECT a.id, a.name, a.code, j.type, j.amount,
         SUM(
             CASE WHEN j.type = 'D' THEN j.amount ELSE 0
         END
@@ -115,11 +115,16 @@ class ReportController extends Controller
             FROM
                 accounts
             WHERE
-                account_type_id = '610000'
-                OR account_type_id = '400000'
-                OR account_type_id = '500000'
-                OR account_type_id = '610000'
-                OR account_type_id = '630000'
+                account_type_id = '410'
+                OR account_type_id = '510'
+                -- OR account_type_id = '500000'
+                -- OR account_type_id = '610000'
+                -- OR account_type_id = '630000'
+                -- account_type_id = '610000'
+                -- OR account_type_id = '400000'
+                -- OR account_type_id = '500000'
+                -- OR account_type_id = '610000'
+                -- OR account_type_id = '630000'
         ) THEN 1 ELSE 0
         END AS laba_rugi
         FROM
@@ -139,6 +144,10 @@ class ReportController extends Controller
             $a->_lb_credit = 0;
             $a->_n_debet = 0;
             $a->_n_credit = 0;
+
+            $a->DEBET += 0;
+            $a->CREDIT += 0;
+            $a->amount += 0;
 
             if ($a->amount) {
                 $a->value = true;
