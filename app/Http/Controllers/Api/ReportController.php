@@ -41,7 +41,7 @@ class ReportController extends Controller
         $saldo = 0;
         foreach ($bukuBesar as $a) {
             $a->diffHuman = date('d/m/Y', strtotime($a->date));
-            if ($a->position_normal === "DEBET") {
+            if ($a->position_normal === "D") {
                 $saldo += $a->DEBET - $a->CREDIT;
                 $a->saldo = $saldo;
             } else {
