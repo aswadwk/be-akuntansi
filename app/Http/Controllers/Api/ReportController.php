@@ -17,38 +17,75 @@ class ReportController extends Controller
             'to' => 'required'
         ]);
 
-        $bukuBesar = DB::select("SELECT
-        a.`name`,
-        j.date,
-        j.description,
-        at.position_normal,
-        CASE
-                WHEN j.type = 'D' THEN
-                j.amount ELSE 0
-            END AS DEBET,
-        CASE
-                WHEN j.type = 'C' THEN
-                j.amount ELSE 0
-            END AS CREDIT
-        FROM
-            journals AS j
-            INNER JOIN accounts AS a ON j.account_id = a.id
-            INNER JOIN account_types AS at ON a.account_type_id = at.id
-        WHERE
-            j.account_id = '$id'
-            AND j.deleted_at IS NULL AND j.date BETWEEN '$request->from' AND '$request->to'");
+        // $bukuBesar = DB::select("SELECT
+        // a.`name`,
+        // j.date,
+        // j.description,
+        // at.position_normal,
+        // CASE
+        //         WHEN j.type = 'D' THEN
+        //         j.amount ELSE 0
+        //     END AS DEBET,
+        // CASE
+        //         WHEN j.type = 'C' THEN
+        //         j.amount ELSE 0
+        //     END AS CREDIT
+        // FROM
+        //     journals AS j
+        //     INNER JOIN accounts AS a ON j.account_id = a.id
+        //     INNER JOIN account_types AS at ON a.account_type_id = at.id
+        // WHERE
+        //     j.account_id = '$id'
+        //     AND j.deleted_at IS NULL AND j.date BETWEEN '$request->from' AND '$request->to' order by j.date desc");
+
+        // $saldo = 0;
+        // foreach ($bukuBesar as $a) {
+        //     $a->diffHuman = date('d/m/Y', strtotime($a->date));
+        //     if ($a->position_normal === "D") {
+        //         $saldo += $a->DEBET - $a->CREDIT;
+        //         $a->saldo = $saldo;
+        //     } else {
+        //         $saldo +=  $a->CREDIT - $a->DEBET;
+        //         $a->saldo = $saldo;
+        //     }
+        // }
+
+        $bukuBesar = DB::table('journals')
+            ->select(
+                'accounts.name',
+                'journals.date',
+                'journals.description',
+                'account_types.position_normal',
+                DB::raw("CASE WHEN journals.type = 'D' THEN journals.amount ELSE 0 END AS DEBET"),
+                DB::raw("CASE WHEN journals.type = 'C' THEN journals.amount ELSE 0 END AS CREDIT")
+            )
+            ->join('accounts', 'journals.account_id', '=', 'accounts.id')
+            ->join('account_types', 'accounts.account_type_id', '=', 'account_types.id')
+            ->where('journals.account_id', $id)
+            ->whereNull('journals.deleted_at')
+            ->whereBetween('journals.date', [$request->from, $request->to])
+            ->orderBy('journals.date', 'asc')
+            ->get();
 
         $saldo = 0;
         foreach ($bukuBesar as $a) {
             $a->diffHuman = date('d/m/Y', strtotime($a->date));
-            if ($a->position_normal === "D") {
+            $a->DEBET += 0;
+            $a->CREDIT += 0;
+            if ($a->position_normal === 'D') {
                 $saldo += $a->DEBET - $a->CREDIT;
-                $a->saldo = $saldo;
             } else {
-                $saldo +=  $a->CREDIT - $a->DEBET;
-                $a->saldo = $saldo;
+                $saldo += $a->CREDIT - $a->DEBET;
             }
+            $a->saldo = $saldo;
         }
+
+        // foreach ($bukuBesar as $a) {
+        //     $a->DEBET = number_format($a->DEBET, 2, ',', '.');
+        //     $a->CREDIT = number_format($a->CREDIT, 2, ',', '.');
+        //     $a->saldo = number_format($a->saldo, 2, ',', '.');
+        // }
+
 
         if ($bukuBesar)
             return ResponseFormatter::success($bukuBesar, 'Data Buku Besar!!!');
