@@ -21,6 +21,11 @@ class AccountType extends Model
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
+    public function profitLossAccount()
+    {
+        return $this->hasOne(ProfitLossAccount::class);
+    }
+
     // public function positionNormal(): Attribute
     // {
     //     return Attribute::make(

@@ -47,7 +47,31 @@ class AccountTypeController extends Controller
     {
         return  ResponseFormatter::success(
             $this->service->delete($id),
-            'Berhasil. Data di delete'
+            'Berhasil.'
+        );
+    }
+
+    public function getProfitLossAccounts()
+    {
+        return  ResponseFormatter::success(
+            $this->service->getProfitLossAccounts(),
+            'Berhasil.'
+        );
+    }
+
+    public function storeProfitLossAccount($accountTypeId)
+    {
+        return  ResponseFormatter::success(
+            $this->service->addProfitLossAccount($accountTypeId),
+            'Berhasil.'
+        );
+    }
+
+    public function deleteProfitLossAccount($id)
+    {
+        return  ResponseFormatter::success(
+            $this->service->removeProfitLossAccount($id),
+            'Berhasil.'
         );
     }
 }

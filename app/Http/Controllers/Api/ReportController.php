@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Helpers\ResponseFormatter;
 use App\Http\Controllers\Controller;
+use App\Models\ProfitLossAccount;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -100,6 +101,9 @@ class ReportController extends Controller
             'to' => 'required'
         ]);
 
+        // $profitLossAccountIds = DB::select("SELECT account_type_id FROM profit_loss_accounts WHERE deleted_at IS NULL");
+        // dd($profitLossAccountIds);
+
         $_neraca_lajur =  DB::select("SELECT a.id, a.name, a.code, j.type, j.amount,
         SUM(
             CASE WHEN j.type = 'D' THEN j.amount ELSE 0
@@ -110,7 +114,7 @@ class ReportController extends Controller
         END
         ) AS CREDIT,
         CASE WHEN j.account_id IN(
-            SELECT id FROM accounts WHERE account_type_id IN(SELECT id FROM `account_types` WHERE CODE = '410' OR CODE = '510')
+            SELECT id FROM accounts WHERE account_type_id IN(SELECT account_type_id FROM profit_loss_accounts WHERE deleted_at IS NULL)
                 -- OR account_type_id = '500000'
                 -- OR account_type_id = '610000'
                 -- OR account_type_id = '630000'

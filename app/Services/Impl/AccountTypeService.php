@@ -4,6 +4,7 @@ namespace App\Services\Impl;
 
 use App\Exceptions\InvariantError;
 use App\Models\AccountType;
+use App\Models\ProfitLossAccount;
 use App\Services\AccountTypeInterface;
 use Illuminate\Validation\ValidationException;
 
@@ -100,5 +101,40 @@ class AccountTypeService implements AccountTypeInterface
 
         return $account->where('code', $code)
             ->exists();
+    }
+
+    public function addProfitLossAccount($accountTypeId)
+    {
+        $accountType = AccountType::find($accountTypeId);
+
+        if ($accountType) {
+            $accountType->profitLossAccount()->create([
+                'account_type_id' => $accountTypeId,
+            ]);
+
+            return $accountType;
+        }
+
+        return false;
+    }
+
+    public function removeProfitLossAccount($profitLossAccountId)
+    {
+        $profitLossAccount = ProfitLossAccount::find($profitLossAccountId);
+
+        if ($profitLossAccount) {
+            $profitLossAccount->delete();
+
+            return $profitLossAccount;
+        }
+
+        return false;
+    }
+
+    public function getProfitLossAccounts()
+    {
+        return AccountType::with('profitLossAccount')
+            ->whereHas('profitLossAccount')
+            ->get();
     }
 };

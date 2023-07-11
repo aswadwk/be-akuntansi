@@ -41,6 +41,11 @@ Route::prefix('v1')->middleware(['auth:api', 'user.id'])->group(function () {
         Route::post('account-types', 'store')->name('account-type.store');
         Route::put('account-types/{id}', 'update')->name('account-type.update');
         Route::delete('account-types/{id}', 'delete')->name('account-type.delete');
+
+        // profit loss account
+        Route::get('profit-loss-accounts', 'getProfitLossAccounts');
+        Route::post('profit-loss-accounts/{profitLossId}', 'storeProfitLossAccount');
+        Route::delete('profit-loss-accounts/{profitLossId}', 'deleteProfitLossAccount');
     });
 
     Route::controller(AccountController::class)->group(function () {
