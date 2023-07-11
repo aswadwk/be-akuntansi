@@ -110,13 +110,7 @@ class ReportController extends Controller
         END
         ) AS CREDIT,
         CASE WHEN j.account_id IN(
-            SELECT
-                id
-            FROM
-                accounts
-            WHERE
-                account_type_id = '410'
-                OR account_type_id = '510'
+            SELECT id FROM accounts WHERE account_type_id IN(SELECT id FROM `account_types` WHERE CODE = '410' OR CODE = '510')
                 -- OR account_type_id = '500000'
                 -- OR account_type_id = '610000'
                 -- OR account_type_id = '630000'
@@ -134,6 +128,8 @@ class ReportController extends Controller
             a.id = j.account_id WHERE j.deleted_at IS NULL AND j.date BETWEEN '$request->from' AND '$request->to'
         GROUP BY
             a.id");
+
+        // dd($_neraca_lajur);
 
         $_sa = 0;
 
@@ -266,26 +262,27 @@ class ReportController extends Controller
         RIGHT JOIN account_types AS AT
         ON
             a.account_type_id = AT.id WHERE
-                a.account_type_id = '111000'   #Kas
-                OR a.account_type_id = '112000' #BANK
-                OR a.account_type_id = '113000' #PIUTANG
-                OR a.account_type_id = '114000' #PERSEDIAAN
+                a.account_type_id != '410'   #Kas
+                or a.account_type_id != '510' #Bank
+                -- OR a.account_type_id = '112000' #BANK
+                -- OR a.account_type_id = '113000' #PIUTANG
+                -- OR a.account_type_id = '114000' #PERSEDIAAN
 
-                OR a.account_type_id = '121000' #AKTIVA TETAP
-                OR a.account_type_id = '122000' #DEPRESIASI DAN AMORTISASI Akum. Penyusutan
-                OR a.account_type_id = '123000' #Piutang Jangka Panjang
+                -- OR a.account_type_id = '121000' #AKTIVA TETAP
+                -- OR a.account_type_id = '122000' #DEPRESIASI DAN AMORTISASI Akum. Penyusutan
+                -- OR a.account_type_id = '123000' #Piutang Jangka Panjang
 
-                OR a.account_type_id = '211000' #Akun Hutang
-                OR a.account_type_id = '214000' #Hutang Jangka Pendek
-                OR a.account_type_id = '212000' #KEWAJIBAN JANGKA PANJANG
+                -- OR a.account_type_id = '211000' #Akun Hutang
+                -- OR a.account_type_id = '214000' #Hutang Jangka Pendek
+                -- OR a.account_type_id = '212000' #KEWAJIBAN JANGKA PANJANG
 
-                OR a.account_type_id = '321000' #EKUITAS
-                OR a.account_type_id = '321001' #MODAL AWAL
-                OR a.account_type_id = '321004' #tambahan Modal Disetor
-                OR a.account_type_id = '321006' #laba Ditahan
-                OR a.account_type_id = '321007' #LABA PERIODE BERJALAN
-                OR a.account_type_id = '500000' #BIAYA ATAS PENDAPATAN
-                OR a.account_type_id = '630000' #BEBAN PENYUSUTAN
+                -- OR a.account_type_id = '321000' #EKUITAS
+                -- OR a.account_type_id = '321001' #MODAL AWAL
+                -- OR a.account_type_id = '321004' #tambahan Modal Disetor
+                -- OR a.account_type_id = '321006' #laba Ditahan
+                -- OR a.account_type_id = '321007' #LABA PERIODE BERJALAN
+                -- OR a.account_type_id = '500000' #BIAYA ATAS PENDAPATAN
+                -- OR a.account_type_id = '630000' #BEBAN PENYUSUTAN
 
         AND j.deleted_at IS NULL AND j.date BETWEEN '$request->from' AND '$request->to'
 
