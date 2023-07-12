@@ -246,6 +246,7 @@ class ReportController extends Controller
         AT.name as nama_type_akun,
         a.id,
         a.name,
+        a.code,
         j.type,
         AT.position_normal,
 
@@ -291,7 +292,7 @@ class ReportController extends Controller
         AND j.deleted_at IS NULL AND j.date BETWEEN '$request->from' AND '$request->to'
 
         GROUP BY
-            a.id");
+            a.id ORDER BY a.code ASC");
 
         foreach ($_neraca as $a) {
 
@@ -302,9 +303,9 @@ class ReportController extends Controller
             }
         }
 
-        $arr = array();
+        $arr = [];
         foreach ($_neraca as $key => $item) {
-            $arr[$item->kode_type][] =  $item;
+            $arr[] =  $item;
         }
 
         if ($_neraca)
