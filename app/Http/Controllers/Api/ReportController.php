@@ -284,11 +284,12 @@ class ReportController extends Controller
         INNER JOIN journals AS j
         ON
             a.id = j.account_id
-        RIGHT JOIN account_types AS AT
+        INNER JOIN account_types AS AT
         ON
             a.account_type_id = AT.id WHERE
-                a.account_type_id != '410'   #Kas
-                or a.account_type_id != '510' #Bank
+            AT.code >= '100' AND AT.code <= '399'
+                -- a.account_type_id != '410'   #Kas
+                -- or a.account_type_id != '510' #Bank
                 -- OR a.account_type_id = '112000' #BANK
                 -- OR a.account_type_id = '113000' #PIUTANG
                 -- OR a.account_type_id = '114000' #PERSEDIAAN
@@ -366,8 +367,9 @@ class ReportController extends Controller
             a.id = j.account_id
         RIGHT JOIN account_types AS AT
         ON
-            a.account_type_id = AT.id WHERE a.account_type_id
-            IN(SELECT account_type_id FROM profit_loss_accounts WHERE deleted_at IS NULL)
+            a.account_type_id = AT.id WHERE AT.code >= '400' AND AT.code <= '599'
+            -- a.account_type_id = AT.id WHERE a.account_type_id
+            -- IN(SELECT account_type_id FROM profit_loss_accounts WHERE deleted_at IS NULL)
                 -- a.account_type_id != '410'   #Kas
                 -- or a.account_type_id != '510' #Bank
                 -- OR a.account_type_id = '112000' #BANK
