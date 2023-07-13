@@ -233,7 +233,27 @@ class ReportController extends Controller
             return ResponseFormatter::error('error', 'Data Tidak di temukan', 404);
     }
 
+    public function account_hutang()
+    {
+        $hutang = DB::select("SELECT * FROM `partners` WHERE account_type='HUTANG'");
 
+        if ($hutang)
+            return ResponseFormatter::success($hutang, 'Data Akun Hutang!!!');
+        else
+            return ResponseFormatter::error('error', 'Data Tidak di temukan', 404);
+    }
+    public function account_piutang()
+    {
+        $piutang = DB::select("SELECT * FROM `partners` WHERE account_type='PIUTANG'");
+
+        if ($piutang)
+            return ResponseFormatter::success($piutang, 'Data Akun piutang!!!');
+        else
+            return ResponseFormatter::error('error', 'Data Tidak di temukan', 404);
+    }
+
+
+    // Laporan Keuangan
     public function neraca(Request $request)
     {
         $this->validate($request, [
@@ -314,21 +334,83 @@ class ReportController extends Controller
             return ResponseFormatter::error('error', 'Data Tidak di temukan', 404);
     }
 
-    public function account_hutang()
+    public function profitLoss(Request $request)
     {
-        $hutang = DB::select("SELECT * FROM `partners` WHERE account_type='HUTANG'");
+        $this->validate($request, [
+            'from' => 'required',
+            'to' => 'required'
+        ]);
 
-        if ($hutang)
-            return ResponseFormatter::success($hutang, 'Data Akun Hutang!!!');
-        else
-            return ResponseFormatter::error('error', 'Data Tidak di temukan', 404);
-    }
-    public function account_piutang()
-    {
-        $piutang = DB::select("SELECT * FROM `partners` WHERE account_type='PIUTANG'");
+        $_neraca =  DB::select("SELECT
+         a.account_type_id AS kode_type,
+        AT.name as nama_type_akun,
+        a.id,
+        a.name,
+        a.code,
+        j.type,
+        AT.position_normal,
 
-        if ($piutang)
-            return ResponseFormatter::success($piutang, 'Data Akun piutang!!!');
+        j.amount,
+        SUM(
+            CASE WHEN j.type = 'D' AND j.date BETWEEN '$request->from' AND '$request->to' THEN j.amount ELSE 0
+        END
+        ) AS DEBET,
+        SUM(
+            CASE WHEN j.type = 'C' AND j.date BETWEEN '$request->from' AND '$request->to' THEN j.amount ELSE 0
+        END
+        ) AS CREDIT
+        FROM
+            accounts AS a
+        INNER JOIN journals AS j
+        ON
+            a.id = j.account_id
+        RIGHT JOIN account_types AS AT
+        ON
+            a.account_type_id = AT.id WHERE a.account_type_id
+            IN(SELECT account_type_id FROM profit_loss_accounts WHERE deleted_at IS NULL)
+                -- a.account_type_id != '410'   #Kas
+                -- or a.account_type_id != '510' #Bank
+                -- OR a.account_type_id = '112000' #BANK
+                -- OR a.account_type_id = '113000' #PIUTANG
+                -- OR a.account_type_id = '114000' #PERSEDIAAN
+
+                -- OR a.account_type_id = '121000' #AKTIVA TETAP
+                -- OR a.account_type_id = '122000' #DEPRESIASI DAN AMORTISASI Akum. Penyusutan
+                -- OR a.account_type_id = '123000' #Piutang Jangka Panjang
+
+                -- OR a.account_type_id = '211000' #Akun Hutang
+                -- OR a.account_type_id = '214000' #Hutang Jangka Pendek
+                -- OR a.account_type_id = '212000' #KEWAJIBAN JANGKA PANJANG
+
+                -- OR a.account_type_id = '321000' #EKUITAS
+                -- OR a.account_type_id = '321001' #MODAL AWAL
+                -- OR a.account_type_id = '321004' #tambahan Modal Disetor
+                -- OR a.account_type_id = '321006' #laba Ditahan
+                -- OR a.account_type_id = '321007' #LABA PERIODE BERJALAN
+                -- OR a.account_type_id = '500000' #BIAYA ATAS PENDAPATAN
+                -- OR a.account_type_id = '630000' #BEBAN PENYUSUTAN
+
+        AND j.deleted_at IS NULL AND j.date BETWEEN '$request->from' AND '$request->to'
+
+        GROUP BY
+            a.id ORDER BY a.code ASC");
+
+        foreach ($_neraca as $a) {
+
+            if ($a->position_normal == "D") {
+                $a->total = $a->DEBET - $a->CREDIT;
+            } else {
+                $a->total =  $a->CREDIT - $a->DEBET;
+            }
+        }
+
+        $arr = [];
+        foreach ($_neraca as $key => $item) {
+            $arr[] =  $item;
+        }
+
+        if ($_neraca)
+            return ResponseFormatter::success($arr, 'Data Laba rugi!');
         else
             return ResponseFormatter::error('error', 'Data Tidak di temukan', 404);
     }

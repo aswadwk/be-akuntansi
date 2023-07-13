@@ -87,8 +87,11 @@ Route::prefix('v1')->middleware(['auth:api', 'user.id'])->group(function () {
         Route::get('general-ledger/{accountId}', 'buku_besar')->name('reports.general-ledger');
         Route::get('neraca-lajur', 'neraca_lajur')->name('reports.neraca-lajur');
         Route::get('buku-pembantu/{partnerId}', 'buku_pembantu')->name('reports.buku-pembantu');
-        Route::get('neraca', 'neraca')->name('reports.neraca');
         Route::get('account-hutang', 'account_hutang')->name('reports.account-hutang');
         Route::get('account-piutang', 'account_piutang')->name('reports.account-piutang');
+
+        // Laporan Keuangan
+        Route::get('neraca', 'neraca')->name('reports.neraca');
+        Route::get('profit-loss', 'profitLoss');
     });
 });
