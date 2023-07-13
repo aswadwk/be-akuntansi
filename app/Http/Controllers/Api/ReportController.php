@@ -322,6 +322,11 @@ class ReportController extends Controller
             } else {
                 $a->total =  $a->CREDIT - $a->DEBET;
             }
+
+            if ($a->total < 0) {
+                $a->total = abs($a->total);
+                $a->position_normal = 'C';
+            }
         }
 
         $arr = [];
