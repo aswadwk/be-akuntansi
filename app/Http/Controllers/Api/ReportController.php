@@ -64,7 +64,7 @@ class ReportController extends Controller
             ->join('account_types', 'accounts.account_type_id', '=', 'account_types.id')
             ->where('journals.account_id', $id)
             ->whereNull('journals.deleted_at')
-            ->whereBetween('journals.date', [$request->from, $request->to])
+            ->whereDate('journals.date', '<=', $request->to)
             ->orderBy('journals.date', 'asc')
             ->get();
 
