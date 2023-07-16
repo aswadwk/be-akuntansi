@@ -114,7 +114,7 @@ class ReportController extends Controller
         END
         ) AS CREDIT,
         CASE WHEN j.account_id IN(
-            SELECT id FROM accounts WHERE account_type_id IN(SELECT account_type_id FROM profit_loss_accounts WHERE deleted_at IS NULL)
+            SELECT id FROM accounts WHERE code >= '400' AND code <= '599'
                 -- OR account_type_id = '500000'
                 -- OR account_type_id = '610000'
                 -- OR account_type_id = '630000'
@@ -129,11 +129,9 @@ class ReportController extends Controller
             accounts AS a
         INNER JOIN journals AS j
         ON
-            a.id = j.account_id WHERE j.deleted_at IS NULL AND j.date BETWEEN '$request->from' AND '$request->to'
+            a.id = j.account_id WHERE j.deleted_at IS NULL AND j.date <= '$request->to'
         GROUP BY
             a.id ORDER BY a.code ASC");
-
-        // dd($_neraca_lajur);
 
         $_sa = 0;
 
