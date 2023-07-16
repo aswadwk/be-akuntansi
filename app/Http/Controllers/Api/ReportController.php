@@ -270,11 +270,11 @@ class ReportController extends Controller
 
         j.amount,
         SUM(
-            CASE WHEN j.type = 'D' AND j.date BETWEEN '$request->from' AND '$request->to' THEN j.amount ELSE 0
+            CASE WHEN j.type = 'D' AND j.date <= '$request->to' THEN j.amount ELSE 0
         END
         ) AS DEBET,
         SUM(
-            CASE WHEN j.type = 'C' AND j.date BETWEEN '$request->from' AND '$request->to' THEN j.amount ELSE 0
+            CASE WHEN j.type = 'C' AND j.date <= '$request->to' THEN j.amount ELSE 0
         END
         ) AS CREDIT
         FROM
@@ -308,7 +308,7 @@ class ReportController extends Controller
                 -- OR a.account_type_id = '500000' #BIAYA ATAS PENDAPATAN
                 -- OR a.account_type_id = '630000' #BEBAN PENYUSUTAN
 
-        AND j.deleted_at IS NULL AND j.date BETWEEN '$request->from' AND '$request->to'
+        AND j.deleted_at IS NULL AND j.date <= '$request->to'
 
         GROUP BY
             a.id ORDER BY a.code ASC");
@@ -356,11 +356,11 @@ class ReportController extends Controller
 
         j.amount,
         SUM(
-            CASE WHEN j.type = 'D' AND j.date BETWEEN '$request->from' AND '$request->to' THEN j.amount ELSE 0
+            CASE WHEN j.type = 'D' AND j.date <= '$request->to' THEN j.amount ELSE 0
         END
         ) AS DEBET,
         SUM(
-            CASE WHEN j.type = 'C' AND j.date BETWEEN '$request->from' AND '$request->to' THEN j.amount ELSE 0
+            CASE WHEN j.type = 'C' AND j.date <= '$request->to' THEN j.amount ELSE 0
         END
         ) AS CREDIT
         FROM
@@ -395,7 +395,7 @@ class ReportController extends Controller
                 -- OR a.account_type_id = '500000' #BIAYA ATAS PENDAPATAN
                 -- OR a.account_type_id = '630000' #BEBAN PENYUSUTAN
 
-        AND j.deleted_at IS NULL AND j.date BETWEEN '$request->from' AND '$request->to'
+        AND j.deleted_at IS NULL AND j.date <= '$request->to'
 
         GROUP BY
             a.id ORDER BY a.code ASC");
