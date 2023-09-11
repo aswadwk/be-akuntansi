@@ -6,6 +6,7 @@ use App\Exceptions\AuthenticationError;
 use App\Models\User;
 use App\Services\AuthService;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\UnauthorizedException;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
@@ -27,7 +28,7 @@ class AuthServiceImpl implements AuthService
         $token = auth('api')->attempt($credential);
 
         if (!$token) {
-            throw new UnauthorizedHttpException();
+            throw new UnauthorizedException('Unauthentication');
         }
 
         return $this->respondWithToken($token);
