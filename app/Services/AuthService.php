@@ -13,4 +13,6 @@ interface AuthService
     public function logout($token);
 
     public function me($token);
+
+    public function changePassword($params);
 };

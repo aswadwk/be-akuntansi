@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use App\Helpers\ResponseFormatter;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Validation\UnauthorizedException;
 use Illuminate\Validation\ValidationException;
@@ -66,10 +67,6 @@ class Handler extends ExceptionHandler
                     return ResponseFormatter::error($e->getMessage(), null, $e->getStatusCode());
                 }
 
-                // if ($e instanceof ClientError) {
-                //     return ResponseFormatter::error($e->getMessage(), null, 404);
-                // }
-
                 if ($e instanceof MethodNotAllowedHttpException) {
                     return ResponseFormatter::error(__('commons.method_not_allowed'), null, 405);
                 }
@@ -82,6 +79,9 @@ class Handler extends ExceptionHandler
                     return ResponseFormatter::error($e->getMessage(), null, 401);
                 }
 
+                if ($e instanceof AuthenticationException) {
+                    return ResponseFormatter::error($e->getMessage(), null, 401);
+                }
 
                 if (config('app.env') === 'local' || config('app.env') === 'testing') {
                     dd($e);
