@@ -32,7 +32,8 @@ Route::prefix('v1')->middleware(['auth:api', 'user.id'])->group(function () {
     Route::controller(AuthController::class)->group(function () {
         Route::post('register', 'register')->name('auth.register')->withoutMiddleware(['auth:api', 'user.id']);
         Route::post('login', 'login')->name('auth.login')->withoutMiddleware(['auth:api', 'user.id']);
-        Route::post('logout', 'logout')->name('auth.logout');
+        Route::post('auth/logout', 'logout')->name('auth.logout');
+        Route::post('auth/change-password', 'changePassword');
         Route::post('refresh', 'refresh')->name('auth.refresh');
         Route::get('me', 'me')->name('auth.me');
     });

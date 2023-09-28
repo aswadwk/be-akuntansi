@@ -2,8 +2,6 @@
 
 namespace App\Services\Impl;
 
-use App\Exceptions\ClientError;
-use App\Exceptions\NotFoundError;
 use App\Models\Journal;
 use App\Models\Transaction;
 use App\Services\TransactionService;
@@ -14,22 +12,20 @@ class TransactionServiceImpl implements TransactionService
 {
     public function getAllTransactions()
     {
-        $transactions = Transaction::with([
+        return Transaction::with([
             'journals',
             'journals.account',
             'journals.division',
             'journals.partner',
         ])
             ->get();
-
-        return $transactions;
     }
 
     public function store($attrs)
     {
-        $transaction = Transaction::create($attrs);
+        Transaction::create($attrs);
 
-        return $transaction;
+        return true;
     }
 
     public function getTransactionById($id)

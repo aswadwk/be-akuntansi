@@ -8,6 +8,7 @@ use App\Services\AuthService;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\UnauthorizedException;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class AuthServiceImpl implements AuthService
@@ -60,5 +61,21 @@ class AuthServiceImpl implements AuthService
     public function emailIsExist($email): bool
     {
         return User::where('email', $email)->exists();
+    }
+
+    public function changePassword($params)
+    {
+        $user = User::find($params['user_id']);
+
+        if (!$user) {
+            throw new BadRequestException('User tidak ditemukan');
+        }
+
+        if (!Hash::check($params['old_password'], $user->password)) {
+            throw new BadRequestException('Password lama tidak sesuai');
+        }
+
+        $user->password = Hash::make($params['new_password']);
+        return $user->save();
     }
 };
