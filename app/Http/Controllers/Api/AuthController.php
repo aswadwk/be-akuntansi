@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Helpers\ResponseFormatter;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\ChangePasswordRequest;
 use App\Http\Requests\UserLoginRequest;
 use App\Http\Requests\UserRegisterRequest;
 use App\Services\AuthService;
@@ -77,7 +78,7 @@ class AuthController extends Controller
     {
         auth('api')->logout();
 
-        return response()->json(['message' => 'Successfully logged out']);
+        return ResponseFormatter::success(true, 'Berhasil');
     }
 
     /**
@@ -88,5 +89,12 @@ class AuthController extends Controller
     public function refresh()
     {
         return $this->respondWithToken(auth('api')->refresh());
+    }
+
+    public function changePassword(ChangePasswordRequest $request)
+    {
+        $this->service->changePassword($request->validated());
+
+        return ResponseFormatter::success(null, 'Berhasil Ganti Password');
     }
 }
