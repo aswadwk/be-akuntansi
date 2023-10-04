@@ -20,6 +20,8 @@ return new class extends Migration
             $table->char('code');
             $table->string('name');
             $table->text('description')->nullable();
+            $table->enum('position_normal', ['D', 'C'])->default('D');
+            $table->decimal('balance', 20, 2)->default(0.00);
 
             $table->uuid('account_type_id');
             $table->foreign('account_type_id')

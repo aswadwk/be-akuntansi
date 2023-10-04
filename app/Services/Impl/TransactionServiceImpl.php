@@ -23,9 +23,7 @@ class TransactionServiceImpl implements TransactionService
 
     public function store($attrs)
     {
-        Transaction::create($attrs);
-
-        return true;
+        return Transaction::create($attrs);
     }
 
     public function getTransactionById($id)

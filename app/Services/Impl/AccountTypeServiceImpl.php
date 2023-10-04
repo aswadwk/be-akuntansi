@@ -3,10 +3,12 @@
 namespace App\Services\Impl;
 
 use App\Exceptions\InvariantError;
+use App\Models\Account;
 use App\Models\AccountType;
 use App\Models\ProfitLossAccount;
 use App\Services\AccountTypeService;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class AccountTypeServiceImpl implements AccountTypeService
@@ -52,7 +54,9 @@ class AccountTypeServiceImpl implements AccountTypeService
     public function update($id, $attr)
     {
         if (empty(array_filter($attr))) {
-            throw new BadRequestHttpException('tidak ada data yang di update, pastikan anda mengirimkan data yang akan di update');
+            throw new BadRequestException(
+                'tidak ada data yang di update, pastikan anda mengirimkan data yang akan di update'
+            );
         }
 
         $accountType = AccountType::find($id);
@@ -70,6 +74,13 @@ class AccountTypeServiceImpl implements AccountTypeService
         }
 
         if (isset($attr['position_normal'])) {
+
+            if ($attr['position_normal'] != $accountType->position_normal) {
+                Account::where('account_type_id', $id)->update([
+                    'position_normal' => $attr['position_normal']
+                ]);
+            }
+
             $accountType->position_normal = $attr['position_normal'];
         }
 
