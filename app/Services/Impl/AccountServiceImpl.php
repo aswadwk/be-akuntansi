@@ -8,6 +8,7 @@ use App\Models\Account;
 use App\Models\AccountType;
 use App\Services\AccountService;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -44,9 +45,17 @@ class AccountServiceImpl implements AccountService
 
     public function store($attr)
     {
+        $accountType = AccountType::find($attr['account_type_id']);
+
+        if (!$accountType) {
+            throw new NotFoundHttpException('account type tidak di temukan');
+        }
+
         if ($this->codeIsExists($attr['code'])) {
             throw ValidationException::withMessages(['code' => 'Kode tidak tersedia']);
         }
+
+        $attr['position_normal'] = $accountType->position_normal;
 
         return Account::create($attr);
     }
@@ -56,7 +65,10 @@ class AccountServiceImpl implements AccountService
         $account = Account::find($id);
 
         if (empty(array_filter($attr))) {
-            throw new BadRequestHttpException('tidak ada data yang di update, pastikan anda mengirimkan data yang akan di update');
+
+            throw new BadRequestException(
+                'Tidak ada data yang di update, pastikan anda mengirimkan data yang akan di update.'
+            );
         }
 
         if (isset($attr['code'])) {
@@ -75,9 +87,13 @@ class AccountServiceImpl implements AccountService
             $account->description = $attr['description'];
         }
 
+        if (isset($attr['balance'])) {
+            $account->balance = $attr['balance'];
+        }
+
         if (isset($attr['account_type_id'])) {
             if (!AccountType::find($attr['account_type_id'])) {
-                throw new NotFoundHttpException('account type tidak di temukan');
+                throw new NotFoundHttpException('Tipe akun tidak di temukan.');
             }
 
             $account->account_type_id = $attr['account_type_id'];

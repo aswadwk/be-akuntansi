@@ -89,11 +89,7 @@ class JournalServiceImpl implements JournalService
             DB::rollBack();
             Log::error($err->getMessage());
 
-            if ($err instanceof BadRequestHttpException) {
-                throw $err;
-            }
-
-            throw new BadRequestHttpException('failed to create journal');
+            throw $err;
         }
     }
 

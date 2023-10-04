@@ -26,6 +26,7 @@ class AccountRequest extends FormRequest
         return [
             'code'            => 'required|string|min:3',
             'name'            => 'required|string|min:3',
+            'balance'         => 'nullable|numeric',
             'description'     => 'nullable|min:3|string',
             'account_type_id' => 'required|string|exists:account_types,id',
             'user_id'         => 'required|string',
