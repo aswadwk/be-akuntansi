@@ -75,11 +75,11 @@ class AccountTypeServiceImpl implements AccountTypeService
 
         if (isset($attr['position_normal'])) {
 
-            if ($attr['position_normal'] != $accountType->position_normal) {
-                Account::where('account_type_id', $id)->update([
-                    'position_normal' => $attr['position_normal']
-                ]);
-            }
+            // if ($attr['position_normal'] != $accountType->position_normal) {
+            //     Account::where('account_type_id', $id)->update([
+            //         'position_normal' => $attr['position_normal']
+            //     ]);
+            // }
 
             $accountType->position_normal = $attr['position_normal'];
         }

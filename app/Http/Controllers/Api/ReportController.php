@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Helpers\ResponseFormatter;
 use App\Http\Controllers\Controller;
+use App\Models\Account;
 use App\Models\ProfitLossAccount;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -11,45 +12,18 @@ use Illuminate\Support\Facades\DB;
 class ReportController extends Controller
 {
 
-    public function buku_besar(Request $request, $id)
+    public function bukuBesar(Request $request, $id)
     {
         $this->validate($request, [
             'from' => 'required',
             'to' => 'required'
         ]);
 
-        // $bukuBesar = DB::select("SELECT
-        // a.`name`,
-        // j.date,
-        // j.description,
-        // at.position_normal,
-        // CASE
-        //         WHEN j.type = 'D' THEN
-        //         j.amount ELSE 0
-        //     END AS DEBET,
-        // CASE
-        //         WHEN j.type = 'C' THEN
-        //         j.amount ELSE 0
-        //     END AS CREDIT
-        // FROM
-        //     journals AS j
-        //     INNER JOIN accounts AS a ON j.account_id = a.id
-        //     INNER JOIN account_types AS at ON a.account_type_id = at.id
-        // WHERE
-        //     j.account_id = '$id'
-        //     AND j.deleted_at IS NULL AND j.date BETWEEN '$request->from' AND '$request->to' order by j.date desc");
+        $account = Account::find($id);
 
-        // $saldo = 0;
-        // foreach ($bukuBesar as $a) {
-        //     $a->diffHuman = date('d/m/Y', strtotime($a->date));
-        //     if ($a->position_normal === "D") {
-        //         $saldo += $a->DEBET - $a->CREDIT;
-        //         $a->saldo = $saldo;
-        //     } else {
-        //         $saldo +=  $a->CREDIT - $a->DEBET;
-        //         $a->saldo = $saldo;
-        //     }
-        // }
+        if (!$account) {
+            return ResponseFormatter::error('error', 'Data Tidak di temukan', 404);
+        }
 
         $bukuBesar = DB::table('journals')
             ->select(
@@ -68,7 +42,8 @@ class ReportController extends Controller
             ->orderBy('journals.date', 'asc')
             ->get();
 
-        $saldo = 0;
+        $saldo = $account->balance;
+
         foreach ($bukuBesar as $a) {
             $a->diffHuman = date('d/m/Y', strtotime($a->date));
             $a->DEBET += 0;
@@ -80,13 +55,6 @@ class ReportController extends Controller
             }
             $a->saldo = $saldo;
         }
-
-        // foreach ($bukuBesar as $a) {
-        //     $a->DEBET = number_format($a->DEBET, 2, ',', '.');
-        //     $a->CREDIT = number_format($a->CREDIT, 2, ',', '.');
-        //     $a->saldo = number_format($a->saldo, 2, ',', '.');
-        // }
-
 
         if ($bukuBesar)
             return ResponseFormatter::success($bukuBesar, 'Data Buku Besar!!!');
@@ -100,9 +68,6 @@ class ReportController extends Controller
             'from' => 'required',
             'to' => 'required'
         ]);
-
-        // $profitLossAccountIds = DB::select("SELECT account_type_id FROM profit_loss_accounts WHERE deleted_at IS NULL");
-        // dd($profitLossAccountIds);
 
         $_neraca_lajur =  DB::select("SELECT a.id, a.name, a.code, j.type, j.amount,
         SUM(
