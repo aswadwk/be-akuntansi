@@ -86,7 +86,7 @@ Route::prefix('v1')->middleware(['auth:api', 'user.id'])->group(function () {
     });
 
     Route::controller(ReportController::class)->group(function () {
-        Route::get('general-ledger/{accountId}', 'buku_besar')->name('reports.general-ledger');
+        Route::get('general-ledger/{accountId}', 'bukuBesar')->name('reports.general-ledger');
         Route::get('neraca-lajur', 'neraca_lajur')->name('reports.neraca-lajur');
         Route::get('buku-pembantu/{partnerId}', 'buku_pembantu')->name('reports.buku-pembantu');
         Route::get('account-hutang', 'account_hutang')->name('reports.account-hutang');
