@@ -55,7 +55,9 @@ class AccountServiceImpl implements AccountService
             throw ValidationException::withMessages(['code' => 'Kode tidak tersedia']);
         }
 
-        $attr['position_normal'] = $accountType->position_normal;
+        if (!isset($attr['position_normal'])) {
+            $attr['position_normal'] = $accountType->position_normal;
+        }
 
         return Account::create($attr);
     }
