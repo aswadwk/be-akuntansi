@@ -69,7 +69,7 @@ class ReportController extends Controller
             'to' => 'required'
         ]);
 
-        $_neraca_lajur =  DB::select("SELECT a.id, a.name, a.code, j.type, j.amount,
+        $_neraca_lajur =  DB::select("SELECT a.id, a.name, a.code, a.balance, j.type, j.amount,
         SUM(
             CASE WHEN j.type = 'D' THEN j.amount ELSE 0
         END
@@ -141,7 +141,10 @@ class ReportController extends Controller
             }
         }
 
-        // dd($_neraca_lajur);
+        foreach ($_neraca_lajur as $a) {
+            $a->DEBET += $a->type === 'D' ? $a->balance : 0;
+            $a->CREDIT += $a->type === 'C' ? $a->balance : 0;
+        }
 
         if ($_neraca_lajur)
             return ResponseFormatter::success($_neraca_lajur, 'Data Neraca Lajur!!!');
