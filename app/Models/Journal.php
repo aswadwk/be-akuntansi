@@ -39,4 +39,9 @@ class Journal extends Model
             get: fn ($value) => + ($value),
         );
     }
+
+    // public function accountType()
+    // {
+    //     return $this->belongsTo(AccountType::class);
+    // }
 }

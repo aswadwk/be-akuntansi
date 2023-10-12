@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Helpers\ResponseFormatter;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Report\GeneralLedgerResource;
 use App\Models\Account;
+use App\Models\Journal;
 use App\Models\ProfitLossAccount;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -25,41 +27,46 @@ class ReportController extends Controller
             return ResponseFormatter::error('error', 'Data Tidak di temukan', 404);
         }
 
-        $bukuBesar = DB::table('journals')
-            ->select(
-                'accounts.name',
-                'journals.date',
-                'journals.description',
-                'account_types.position_normal',
-                DB::raw("CASE WHEN journals.type = 'D' THEN journals.amount ELSE 0 END AS DEBET"),
-                DB::raw("CASE WHEN journals.type = 'C' THEN journals.amount ELSE 0 END AS CREDIT")
-            )
-            ->join('accounts', 'journals.account_id', '=', 'accounts.id')
-            ->join('account_types', 'accounts.account_type_id', '=', 'account_types.id')
-            ->where('journals.account_id', $id)
-            ->whereNull('journals.deleted_at')
-            ->whereDate('journals.date', '<=', $request->to)
-            ->orderBy('journals.date', 'asc')
+        $queryGeneralBalance = Journal::with(['account.accountType'])
+            ->select('id', 'account_id', 'date', 'description', 'type', 'amount')
+            ->where('account_id', $id)
+            ->whereDate('date', '<=', $request->to)
+            ->orderBy('date', 'asc')
             ->get();
 
-        $saldo = $account->balance;
 
-        foreach ($bukuBesar as $a) {
-            $a->diffHuman = date('d/m/Y', strtotime($a->date));
-            $a->DEBET += 0;
-            $a->CREDIT += 0;
-            if ($a->position_normal === 'D') {
-                $saldo += $a->DEBET - $a->CREDIT;
-            } else {
-                $saldo += $a->CREDIT - $a->DEBET;
-            }
-            $a->saldo = $saldo;
+        $generalBalance = [];
+        $generalBalance[] = collect([
+            'account_id' => $account->id,
+            'balance' => $account->balance,
+            'debit' => $account->position_normal === 'D' ? $account->balance : 0,
+            'credit' => $account->position_normal === 'C' ? $account->balance : 0,
+            'type' => $account->position_normal,
+            'date' => $account->created_at,
+            'description' => 'Saldo Awal',
+            'name' => $account->name ?? null,
+        ]);
+
+        $balance = $account->balance;
+        foreach ($queryGeneralBalance as $journal) {
+            $journal->debit = $journal->type === 'D' ? $journal->amount : 0;
+            $journal->credit = $journal->type === 'C' ? $journal->amount : 0;
+
+            $balance += $journal->account->accountType->position_normal === 'D'
+                ? $journal->debit - $journal->credit
+                : $journal->credit - $journal->debit;
+
+            $journal->balance = $balance;
+            $journal->name = $account->name ?? null;
+
+            $generalBalance[] = $journal;
         }
 
-        if ($bukuBesar)
-            return ResponseFormatter::success($bukuBesar, 'Data Buku Besar!!!');
-        else
+        if ($queryGeneralBalance) {
+            return ResponseFormatter::success($generalBalance, 'Data Buku Besar!!!');
+        } else {
             return ResponseFormatter::error('error', 'Data Tidak di temukan', 404);
+        }
     }
 
     public function neraca_lajur(Request $request)
