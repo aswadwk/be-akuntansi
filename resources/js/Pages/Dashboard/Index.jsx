@@ -1,14 +1,12 @@
-import React from 'react'
-import Layout from '../../Shared/Layout'
+import React from "react";
+import Layout from "../../Shared/Layout";
 
 const index = () => {
     return (
         <Layout>
-            {/* <Head title="Welcome" /> */}
-            <h1>Welcome</h1>
-            <p>Hello , welcome to your first Inertia app!</p>
+            <div className="row row-deck row-cards"></div>
         </Layout>
-    )
-}
+    );
+};
 
-export default index
+export default index;
