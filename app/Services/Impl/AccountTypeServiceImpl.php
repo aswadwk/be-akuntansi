@@ -48,6 +48,9 @@ class AccountTypeServiceImpl implements AccountTypeService
             throw ValidationException::withMessages(['code' => 'Kode tidak tersedia']);
         }
 
+        $attrs['created_by'] = $attrs['user_id'];
+        unset($attrs['user_id']);
+
         return AccountType::create($attrs);
     }
 

@@ -1,0 +1,53 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Requests\AccountTypeRequest;
+use App\Models\AccountType;
+use App\Services\AccountTypeService;
+use Illuminate\Http\Request;
+
+class AccountTypeController extends Controller
+{
+    private $service;
+
+    public function __construct(
+        AccountTypeService $service
+    ) {
+        $this->service = $service;
+    }
+
+    public function index()
+    {
+        $accountTypes = $this->service->search([]);
+        return inertia('AccountType/Index', [
+            'accountTypes' => $accountTypes
+        ]);
+    }
+
+    public function create()
+    {
+        return inertia('AccountType/Create');
+    }
+
+    public function store(AccountTypeRequest $request)
+    {
+        $this->service->store(
+            $request->validated()
+        );
+
+        return $this->index();
+    }
+
+    public function show($accountTypeId)
+    {
+    }
+
+    public function edit($accountTypeId)
+    {
+    }
+
+    public function delete($accountTypeId)
+    {
+    }
+}
