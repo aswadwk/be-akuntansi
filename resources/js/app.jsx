@@ -2,7 +2,20 @@ import { createInertiaApp } from "@inertiajs/react";
 import { createRoot } from "react-dom/client";
 import { InertiaProgress } from "@inertiajs/progress";
 
-InertiaProgress.init();
+InertiaProgress.init({
+    // The delay after which the progress bar will
+    // appear during navigation, in milliseconds.
+    delay: 250,
+
+    // The color of the progress bar.
+    color: '#29d',
+
+    // Whether to include the default NProgress styles.
+    includeCSS: true, //this
+
+    // Whether the NProgress spinner will be shown.
+    showSpinner: false,
+});
 
 createInertiaApp({
     resolve: (name) => {
@@ -11,5 +24,5 @@ createInertiaApp({
     },
     setup({ el, App, props }) {
         createRoot(el).render(<App {...props} />);
-    },
+    }
 });

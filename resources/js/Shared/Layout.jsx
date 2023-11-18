@@ -4,7 +4,7 @@ import Navbar from "./Navbar";
 import PageTitle from "./PageTitle";
 import Footer from "./Footer";
 
-export default function Layout({ children }) {
+export default function Layout({ children, left, right }) {
     return (
         <>
             <Head>
@@ -17,7 +17,7 @@ export default function Layout({ children }) {
                 <div className="page-wrapper">
                     <div className="page-header d-print-none">
                         <div className="container-xl">
-                            <PageTitle />
+                            <PageTitle left={left} right={right}/>
                         </div>
                     </div>
 

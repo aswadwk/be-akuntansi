@@ -22,14 +22,7 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::controller(AccountController::class)->group(function () {
+        Route::get('/accounts', 'index');
         Route::get('/account-types', 'accountTypes');
     });
 });
-
-// Route::get('/account-types', function () {
-//     return inertia('Account/Type');
-// });
-
-// Route::get('/accounts', function () {
-//     return inertia('Account/Index');
-// });

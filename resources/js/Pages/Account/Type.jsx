@@ -4,14 +4,10 @@ import { Link } from "@inertiajs/react";
 import Paginate, { PaginateInfo } from "../../Shared/Paginate";
 
 const AccountType = ({ accountTypes }) => {
-    console.log(accountTypes)
     return (
         <Layout>
             <div className="col-12">
                 <div className="card">
-                    <div className="card-header">
-                        <h3 className="card-title">Account Types</h3>
-                    </div>
                     <div className="card-body border-bottom py-3">
                         <div className="d-flex">
                             <div className="text-secondary">
@@ -47,7 +43,7 @@ const AccountType = ({ accountTypes }) => {
                                         <tr key={index}>
                                             <td>{accountType.name}</td>
                                             <td>{accountType.code}</td>
-                                            <td>{accountType.position_normal}</td>
+                                            <td>{accountType.position_normal==="D" ? 'Debit' : 'Credit' }</td>
                                             <td>{accountType.description}</td>
                                             <td>{accountType.created_at}</td>
                                             <td></td>
@@ -65,9 +61,6 @@ const AccountType = ({ accountTypes }) => {
             </div>
         </Layout>
     )
-
-
-
 };
 
 export default AccountType;
