@@ -15,6 +15,8 @@ class AuthController extends Controller
 
     public function doLogin(UserLoginRequest $request)
     {
+        $request->authenticate();
+
         $request->session()->regenerate();
 
         return redirect()->intended(RouteServiceProvider::HOME);

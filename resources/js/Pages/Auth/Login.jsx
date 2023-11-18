@@ -21,7 +21,7 @@ const Login = () => {
                 <div className="text-center mb-4">
                     <a href="." className="navbar-brand navbar-brand-autodark">
                         <img
-                            src="./static/logo.svg"
+                            src="/logo.svg"
                             width="110"
                             height="32"
                             alt="Tabler"
@@ -41,9 +41,8 @@ const Login = () => {
                                 </label>
                                 <input
                                     type="text"
-                                    className={`${
-                                        errors.email ? "is-invalid" : ""
-                                    } form-control`}
+                                    className={`${errors.email ? "is-invalid" : ""
+                                        } form-control`}
                                     placeholder="your@email.com"
                                     autoComplete="off"
                                     value={data.email}
@@ -67,9 +66,8 @@ const Login = () => {
                                 <div className="input-group input-group-flat">
                                     <input
                                         type={isShowing ? "text" : "password"}
-                                        className={`${
-                                            errors.email ? "is-invalid" : ""
-                                        } form-control`}
+                                        className={`${errors.email ? "is-invalid" : ""
+                                            } form-control`}
                                         placeholder="Your password"
                                         autoComplete="off"
                                         value={data.password}

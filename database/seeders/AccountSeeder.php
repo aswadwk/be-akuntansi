@@ -24,7 +24,7 @@ class AccountSeeder extends Seeder
             'name'            => 'Aktiva Lancar',
             'account_type_id' => $accountType->id,
             'position_normal' => $accountType->position_normal,
-            'user_id'         => $user->id,
+            'created_by'         => $user->id,
             'created_at'      => now(),
             'updated_at'      => now(),
         ]);
@@ -34,7 +34,7 @@ class AccountSeeder extends Seeder
             'name'            => 'Kas Rupiah',
             'account_type_id' => $accountType->id,
             'position_normal' => $accountType->position_normal,
-            'user_id'         => $user->id,
+            'created_by'         => $user->id,
             'created_at'      => now(),
             'updated_at'      => now(),
         ]);
@@ -44,7 +44,7 @@ class AccountSeeder extends Seeder
             'name'            => 'Saldo Tokopedia',
             'account_type_id' => $accountType->id,
             'position_normal' => $accountType->position_normal,
-            'user_id'         => $user->id,
+            'created_by'         => $user->id,
             'created_at'      => now(),
             'updated_at'      => now(),
         ]);
@@ -54,7 +54,7 @@ class AccountSeeder extends Seeder
             'name'            => 'Saldo Flip',
             'account_type_id' => $accountType->id,
             'position_normal' => $accountType->position_normal,
-            'user_id'         => $user->id,
+            'created_by'         => $user->id,
             'created_at'      => now(),
             'updated_at'      => now(),
         ]);
@@ -64,7 +64,7 @@ class AccountSeeder extends Seeder
             'name'            => 'Saldo Link Aja',
             'account_type_id' => $accountType->id,
             'position_normal' => $accountType->position_normal,
-            'user_id'         => $user->id,
+            'created_by'         => $user->id,
             'created_at'      => now(),
             'updated_at'      => now(),
         ]);
@@ -74,7 +74,7 @@ class AccountSeeder extends Seeder
             'name'            => 'Bank BRI',
             'account_type_id' => $accountType->id,
             'position_normal' => $accountType->position_normal,
-            'user_id'         => $user->id,
+            'created_by'         => $user->id,
             'created_at'      => now(),
             'updated_at'      => now(),
         ]);
@@ -84,7 +84,7 @@ class AccountSeeder extends Seeder
             'name'            => 'Piutang Usaha',
             'account_type_id' => $accountType->id,
             'position_normal' => $accountType->position_normal,
-            'user_id'         => $user->id,
+            'created_by'         => $user->id,
             'created_at'      => now(),
             'updated_at'      => now(),
         ]);
@@ -94,7 +94,7 @@ class AccountSeeder extends Seeder
             'name'            => 'Aktiva Tetap',
             'account_type_id' => $accountType->id,
             'position_normal' => $accountType->position_normal,
-            'user_id'         => $user->id,
+            'created_by'         => $user->id,
             'created_at'      => now(),
             'updated_at'      => now(),
         ]);
@@ -104,7 +104,7 @@ class AccountSeeder extends Seeder
             'name'            => 'Tanah',
             'account_type_id' => $accountType->id,
             'position_normal' => $accountType->position_normal,
-            'user_id'         => $user->id,
+            'created_by'         => $user->id,
             'created_at'      => now(),
             'updated_at'      => now(),
         ]);
@@ -114,7 +114,7 @@ class AccountSeeder extends Seeder
             'name'            => 'Bagunan',
             'account_type_id' => $accountType->id,
             'position_normal' => $accountType->position_normal,
-            'user_id'         => $user->id,
+            'created_by'         => $user->id,
             'created_at'      => now(),
             'updated_at'      => now(),
         ]);
@@ -124,7 +124,7 @@ class AccountSeeder extends Seeder
             'name'            => 'Kendaraan',
             'account_type_id' => $accountType->id,
             'position_normal' => $accountType->position_normal,
-            'user_id'         => $user->id,
+            'created_by'         => $user->id,
             'created_at'      => now(),
             'updated_at'      => now(),
         ]);
@@ -134,7 +134,7 @@ class AccountSeeder extends Seeder
             'name'            => 'Mesin dan Perlatan',
             'account_type_id' => $accountType->id,
             'position_normal' => $accountType->position_normal,
-            'user_id'         => $user->id,
+            'created_by'         => $user->id,
             'created_at'      => now(),
             'updated_at'      => now(),
         ]);
@@ -144,7 +144,7 @@ class AccountSeeder extends Seeder
             'name'            => 'Perabot atau Mebel',
             'account_type_id' => $accountType->id,
             'position_normal' => $accountType->position_normal,
-            'user_id'         => $user->id,
+            'created_by'         => $user->id,
             'created_at'      => now(),
             'updated_at'      => now(),
         ]);
@@ -154,7 +154,7 @@ class AccountSeeder extends Seeder
             'name'            => 'Akumulasi Penyusutan',
             'account_type_id' => $accountType->id,
             'position_normal' => $accountType->position_normal,
-            'user_id'         => $user->id,
+            'created_by'         => $user->id,
             'created_at'      => now(),
             'updated_at'      => now(),
         ]);
