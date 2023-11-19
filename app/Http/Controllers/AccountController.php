@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AccountRequest;
+use App\Http\Requests\UpdateAccountRequest;
 use App\Services\AccountService;
 use App\Services\AccountTypeService;
 use Illuminate\Http\Request;
@@ -29,12 +31,41 @@ class AccountController extends Controller
         ]);
     }
 
-    public function AccountTypes()
+    public function create()
     {
-        $accountTypes = $this->accountTypesService->search([]);
-
-        return inertia('Account/Type', [
-            'accountTypes' => $accountTypes
+        return inertia('Account/Create', [
+            'accountTypes' => $this->accountTypesService->search(['all' => true])
         ]);
+    }
+
+    public function store(AccountRequest $request)
+    {
+        $this->service->store($request->validated());
+
+        return redirect('accounts');
+    }
+
+    public function edit($accountId)
+    {
+        $account = $this->service->search([], $accountId);
+
+        return inertia('Account/Edit', [
+            'account' => $account,
+            'accountTypes' => $this->accountTypesService->search(['all' => true])
+        ]);
+    }
+
+    public function update(UpdateAccountRequest $request, $accountId)
+    {
+        $this->service->update($accountId, $request->validated());
+
+        return redirect('accounts');
+    }
+
+    public function delete($accountId)
+    {
+        $this->service->delete($accountId);
+
+        return redirect('accounts');
     }
 }

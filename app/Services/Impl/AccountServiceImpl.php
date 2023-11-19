@@ -59,6 +59,9 @@ class AccountServiceImpl implements AccountService
             $attr['position_normal'] = $accountType->position_normal;
         }
 
+        $attr['created_by'] = $attr['user_id'];
+        unset($attr['user_id']);
+
         return Account::create($attr);
     }
 

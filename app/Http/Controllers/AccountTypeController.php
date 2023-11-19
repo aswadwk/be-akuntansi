@@ -37,7 +37,7 @@ class AccountTypeController extends Controller
             $request->validated()
         );
 
-        return $this->index();
+        return redirect('account-types');
     }
 
     public function show($accountTypeId)
@@ -57,13 +57,13 @@ class AccountTypeController extends Controller
     {
         $this->service->update($accountTypeId, $request->validated());
 
-        return $this->index();
+        return redirect('account-types');
     }
 
     public function delete($accountTypeId)
     {
         $this->service->delete($accountTypeId);
 
-        return $this->index();
+        return redirect('account-types');
     }
 }

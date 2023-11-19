@@ -22,16 +22,21 @@ Route::middleware(['auth', 'user.id'])->group(function () {
         Route::get('/', 'index');
     });
 
-    Route::controller(AccountController::class)->group(function () {
-        Route::get('/accounts', 'index');
-    });
-
     Route::controller(AccountTypeController::class)->group(function () {
         Route::get('/account-types', 'index');
         Route::get('/account-types/create', 'create');
         Route::post('/account-types', 'store');
-        Route::get('/account-types/{accountTypeId}', 'edit');
+        Route::get('/account-types/{accountTypeId}/edit', 'edit');
         Route::put('/account-types/{accountTypeId}', 'update');
         Route::delete('/account-types/{accountTypeId}', 'delete');
+    });
+
+    Route::controller(AccountController::class)->group(function () {
+        Route::get('/accounts', 'index');
+        Route::get('/accounts/create', 'create');
+        Route::post('/accounts', 'store');
+        Route::get('/accounts/{accountId}/edit', 'edit');
+        Route::put('/accounts/{accountId}', 'update');
+        Route::delete('/accounts/{accountId}', 'delete');
     });
 });
