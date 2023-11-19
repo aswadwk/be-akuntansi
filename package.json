@@ -26,6 +26,7 @@
     "dependencies": {
         "@inertiajs/progress": "^0.2.7",
         "@inertiajs/react": "^1.0.14",
+        "@tabler/icons-react": "^2.41.0",
         "react": "^18.2.0",
         "react-dom": "^18.2.0"
     }

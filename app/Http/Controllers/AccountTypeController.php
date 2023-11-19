@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AccountTypeRequest;
+use App\Http\Requests\updateAccountTypeRequest;
 use App\Models\AccountType;
 use App\Services\AccountTypeService;
 use Illuminate\Http\Request;
@@ -45,9 +46,24 @@ class AccountTypeController extends Controller
 
     public function edit($accountTypeId)
     {
+        $accountType = $this->service->search([], $accountTypeId);
+
+        return inertia('AccountType/Edit', [
+            'accountType' => $accountType
+        ]);
+    }
+
+    public function update(updateAccountTypeRequest $request, $accountTypeId)
+    {
+        $this->service->update($accountTypeId, $request->validated());
+
+        return $this->index();
     }
 
     public function delete($accountTypeId)
     {
+        $this->service->delete($accountTypeId);
+
+        return $this->index();
     }
 }

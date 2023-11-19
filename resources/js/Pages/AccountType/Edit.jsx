@@ -3,18 +3,17 @@ import Layout from '../../Shared/Layout'
 import { useForm } from '@inertiajs/react'
 import Input from '../../Shared/Input'
 
-const Create = () => {
-
-    const { data, setData, post, errors, } = useForm({
-        name: "",
-        code: "",
-        position_normal: "",
-        description: "",
+const Create = ({ accountType }) => {
+    const { data, setData, put, errors, } = useForm({
+        name: accountType?.name,
+        code: accountType?.code,
+        position_normal: accountType?.position_normal,
+        description: accountType?.description,
     })
 
     const onSubmit = (e) => {
         e.preventDefault()
-        post("/account-types")
+        put(`/account-types/${accountType.id}`)
     }
 
     return (
@@ -81,7 +80,7 @@ const FormAddAccountType = ({ onSubmit, data, errors, setData }) => {
                     </div>
                 </div>
                 <div className="card-footer text-end">
-                    <button className='btn btn-primary' onClick={onSubmit}>Save</button>
+                    <button className='btn btn-primary' onClick={onSubmit}>Update</button>
                 </div>
             </div>
         </form>
