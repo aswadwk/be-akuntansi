@@ -2,6 +2,8 @@ import React from 'react'
 import Layout from '../../Shared/Layout'
 import { useForm } from '@inertiajs/react'
 import Input from '../../Shared/Input'
+import InputSelect from '../../Shared/InputSelect'
+import Button from '../../Shared/Button'
 
 const Create = ({ accountTypes, account }) => {
 
@@ -59,32 +61,25 @@ const FormAddAccountType = ({ onSubmit, data, errors, setData, accountTypes }) =
                         />
                     </div>
                     <div className="mb-3">
-                        <label className="form-label">Posisi Normal</label>
-                        <select
+                        <InputSelect placeholder={"Posisi Normal"} options={[
+                            { label: "Debit", value: "D" },
+                            { label: "Credit", value: "C" },
+                        ]}
                             onChange={e => setData("position_normal", e.target.value)}
                             value={data.position_normal}
-                            className="form-select"
-                            placeholder="Pilih posisi normal"
-                        >
-                            <option value="">Pilih Posisi Normal</option>
-                            <option value="D">Debet</option>
-                            <option value="C">Kredit</option>
-                        </select>
+                            error={errors.position_normal}
+                            label={"Posisi Normal"}
+                        />
                     </div>
                     <div className="mb-3">
-                        <label className="form-label">Account Type</label>
-                        <select
+                        <InputSelect placeholder={"Account type"} options={accountTypes.map((item) => (
+                            { label: item.name, value: item.id }
+                        ))}
                             onChange={e => setData("account_type_id", e.target.value)}
                             value={data.account_type_id}
-                            className={`form-select ${errors.account_type_id ? 'is-invalid' : ''}`}
-                            placeholder="Pilih posisi normal"
-                        >
-                            <option value="">Choose Posisi Normal</option>
-                            {accountTypes.map((item, index) => (
-                                <option key={index} value={item.id}>{item.name}</option>
-                            ))}
-                        </select>
-                        {errors.account_type_id && <div className="invalid-feedback">{errors.account_type_id}</div>}
+                            error={errors.account_type_id}
+                            label={"Account type"}
+                        />
                     </div>
                     <div className="mb-3">
                         <Input
@@ -97,7 +92,7 @@ const FormAddAccountType = ({ onSubmit, data, errors, setData, accountTypes }) =
                     </div>
                 </div>
                 <div className="card-footer text-end">
-                    <button className='btn btn-primary' onClick={onSubmit}>Update</button>
+                    <Button type={'primary'} onClick={onSubmit}>Update Account</Button>
                 </div>
             </div>
         </form>

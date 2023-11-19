@@ -2,6 +2,7 @@ import React from 'react'
 import Layout from '../../Shared/Layout'
 import { useForm } from '@inertiajs/react'
 import Input from '../../Shared/Input'
+import InputSelect from '../../Shared/InputSelect'
 
 const Create = () => {
 
@@ -58,17 +59,15 @@ const FormAddAccountType = ({ onSubmit, data, errors, setData }) => {
                         />
                     </div>
                     <div className="mb-3">
-                        <label className="form-label">Posisi Normal</label>
-                        <select
+                        <InputSelect placeholder={"Posisi Normal"} options={[
+                            { label: "Debit", value: "D" },
+                            { label: "Credit", value: "C" },
+                        ]}
                             onChange={e => setData("position_normal", e.target.value)}
                             value={data.position_normal}
-                            className="form-select"
-                            placeholder="Pilih posisi normal"
-                        >
-                            <option value="">Pilih Posisi Normal</option>
-                            <option value="D">Debet</option>
-                            <option value="C">Kredit</option>
-                        </select>
+                            error={errors.position_normal}
+                            label={"Posisi Normal"}
+                        />
                     </div>
                     <div className="mb-3">
                         <Input
