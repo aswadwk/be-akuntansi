@@ -4,6 +4,7 @@ use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AccountTypeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\JournalController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/test', function () {
@@ -38,5 +39,14 @@ Route::middleware(['auth', 'user.id'])->group(function () {
         Route::get('/accounts/{accountId}/edit', 'edit');
         Route::put('/accounts/{accountId}', 'update');
         Route::delete('/accounts/{accountId}', 'delete');
+    });
+
+    Route::controller(JournalController::class)->group(function () {
+        Route::get('/journals', 'index');
+        Route::get('/journals/create', 'create');
+        Route::post('/journals', 'store');
+        Route::get('/journals/{transactionId}/edit', 'edit');
+        Route::put('/journals/{transactionId}', 'updateJournal');
+        Route::delete('/journals/{transactionId}', 'delete');
     });
 });
