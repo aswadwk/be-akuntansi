@@ -1,10 +1,15 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Paginate, { PaginateInfo } from '../../Shared/Paginate'
 import Layout from '../../Shared/Layout'
 import { Link } from '@inertiajs/react'
 import { NumericFormat } from 'react-number-format';
 
 const Index = ({ journals }) => {
+    const [filters, setFilters] = useState({
+        show: 8,
+        search: ''
+    })
+
     return (
         <Layout left={'Journals'} right={<PageTitleRight />}>
             <div className="col-12">
@@ -14,14 +19,20 @@ const Index = ({ journals }) => {
                             <div className="text-secondary">
                                 Show
                                 <div className="mx-2 d-inline-block">
-                                    <input type="text" className="form-control form-control-sm" value="8" size="3" aria-label="Invoices count" />
+                                    <input
+                                        value={filters.show}
+                                        onChange={(e) => setFilters({ ...filters, show: e.target.value })}
+                                        type="text" className="form-control form-control-sm" size="3" aria-label="Invoices count" />
                                 </div>
                                 entries
                             </div>
                             <div className="ms-auto text-secondary">
                                 Search:
                                 <div className="ms-2 d-inline-block">
-                                    <input type="text" className="form-control form-control-sm" aria-label="Search invoice" />
+                                    <input
+                                        onChange={(e) => setFilters({ ...filters, search: e.target.value })}
+                                        value={filters.search}
+                                        type="text" className="form-control form-control-sm" aria-label="Search invoice" />
                                 </div>
                             </div>
                         </div>
@@ -71,13 +82,13 @@ const Index = ({ journals }) => {
                                                 />
                                             </td>
                                             <td>
-                                                <Link href={`/account-types/${journal.id}/edit`}>
+                                                <Link href={`/journals/${journal.transaction_id}/edit`}>
                                                     <span className="cursor-pointer">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" className="icon dropdown-item-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1"></path><path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z"></path><path d="M16 5l3 3"></path></svg>
+                                                        <svg xmlns="http://www.w3.org/2000/svg" className="icon dropdown-item-icon" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1"></path><path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z"></path><path d="M16 5l3 3"></path></svg>
                                                     </span>
                                                 </Link>
                                                 <span className="text-secondary cursor-pointer" onClick={() => onDelete(journal.id)} >
-                                                    <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-trash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-trash" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
                                                         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                                         <path d="M4 7l16 0" />
                                                         <path d="M10 11l0 6" />

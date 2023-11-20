@@ -340,7 +340,7 @@ const Navbar = () => {
                     </div>
                 </div>
                 <div className="collapse navbar-collapse" id="navbar-menu">
-                    <div>
+                    {/* <div>
                         <form
                             action="./"
                             method="get"
@@ -378,7 +378,7 @@ const Navbar = () => {
                                 />
                             </div>
                         </form>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </header>

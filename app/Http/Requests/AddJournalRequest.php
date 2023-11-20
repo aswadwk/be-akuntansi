@@ -33,8 +33,6 @@ class AddJournalRequest extends FormRequest
             'journals.*.type'        => 'required|in:D,C',
             'journals.*.division_id' => 'nullable|string',
             'journals.*.partner_id'  => 'nullable|string',
-            // 'journals.*.date'        => 'required|date',
-            // 'journals.*.description' => 'nullable|string',
         ];
     }
 }

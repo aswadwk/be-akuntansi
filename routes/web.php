@@ -5,6 +5,7 @@ use App\Http\Controllers\AccountTypeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\JournalController;
+use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/test', function () {
@@ -48,5 +49,9 @@ Route::middleware(['auth', 'user.id'])->group(function () {
         Route::get('/journals/{transactionId}/edit', 'edit');
         Route::put('/journals/{transactionId}', 'updateJournal');
         Route::delete('/journals/{transactionId}', 'delete');
+    });
+
+    Route::controller(ReportController::class)->group(function () {
+        Route::get('/reports/general-ledger/{accountId?}', 'generalLedger');
     });
 });

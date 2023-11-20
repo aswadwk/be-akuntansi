@@ -107,34 +107,34 @@ const Menu = () => {
                         Ringkasan Bisnis
                     </Link>
                 </div>
-                <li className={`nav-item dropdown ${isActive('financial-statements')}`}>
-                    <a
-                        className="nav-link dropdown-toggle"
-                        href="#navbar-extra"
-                        data-bs-toggle="dropdown"
-                        role="button"
-                        aria-expanded="false"
-                    >
-                        <span className="nav-link-icon d-md-none d-lg-inline-block">
-                            <IconReport />
-                        </span>
-                        <span className="nav-link-title">Laporan Keuangan</span>
-                    </a>
-                    <div className="dropdown-menu">
-                        <Link className="dropdown-item" href="/financial-statements/balance-sheet">
-                            Neraca
-                        </Link>
-                        <Link className="dropdown-item" href="/financial-statements/profit-loss">
-                            Laba Rugi
-                        </Link>
-                        <Link className="dropdown-item" href="/journals/new">
-                            Arus Kas
-                        </Link>
-                        <Link className="dropdown-item" href="/journals/new">
-                            Ekuitas
-                        </Link>
-                    </div>
-                </li>
+            </li>
+            <li className={`nav-item dropdown ${isActive('financial-statements')}`}>
+                <a
+                    className="nav-link dropdown-toggle"
+                    href="#navbar-extra"
+                    data-bs-toggle="dropdown"
+                    role="button"
+                    aria-expanded="false"
+                >
+                    <span className="nav-link-icon d-md-none d-lg-inline-block">
+                        <IconReport />
+                    </span>
+                    <span className="nav-link-title">Laporan Keuangan</span>
+                </a>
+                <div className="dropdown-menu">
+                    <Link className="dropdown-item" href="/financial-statements/balance-sheet">
+                        Neraca
+                    </Link>
+                    <Link className="dropdown-item" href="/financial-statements/profit-loss">
+                        Laba Rugi
+                    </Link>
+                    <Link className="dropdown-item" href="/journals/new">
+                        Arus Kas
+                    </Link>
+                    <Link className="dropdown-item" href="/journals/new">
+                        Ekuitas
+                    </Link>
+                </div>
             </li>
         </ul>
     );

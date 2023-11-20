@@ -6,19 +6,23 @@ use App\Http\Requests\AddJournalRequest;
 use App\Http\Requests\GetJournalRequest;
 use App\Services\AccountService;
 use App\Services\JournalService;
+use App\Services\TransactionService;
 use Illuminate\Http\Request;
 
 class JournalController extends Controller
 {
-    protected $service;
+    private $service;
     private $accountService;
+    private $transactionService;
 
     public function __construct(
         JournalService $service,
         AccountService $accountService,
+        TransactionService $transactionService
     ) {
         $this->service = $service;
         $this->accountService = $accountService;
+        $this->transactionService = $transactionService;
     }
 
     public function index(GetJournalRequest $request)
@@ -46,7 +50,8 @@ class JournalController extends Controller
     public function edit($transactionId)
     {
         return inertia('Journal/Edit', [
-            'journals' => $this->service->getJournalByTransactionId($transactionId),
+            'journals' => $this->transactionService->getTransactionById($transactionId),
+            'accounts' => $this->accountService->search(['all' => true]),
         ]);
     }
 
