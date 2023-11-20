@@ -1,17 +1,21 @@
 import { Link } from "@inertiajs/react";
 import React from "react";
 import { IconDatabase, IconNotebook, IconReport } from '@tabler/icons-react';
+import { usePage } from '@inertiajs/react'
+
+
 
 const Menu = () => {
+    const { url, component } = usePage()
 
     const isActive = (path) => {
-        return window.location.pathname === path ? 'active' : '';
+        return url.startsWith(path) ? 'active' : '';
     }
 
     return (
         <ul className="navbar-nav pt-lg-3">
-            <li className="nav-item active">
-                <Link className="nav-link" href="/">
+            <li className={`nav-item ${isActive('/home')}`}>
+                <Link className="nav-link" href="/home">
                     <span className="nav-link-icon d-md-none d-lg-inline-block">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -34,7 +38,7 @@ const Menu = () => {
                     <span className="nav-link-title">Home</span>
                 </Link>
             </li>
-            <li className="nav-item dropdown">
+            <li className={`nav-item dropdown ${isActive('/accounts')}`}>
                 <a
                     className="nav-link dropdown-toggle"
                     href="#navbar-help"
@@ -57,7 +61,7 @@ const Menu = () => {
                     </Link>
                 </div>
             </li>
-            <li className="nav-item dropdown">
+            <li className={`nav-item dropdown ${isActive('/journals')}`}>
                 <a
                     className="nav-link dropdown-toggle"
                     href="#navbar-help"
@@ -80,7 +84,7 @@ const Menu = () => {
                     </Link>
                 </div>
             </li>
-            <li className={`nav-item dropdown ${isActive('reports')}`}>
+            <li className={`nav-item dropdown ${isActive('/reports')}`}>
                 <a
                     className="nav-link dropdown-toggle"
                     href="#navbar-extra"

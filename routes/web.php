@@ -21,7 +21,7 @@ Route::controller(AuthController::class)->group(function () {
 Route::middleware(['auth', 'user.id'])->group(function () {
 
     Route::controller(DashboardController::class)->group(function () {
-        Route::get('/', 'index');
+        Route::get('/home', 'index');
     });
 
     Route::controller(AccountTypeController::class)->group(function () {
