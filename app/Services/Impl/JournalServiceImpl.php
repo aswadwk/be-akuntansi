@@ -36,7 +36,7 @@ class JournalServiceImpl implements JournalService
             // insert transaction
             $attrTransaction = [
                 'code'    => $transactionCode,
-                'user_id' => auth('api')->user()->id,
+                'user_id' => auth()->user()->id,
             ];
 
             $transaction = app(TransactionService::class)->store($attrTransaction);
