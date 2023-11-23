@@ -27,10 +27,12 @@
         "@inertiajs/progress": "^0.2.7",
         "@inertiajs/react": "^1.0.14",
         "@tabler/icons-react": "^2.41.0",
+        "date-fns": "^2.30.0",
         "notistack": "^3.0.1",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
         "react-number-format": "^5.3.1",
-        "react-select": "^5.8.0"
+        "react-select": "^5.8.0",
+        "rsuite": "^5.45.0"
     }
 }

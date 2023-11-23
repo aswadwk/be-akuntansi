@@ -9,7 +9,6 @@ class DashboardController extends Controller
     public function index()
     {
         $currentUser = auth()->user();
-
         return inertia('Dashboard/Index', [
             'currentUser' => $currentUser,
         ]);

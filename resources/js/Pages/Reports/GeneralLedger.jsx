@@ -3,20 +3,35 @@ import Layout from '../../Shared/Layout'
 import { Link } from '@inertiajs/react'
 import { NumericFormat } from 'react-number-format';
 import Select from 'react-select';
-import Input from '../../Shared/Input';
 import Button from '../../Shared/Button';
-import { router } from '@inertiajs/react'
+import { router } from '@inertiajs/react';
+import { DatePicker } from 'rsuite';
+import addDays from 'date-fns/addDays';
+// Date Picker
+import 'rsuite/dist/rsuite.min.css';
 
 const GeneralLedger = ({ generalLedger, accounts, filters }) => {
     const [date, setDate] = useState(filters.to);
+
     const [selectedAccount, setSelectedAccount] = useState(filters.account_id);
 
     const handleFilter = () => {
         if (date && selectedAccount) {
-
+            // date = date.toISOString().split('T')[0];
             router.visit(`/reports/general-ledger/${selectedAccount}?to=${date}&from=${date}`);
         }
     }
+
+    const predefinedBottomRanges = [
+        {
+            label: 'Kemarin',
+            value: addDays(new Date(), -1),
+        },
+        {
+            label: 'Hari ini',
+            value: new Date(),
+        },
+    ];
 
     return (
         <Layout left={'General Ledger (Buku Besar)'} right={<PageTitleRight />}>
@@ -26,38 +41,17 @@ const GeneralLedger = ({ generalLedger, accounts, filters }) => {
                         <div className="col-md-2 form-group">
                             <label className="text-muted small mb-1">Filter Tanggal</label>
                             <div className="input-icon mb-2">
-                                <span className="input-icon-addon">
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        className="icon"
-                                        width="24"
-                                        height="24"
-                                        viewBox="0 0 24 24"
-                                        strokeWidth="2"
-                                        stroke="currentColor"
-                                        fill="none"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                    >
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                        <rect x="4" y="5" width="16" height="16" rx="2"></rect>
-                                        <line x1="16" y1="3" x2="16" y2="7"></line>
-                                        <line x1="8" y1="3" x2="8" y2="7"></line>
-                                        <line x1="4" y1="11" x2="20" y2="11"></line>
-                                        <line x1="11" y1="15" x2="12" y2="15"></line>
-                                        <line x1="12" y1="15" x2="12" y2="18"></line>
-                                    </svg>
-                                </span>
-                                <input
-                                    type='text'
-                                    className="form-control"
-                                    value={date}
-                                    onChange={(value) => {
-                                        setDate(value.target.value);
-                                    }}
-                                    placeholder="Filter Tanggal"
-                                />
-
+                                <div className="input-icon mb-2">
+                                    <DatePicker
+                                        onChange={(value) => {
+                                            setDate(value);
+                                        }}
+                                        // value={new Date(date)}
+                                        ranges={predefinedBottomRanges}
+                                        placeholder="Pilih Tanggal"
+                                        style={{ width: 300 }}
+                                    />
+                                </div>
                             </div>
                         </div>
                         <div className="col-md-3 form-group">
@@ -66,7 +60,7 @@ const GeneralLedger = ({ generalLedger, accounts, filters }) => {
                                 className="basic-single"
                                 classNamePrefix="select"
                                 defaultValue={{
-                                    label: accounts.find((item) => item.id === selectedAccount)?.name,
+                                    label: accounts.find((item) => item.id === selectedAccount)?.name ?? 'Pilih Akun',
                                     value: selectedAccount,
                                 }}
                                 options={accounts.map((item) => ({
