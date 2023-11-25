@@ -3,7 +3,7 @@ name: Continuous Deployment
 on:
   push:
     branches:
-      - dev
+      - main
 
 jobs:
   deploy:
@@ -18,11 +18,13 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            cd public_html/accountancy_app
-            git pull origin dev
+            cd /var/www/accountant
+            git pull origin main
             composer install
-            php artisan migrate
-            php artisan optimize
-            php artisan config:cache
-            php artisan route:cache
-            php artisan view:cache
+            npm install
+            npm run build
+            make build
+            make down
+            make up
+            make optimize
+            make migrate
