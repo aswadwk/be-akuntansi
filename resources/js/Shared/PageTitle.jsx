@@ -69,14 +69,18 @@ const defaultRight = (
 
 const PageTitle = ({ left, right }) => {
     return (
-        <div className="row g-2 align-items-center">
-            <div className="col">
-                <div className="page-pretitle">Overview</div>
-                <h2 className="page-title">{left}</h2>
-            </div>
-            <div className="col-auto ms-auto d-print-none">
-                <div className="btn-list">
-                    {right || defaultRight}
+        <div className="page-header d-print-none">
+            <div className="container-xl">
+                <div className="row g-2 align-items-center">
+                    <div className="col">
+                        <div className="page-pretitle">Overview</div>
+                        <h2 className="page-title">{left}</h2>
+                    </div>
+                    <div className="col-auto ms-auto d-print-none">
+                        <div className="btn-list">
+                            {right || defaultRight}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
