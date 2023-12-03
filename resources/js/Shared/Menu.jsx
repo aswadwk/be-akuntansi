@@ -14,8 +14,8 @@ const Menu = () => {
 
     return (
         <ul className="navbar-nav pt-lg-3">
-            <li className={`nav-item ${isActive('/home')}`}>
-                <Link className="nav-link" href="/home">
+            <li className={`nav-item ${isActive('/')}`}>
+                <Link className="nav-link" href="/">
                     <span className="nav-link-icon d-md-none d-lg-inline-block">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"

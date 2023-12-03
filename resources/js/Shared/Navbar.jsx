@@ -1,4 +1,5 @@
 import React from "react";
+import MenuProfile from "./MenuProfile";
 
 const Navbar = () => {
     return (
@@ -299,45 +300,7 @@ const Navbar = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="nav-item dropdown">
-                        <a
-                            href="#"
-                            className="nav-link d-flex lh-1 text-reset p-0"
-                            data-bs-toggle="dropdown"
-                            aria-label="Open user menu"
-                        >
-                            <span
-                                className="avatar avatar-sm"
-                                style={{
-                                    backgroundImage: `url(/avatars/000m.jpg)`,
-                                }}
-                            ></span>
-                            <div className="d-none d-xl-block ps-2">
-                                <div>Paweł Kuna</div>
-                                <div className="mt-1 small text-muted">
-                                    UI Designer
-                                </div>
-                            </div>
-                        </a>
-                        <div className="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                            <a href="#" className="dropdown-item">
-                                Status
-                            </a>
-                            <a href="./profile.html" className="dropdown-item">
-                                Profile
-                            </a>
-                            <a href="#" className="dropdown-item">
-                                Feedback
-                            </a>
-                            <div className="dropdown-divider"></div>
-                            <a href="./settings.html" className="dropdown-item">
-                                Settings
-                            </a>
-                            <a href="./sign-in.html" className="dropdown-item">
-                                Logout
-                            </a>
-                        </div>
-                    </div>
+                    <MenuProfile />
                 </div>
                 <div className="collapse navbar-collapse" id="navbar-menu">
                     {/* <div>

@@ -4,7 +4,7 @@ import Navbar from "./Navbar";
 import PageTitle from "./PageTitle";
 import Footer from "./Footer";
 
-export default function Layout({ children, left, right }) {
+export default function Layout({ children, left, right, pageTitle }) {
     return (
         <>
             <Head>
@@ -15,16 +15,13 @@ export default function Layout({ children, left, right }) {
                 <Sidebar />
                 <Navbar />
                 <div className="page-wrapper">
-                    <div className="page-header d-print-none">
-                        <div className="container-xl">
-                            <PageTitle left={left} right={right}/>
-                        </div>
-                    </div>
+                    {pageTitle}
+                    {/* <PageTitle left={left} right={right} /> */}
 
                     <div className="page-body">
                         <div
                             className="container-xl"
-                            style={{ minHeight: "65vh" }}
+                            style={{ minHeight: "67vh" }}
                         >
                             {children}
                         </div>

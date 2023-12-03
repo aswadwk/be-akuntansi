@@ -1,7 +1,5 @@
 import { createInertiaApp } from "@inertiajs/react";
 import { createRoot } from "react-dom/client";
-import { InertiaProgress } from "@inertiajs/progress";
-
 
 createInertiaApp({
     resolve: (name) => {
@@ -15,8 +13,3 @@ createInertiaApp({
         delay: 0,
     },
 });
-
-// InertiaProgress.init({
-//     showSpinner: true,
-//     color: 'red'
-// });
