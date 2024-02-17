@@ -58,7 +58,7 @@ class AccountTypeServiceImpl implements AccountTypeService
     {
         if (empty(array_filter($attr))) {
             throw new BadRequestException(
-                'tidak ada data yang di update, pastikan anda mengirimkan data yang akan di update'
+                'Tidak ada data yang di update, pastikan anda mengirimkan data yang akan di update'
             );
         }
 
@@ -66,7 +66,7 @@ class AccountTypeServiceImpl implements AccountTypeService
 
         if (isset($attr['code'])) {
             if ($this->codeIsExists($attr['code'], $id)) {
-                throw ValidationException::withMessages(['code' => 'kode tidak tersedia']);
+                throw ValidationException::withMessages(['code' => 'Kode tidak tersedia']);
             }
 
             $accountType->code = $attr['code'];
@@ -77,13 +77,6 @@ class AccountTypeServiceImpl implements AccountTypeService
         }
 
         if (isset($attr['position_normal'])) {
-
-            // if ($attr['position_normal'] != $accountType->position_normal) {
-            //     Account::where('account_type_id', $id)->update([
-            //         'position_normal' => $attr['position_normal']
-            //     ]);
-            // }
-
             $accountType->position_normal = $attr['position_normal'];
         }
 

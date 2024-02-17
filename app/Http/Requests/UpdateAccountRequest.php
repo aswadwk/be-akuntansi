@@ -26,7 +26,7 @@ class UpdateAccountRequest extends FormRequest
         return [
             'code' => 'nullable|string',
             'name' => 'nullable|string',
-            'balance' => 'nullable|numeric',
+            'opening_balance' => 'nullable|numeric',
             'position_normal' => 'nullable|string|in:D,C',
             'account_type_id' => 'nullable|string',
             'description' => 'nullable|string',

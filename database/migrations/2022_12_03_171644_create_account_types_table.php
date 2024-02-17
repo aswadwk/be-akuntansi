@@ -21,8 +21,8 @@ return new class extends Migration
             $table->enum('position_normal', ['D', 'C'])->default('D');
             $table->text('description')->nullable();
 
-            $table->uuid('user_id');
-            $table->foreign('user_id')
+            $table->uuid('created_by');
+            $table->foreign('created_by')
                 ->references('id')
                 ->on('users')
                 ->onUpdate('cascade')->onDelete('restrict');

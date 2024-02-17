@@ -22,6 +22,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->enum('position_normal', ['D', 'C'])->default('D');
             $table->decimal('balance', 20, 2)->default(0.00);
+            $table->decimal('opening_balance', 20, 2)->default(0.00);
 
             $table->uuid('account_type_id');
             $table->foreign('account_type_id')
@@ -29,8 +30,8 @@ return new class extends Migration
                 ->on('account_types')
                 ->onUpdate('cascade')->onDelete('restrict');
 
-            $table->uuid('user_id');
-            $table->foreign('user_id')
+            $table->uuid('created_by');
+            $table->foreign('created_by')
                 ->references('id')
                 ->on('users')
                 ->onUpdate('cascade')->onDelete('restrict');

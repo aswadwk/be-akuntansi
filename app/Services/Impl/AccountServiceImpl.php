@@ -96,6 +96,10 @@ class AccountServiceImpl implements AccountService
             $account->balance = $attr['balance'];
         }
 
+        if (isset($attr['opening_balance'])) {
+            $account->opening_balance = $attr['opening_balance'];
+        }
+
         if (isset($attr['position_normal'])) {
             $account->position_normal = $attr['position_normal'];
         }

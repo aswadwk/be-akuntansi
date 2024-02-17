@@ -3,8 +3,7 @@ import Layout from "../../Shared/Layout";
 import Paginate, { PaginateInfo } from "../../Shared/Paginate";
 import { Link, useForm } from "@inertiajs/react";
 import { dateHumanize, toYearMonthDayHourMinute } from "../../Shared/utils";
-import { IconEdit } from "@tabler/icons-react";
-import { IconTrash } from "@tabler/icons-react";
+import { IconEdit, IconTrash } from "@tabler/icons-react";
 
 const Index = ({ accountTypes }) => {
     const { delete: destroy } = useForm({});
