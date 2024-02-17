@@ -15,6 +15,7 @@ const Create = ({ accountTypes, account }) => {
         account_type_id: account.account_type_id,
         description: account.description,
         opening_balance: account.opening_balance ?? 0,
+        position_report: account.position_report ?? "balance sheet"
     })
 
     const onSubmit = (e) => {
@@ -68,14 +69,31 @@ const FormAddAccountType = ({ onSubmit, data, errors, setData, accountTypes }) =
                         />
                     </div>
                     <div className="mb-3">
-                        <InputSelect placeholder={"Posisi Normal"} options={[
-                            { label: "Debit", value: "D" },
-                            { label: "Credit", value: "C" },
-                        ]}
+                        <InputSelect
+                            isRequired
+                            placeholder={"Position Normal"}
+                            options={[
+                                { label: "Debit", value: "D" },
+                                { label: "Credit", value: "C" },
+                            ]}
                             onChange={e => setData("position_normal", e.target.value)}
                             value={data.position_normal}
                             error={errors.position_normal}
-                            label={"Posisi Normal"}
+                            label={"Position Normal"}
+                        />
+                    </div>
+                    <div className="mb-3">
+                        <InputSelect
+                            placeholder={"Position Report"}
+                            isRequired
+                            options={[
+                                { label: "Balance Sheet", value: "balance sheet" },
+                                { label: "Profit and Loss", value: "profit and loss" },
+                            ]}
+                            onChange={e => setData("position_report", e.target.value)}
+                            value={data.position_report}
+                            error={errors.position_report}
+                            label={"Position Report"}
                         />
                     </div>
                     <div className="mb-3">

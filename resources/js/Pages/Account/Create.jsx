@@ -14,6 +14,7 @@ const Create = ({ accountTypes }) => {
         account_type_id: "",
         description: "",
         opening_balance: 0,
+        position_report: "balance sheet"
     })
 
     const onSubmit = (e) => {
@@ -51,8 +52,9 @@ const FormAddAccountType = ({ onSubmit, data, errors, setData, accountTypes }) =
                 <div className="card-body">
                     <div className="mb-3">
                         <Input
-                            label="Nama Akun"
-                            placeholder="Nama"
+                            isRequired
+                            label="Name Account"
+                            placeholder="Name"
                             onChange={e => setData("name", e.target.value)}
                             error={errors.name}
                             value={data.name}
@@ -60,28 +62,49 @@ const FormAddAccountType = ({ onSubmit, data, errors, setData, accountTypes }) =
                     </div>
                     <div className="mb-3">
                         <Input
-                            label="Kode Akun"
-                            placeholder="Kode"
+                            isRequired
+                            label="Code Account"
+                            placeholder="Code"
                             onChange={e => setData("code", e.target.value)}
                             error={errors.code}
                             value={data.code}
                         />
                     </div>
                     <div className="mb-3">
-                        <InputSelect placeholder={"Position Normal"} options={[
-                            { label: "Debit", value: "D" },
-                            { label: "Credit", value: "C" },
-                        ]}
+                        <InputSelect
+                            placeholder={"Position Normal"}
+                            options={[
+                                { label: "Debit", value: "D" },
+                                { label: "Credit", value: "C" },
+                            ]}
+                            isRequired
                             onChange={e => setData("position_normal", e.target.value)}
                             value={data.position_normal}
                             error={errors.position_normal}
-                            label={"Posisi Normal"}
+                            label={"Position Normal"}
                         />
                     </div>
                     <div className="mb-3">
-                        <InputSelect placeholder={"Account type"} options={accountTypes.map((item) => (
-                            { label: item.name, value: item.id }
-                        ))}
+                        <InputSelect
+                            placeholder={"Position Report"}
+                            isRequired
+                            options={[
+                                { label: "Balance Sheet", value: "balance sheet" },
+                                { label: "Profit and Loss", value: "profit and loss" },
+                            ]}
+                            onChange={e => setData("position_report", e.target.value)}
+                            value={data.position_report}
+                            error={errors.position_report}
+                            label={"Position Report"}
+                        />
+                    </div>
+                    <div className="mb-3">
+                        <InputSelect
+                            isRequired
+                            placeholder={"Account type"}
+                            options={accountTypes.map((item) => (
+                                { label: item.name, value: item.id }
+                            ))}
                             onChange={e => setData("account_type_id", e.target.value)}
                             value={data.account_type_id}
                             error={errors.account_type_id}

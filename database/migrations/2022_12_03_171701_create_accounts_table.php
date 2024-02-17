@@ -23,6 +23,8 @@ return new class extends Migration
             $table->enum('position_normal', ['D', 'C'])->default('D');
             $table->decimal('balance', 20, 2)->default(0.00);
             $table->decimal('opening_balance', 20, 2)->default(0.00);
+            $table->decimal('closing_balance', 20, 2)->default(0.00);
+            $table->enum('position_report', ['balance sheet', 'profit and loss'])->default('balance sheet');
 
             $table->uuid('account_type_id');
             $table->foreign('account_type_id')

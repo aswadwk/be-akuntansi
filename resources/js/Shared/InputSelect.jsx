@@ -1,9 +1,9 @@
 import React from 'react'
 
-const InputSelect = ({ label, placeholder, error, value, onChange, options }) => {
+const InputSelect = ({ label, placeholder, error, value, onChange, options, isRequired }) => {
     return (
         <>
-            <label className="form-label">{label}</label>
+            <label className={`form-label ${isRequired ? 'required' : ''}`}>{label}</label>
             <select
                 onChange={onChange}
                 value={value}

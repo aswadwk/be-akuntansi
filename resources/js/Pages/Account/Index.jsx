@@ -43,6 +43,7 @@ const Index = ({ accounts }) => {
                                     <th>Name</th>
                                     <th>Code</th>
                                     <th>Position Normal</th>
+                                    <th>Position Report</th>
                                     <th>Type</th>
                                     <th>Opening Balance</th>
                                     <th>Created At</th>
@@ -56,6 +57,11 @@ const Index = ({ accounts }) => {
                                             <td>{account.name}</td>
                                             <td>{account.code}</td>
                                             <td>{account.position_normal === 'D' ? 'Debit' : 'Credit'}</td>
+                                            <td>
+                                                <span className="text-capitalize">
+                                                    {account.position_report}
+                                                </span>
+                                            </td>
                                             <td>{account?.account_type?.name ?? '-'}</td>
                                             <td>{toIDR(account.opening_balance)}</td>
                                             <td>

@@ -1,9 +1,9 @@
 import React from 'react'
 
-const Input = ({ label, onChange, error, value, placeholder, type = 'text' }) => {
+const Input = ({ label, onChange, error, value, placeholder, type = 'text', isRequired }) => {
     return (
         <>
-            <label className="form-label">{label}</label>
+            <label className={`form-label ${isRequired ? 'required' : ''}`}>{label}</label>
             <input
                 onChange={onChange}
                 value={value}

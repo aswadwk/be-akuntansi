@@ -28,6 +28,7 @@ class AccountRequest extends FormRequest
             'name'            => 'required|string|min:3',
             'opening_balance'         => 'nullable|numeric',
             'position_normal' => 'required|string|in:D,C',
+            'position_report' => 'required|string|in:balance sheet,profit and loss',
             'description'     => 'nullable|min:3|string',
             'account_type_id' => 'required|string|exists:account_types,id',
             'user_id'         => 'required|string',

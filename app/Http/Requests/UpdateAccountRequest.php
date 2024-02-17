@@ -28,6 +28,7 @@ class UpdateAccountRequest extends FormRequest
             'name' => 'nullable|string',
             'opening_balance' => 'nullable|numeric',
             'position_normal' => 'nullable|string|in:D,C',
+            'position_report' => 'nullable|string|in:balance sheet,profit and loss',
             'account_type_id' => 'nullable|string',
             'description' => 'nullable|string',
         ];

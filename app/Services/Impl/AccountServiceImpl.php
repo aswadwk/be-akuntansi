@@ -104,6 +104,10 @@ class AccountServiceImpl implements AccountService
             $account->position_normal = $attr['position_normal'];
         }
 
+        if (isset($attr['position_report'])) {
+            $account->position_report = $attr['position_report'];
+        }
+
         if (isset($attr['account_type_id'])) {
             if (!AccountType::find($attr['account_type_id'])) {
                 throw new NotFoundHttpException('Tipe akun tidak di temukan.');
