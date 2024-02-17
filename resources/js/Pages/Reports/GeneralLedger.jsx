@@ -17,8 +17,8 @@ const GeneralLedger = ({ generalLedger, accounts, filters }) => {
 
     const handleFilter = () => {
         if (date && selectedAccount) {
-            // date = date.toISOString().split('T')[0];
-            router.visit(`/reports/general-ledger/${selectedAccount}?to=${date}&from=${date}`);
+            const newDate = date.toISOString().split('T')[0];
+            router.visit(`/reports/general-ledger/${selectedAccount}?to=${newDate}&from=${newDate}`);
         }
     }
 

@@ -16,7 +16,7 @@ export default function Layout({ children, left, right, pageTitle }) {
                 <Navbar />
                 <div className="page-wrapper">
                     {pageTitle}
-                    {/* <PageTitle left={left} right={right} /> */}
+                    <PageTitle left={left} right={right} />
 
                     <div className="page-body">
                         <div
