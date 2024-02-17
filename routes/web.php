@@ -13,7 +13,7 @@ Route::get('/test', function () {
 });
 
 Route::controller(AuthController::class)->group(function () {
-    Route::get('auth/login', 'login')->name('web.auth.login');
+    Route::get('auth/login', 'login')->name('web.auth.login')->middleware(['guest']);
     Route::post('auth/login', 'doLogin');
     Route::post('auth/logout', 'logout')->withoutMiddleware(['auth']);
     Route::get('auth/profile', 'me')->name('web.auth.me');
@@ -24,7 +24,7 @@ Route::controller(AuthController::class)->group(function () {
 Route::middleware(['auth', 'user.id'])->group(function () {
 
     Route::controller(DashboardController::class)->group(function () {
-        Route::get('/', 'index');
+        Route::get('/home', 'index')->name('web.home.index');
     });
 
     Route::controller(AccountTypeController::class)->group(function () {
