@@ -16,9 +16,8 @@ const Index = ({ accountHelpers }) => {
         }
     }
 
-
     return (
-        <Layout left={'Account Type'} right={<PageTitleRight />}>
+        <Layout left={'Account Helpers(Kode Bantu)'} right={<PageTitleRight />}>
             <div className="col-12">
                 <div className="card">
                     <div className="card-body border-bottom py-3">

@@ -10,7 +10,18 @@ class AccountHelperServiceImpl implements AccountHelperService
 {
     public function getAll($params)
     {
-        return AccountHelper::paginate($params['limit'] ?? 10);
+        $accountHelperQuery = AccountHelper::when(isset($params['code']), function ($query) use ($params) {
+            return $query->where('code', 'like', '%' . $params['code'] . '%');
+        })
+            ->when(isset($params['name']), function ($query) use ($params) {
+                return $query->where('name', 'like', '%' . $params['name'] . '%');
+            });
+
+        if (isset($params['all'])) {
+            return $accountHelperQuery->get();
+        }
+
+        return $accountHelperQuery->paginate($params['per_page'] ?? 10);
     }
 
     public function getById($accountHelperId)
