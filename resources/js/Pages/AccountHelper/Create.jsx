@@ -3,19 +3,27 @@ import Layout from '../../Shared/Layout'
 import { useForm } from '@inertiajs/react'
 import Input from '../../Shared/Input'
 import InputSelect from '../../Shared/InputSelect'
+import InputNumber from '../../Shared/InputNumber'
 
 const Create = () => {
 
-    const { data, setData, post, errors, } = useForm({
+    const { data, setData, post, errors, transform } = useForm({
         name: "",
         code: "",
         account_type: "",
         type: "D",
         description: "",
+        opening_balance: 0,
     })
 
     const onSubmit = (e) => {
         e.preventDefault()
+
+        transform((data) => ({
+            ...data,
+            opening_balance: Number(data.opening_balance.toString().replaceAll(',', '').replace('Rp. ', '')),
+        }));
+
         post("/account-helpers")
     }
 
@@ -88,6 +96,17 @@ const FormAddAccountType = ({ onSubmit, data, errors, setData }) => {
                             value={data.type}
                             error={errors.type}
                             label={"Type"}
+                        />
+                    </div>
+                    <div className="mb-3">
+                        <InputNumber
+                            label="Opening Balance"
+                            onChange={e => setData("opening_balance", e.target.value)}
+                            error={errors.opening_balance}
+                            value={data.opening_balance}
+                            placeholder="Balance"
+                            isRequired
+                            prefix="Rp. "
                         />
                     </div>
                     <div className="mb-3">

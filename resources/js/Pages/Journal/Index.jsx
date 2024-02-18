@@ -44,6 +44,7 @@ const Index = ({ journals }) => {
                                     <th>Code</th>
                                     <th>Date</th>
                                     <th>Description</th>
+                                    <th>Account Helper(Kode Bantu)</th>
                                     <th>Account Debit</th>
                                     <th>Account Credit</th>
                                     <th colSpan={2} className="w-1 text-center">
@@ -59,13 +60,16 @@ const Index = ({ journals }) => {
                                             <td>{journal?.account?.code}</td>
                                             <td>{journal.date}</td>
                                             <td>{journal.description}</td>
+                                            <td>
+                                                {journal.account_helper?.name}
+                                            </td>
                                             <td>{journal.type === 'D' ? journal.account?.name : ''}</td>
                                             <td>{journal.type === 'C' ? journal.account?.name : ''}</td>
                                             <td className="text-end">
                                                 <NumericFormat
                                                     displayType="text"
                                                     thousandSeparator="."
-                                                    decimalScale={0}
+                                                    decimalScale={2}
                                                     prefix="Rp. "
                                                     decimalSeparator=","
                                                     value={journal.type === 'D' ? journal.amount : 0}
@@ -75,7 +79,7 @@ const Index = ({ journals }) => {
                                                 <NumericFormat
                                                     displayType="text"
                                                     thousandSeparator="."
-                                                    decimalScale={0}
+                                                    decimalScale={2}
                                                     prefix="Rp. "
                                                     decimalSeparator=","
                                                     value={journal.type === 'C' ? journal.amount : 0}

@@ -2,9 +2,9 @@
 import { useForm } from '@inertiajs/react';
 import React, { useState } from 'react'
 import { NumericFormat } from 'react-number-format';
+import InputSelectWithSearch from '../../Shared/InputSelectWithSearch';
 
-const Edit = ({ accounts, journals }) => {
-    console.log('journals ', journals);
+const Edit = ({ accounts, journals, accountHelpers }) => {
     const { data, setData, processing, put } = useForm({
         id: journals.id,
     })
@@ -15,6 +15,7 @@ const Edit = ({ accounts, journals }) => {
         id: journals.id,
         date: new Date(journals.journals[0].date).toISOString().split('T')[0],
         description: journals.journals[0].description,
+        account_helper_id: journals.journals[0].account_helper_id || '',
         journals: journals.journals.map((row) => ({
             amount: row.amount,
             type: row.type,
@@ -120,6 +121,26 @@ const Edit = ({ accounts, journals }) => {
                                     type="date"
                                 />
                             </div>
+                            <div className="mb-3 col-sm-6 col-md-4">
+                                <InputSelectWithSearch
+                                    label="Kode Bantu"
+                                    defaultValue={{
+                                        label: 'Pilih Akun',
+                                        value: '',
+                                    }}
+                                    options={accountHelpers.map((item) => ({
+                                        label: item.name + ' - ' + item.code,
+                                        value: item.id,
+                                    }))}
+                                    value={newJournal.account_helper_id}
+                                    onChange={(value) => {
+                                        setNewJournal({
+                                            ...newJournal,
+                                            account_helper_id: value,
+                                        });
+                                    }}
+                                />
+                            </div>
                         </div>
                         <div className="mb-3">
                             <label className="form-label">Description</label>
@@ -152,36 +173,28 @@ const Edit = ({ accounts, journals }) => {
                                     {newJournal.journals.map((journal, index) => (
                                         <tr key={index}>
                                             <td>
-                                                <select
-                                                    className="form-select"
-                                                    required
-                                                    value={journal.account_id}
-                                                    onChange={(event) =>
+                                                <InputSelectWithSearch
+                                                    onChange={(value) => {
                                                         setNewJournal({
                                                             ...newJournal,
                                                             journals: newJournal.journals.map((row, i) => {
                                                                 if (i === index) {
                                                                     return {
                                                                         ...row,
-                                                                        account_id: event.target.value,
+                                                                        account_id: value,
                                                                     };
                                                                 }
                                                                 return row;
                                                             }),
-                                                        })
+                                                        });
                                                     }
-                                                >
-                                                    <option value="">Pilih Akun</option>
-                                                    {accounts.map((account) => (
-                                                        <option
-                                                            key={account.id}
-                                                            value={account.id}
-                                                            selected={account.id === journal.account_id ? true : false}
-                                                        >
-                                                            {account.name}
-                                                        </option>
-                                                    ))}
-                                                </select>
+                                                    }
+                                                    value={journal.account_id}
+                                                    options={accounts.map((account) => ({
+                                                        label: account.name,
+                                                        value: account.id,
+                                                    }))}
+                                                />
                                             </td>
                                             <td>
                                                 <NumericFormat

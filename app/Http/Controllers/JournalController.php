@@ -4,25 +4,31 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AddJournalRequest;
 use App\Http\Requests\GetJournalRequest;
+use App\Services\AccountHelperService;
 use App\Services\AccountService;
 use App\Services\JournalService;
 use App\Services\TransactionService;
-use Illuminate\Http\Request;
 
 class JournalController extends Controller
 {
     private $service;
+
     private $accountService;
+
     private $transactionService;
+
+    private $accountHelperService;
 
     public function __construct(
         JournalService $service,
         AccountService $accountService,
-        TransactionService $transactionService
+        TransactionService $transactionService,
+        AccountHelperService $accountHelperService,
     ) {
         $this->service = $service;
         $this->accountService = $accountService;
         $this->transactionService = $transactionService;
+        $this->accountHelperService = $accountHelperService;
     }
 
     public function index(GetJournalRequest $request)
@@ -37,6 +43,7 @@ class JournalController extends Controller
     {
         return inertia('Journal/Create', [
             'accounts' => $this->accountService->search(['all' => true]),
+            'accountHelpers' => $this->accountHelperService->getAll(['all' => true]),
         ]);
     }
 
@@ -52,6 +59,7 @@ class JournalController extends Controller
         return inertia('Journal/Edit', [
             'journals' => $this->transactionService->getTransactionById($transactionId),
             'accounts' => $this->accountService->search(['all' => true]),
+            'accountHelpers' => $this->accountHelperService->getAll(['all' => true]),
         ]);
     }
 

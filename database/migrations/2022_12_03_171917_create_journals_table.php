@@ -38,10 +38,10 @@ return new class extends Migration
                 ->on('divisions')
                 ->onUpdate('cascade')->onDelete('restrict');
 
-            $table->uuid('partner_id')->nullable();
-            $table->foreign('partner_id')
+            $table->uuid('account_helper_id')->nullable();
+            $table->foreign('account_helper_id')
                 ->references('id')
-                ->on('partners')
+                ->on('account_helpers')
                 ->onUpdate('cascade')->onDelete('restrict');
 
             $table->uuid('transaction_id');

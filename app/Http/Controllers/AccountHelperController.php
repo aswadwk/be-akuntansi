@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AccountHelper\CreateRequest;
+use App\Http\Requests\AccountHelper\UpdateRequest;
 use App\Services\AccountHelperService;
 use Illuminate\Http\Request;
 
@@ -27,9 +29,9 @@ class AccountHelperController extends Controller
         return inertia('AccountHelper/Create');
     }
 
-    public function store(Request $request)
+    public function store(CreateRequest $request)
     {
-        $this->service->store($request->all());
+        $this->service->store($request->validated());
 
         return redirect()->route('web.accountHelpers.index');
     }
@@ -41,9 +43,9 @@ class AccountHelperController extends Controller
         ]);
     }
 
-    public function update($accountHelperId, Request $request)
+    public function update($accountHelperId, UpdateRequest $request)
     {
-        $this->service->update($accountHelperId, $request->all());
+        $this->service->update($accountHelperId, $request->validated());
 
         return redirect()->route('web.accountHelpers.index');
     }

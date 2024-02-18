@@ -22,9 +22,9 @@ class AccountController extends Controller
         $this->accountTypesService = $accountTypesService;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $accounts = $this->service->search([]);
+        $accounts = $this->service->search($request->all());
 
         return inertia('Account/Index', [
             'accounts' => $accounts

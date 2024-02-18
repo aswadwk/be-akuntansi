@@ -16,7 +16,7 @@ class TransactionServiceImpl implements TransactionService
             'journals',
             'journals.account',
             'journals.division',
-            'journals.partner',
+            'journals.accountHelper',
         ])
             ->get();
     }
@@ -32,7 +32,7 @@ class TransactionServiceImpl implements TransactionService
             'journals',
             'journals.account',
             'journals.division',
-            'journals.partner',
+            'journals.accountHelper',
         ])->find($id);
 
         return $transaction;

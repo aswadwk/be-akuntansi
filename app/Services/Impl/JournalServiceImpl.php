@@ -4,6 +4,7 @@ namespace App\Services\Impl;
 
 use App\Exceptions\InvariantError;
 use App\Models\Account;
+use App\Models\AccountHelper;
 use App\Models\Journal;
 use App\Models\Transaction;
 use App\Services\JournalService;
@@ -27,6 +28,19 @@ class JournalServiceImpl implements JournalService
         if ($accountExists != count($accountIds)) {
             throw new BadRequestHttpException('account not found');
         }
+
+        // check account helper
+        if (isset($attrs['account_helper_id'])) {
+            $accountHelper = AccountHelper::where('id', $attrs['account_helper_id'])->first();
+            if (!$accountHelper) {
+                throw new NotFoundHttpException('Account helper not found.');
+            }
+        }
+        // $accountHelper = AccountHelper::where('id', $attrs['account_helper_id'])->first();
+        // dd($attrs);
+        // if (!$accountHelper) {
+        //     throw new NotFoundHttpException('Account helper not found.');
+        // }
 
         try {
             DB::beginTransaction();
@@ -60,13 +74,13 @@ class JournalServiceImpl implements JournalService
                     ];
 
                     // Check for division_id
-                    if (isset($attr['division_id'])) {
-                        $journal['division_id'] = $attr['division_id'];
+                    if (isset($attrs['division_id'])) {
+                        $journal['division_id'] = $attrs['division_id'];
                     }
 
-                    // Check for partner_id
-                    if (isset($attr['partner_id'])) {
-                        $journal['partner_id'] = $attr['partner_id'];
+                    // Check for account_helper_id
+                    if (isset($attrs['account_helper_id'])) {
+                        $journal['account_helper_id'] = $attrs['account_helper_id'];
                     }
 
                     // Create journal
@@ -109,7 +123,7 @@ class JournalServiceImpl implements JournalService
 
     public function getJournals($params)
     {
-        $journals = Journal::with(['account'])->orderBy('created_at', 'desc');
+        $journals = Journal::with(['account', 'accountHelper'])->orderBy('created_at', 'desc');
 
         if (isset($params['start_date'])) {
             $journals->whereDate('date', '>=', $params['start_date']);
@@ -174,7 +188,6 @@ class JournalServiceImpl implements JournalService
             $amountDebit = 0;
             $amountCredit = 0;
 
-            // dd($params['journals']);
             foreach ($params['journals'] as $param) {
                 // Create journal array
                 if (isset($params['date']) && $param['amount'] && $param['account_id'] && $param['type']) {
@@ -194,12 +207,11 @@ class JournalServiceImpl implements JournalService
                         $journal['division_id'] = $param['division_id'];
                     }
 
-                    // Check for partner_id
-                    if (isset($param['partner_id'])) {
-                        $journal['partner_id'] = $param['partner_id'];
+                    // Check for account_helper_id
+                    if (isset($params['account_helper_id'])) {
+                        $journal['account_helper_id'] = $params['account_helper_id'];
                     }
-                    // dd($journal);
-                    // Create journal
+
                     Journal::create($journal);
 
                     $journalCount++;

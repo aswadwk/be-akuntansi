@@ -10,14 +10,15 @@ export const InputNumber = ({
     isRequired,
     prefix,
     suffix,
+    borderError = true,
 }) => {
     return (
         <>
-            <label className={`form-label ${isRequired ? "required" : ""}`}>
-                {label}
-            </label>
+            {label && (
+                <label className={`form-label ${isRequired ? 'required' : ''}`}>{label}</label>
+            )}
             <NumericFormat
-                className={`form-control ${error ? "is-invalid" : ""}`}
+                className={`form-control ${error && borderError ? "is-invalid" : ""}`}
                 thousandSeparator={","}
                 decimalSeparator="."
                 allowNegative={false}
@@ -29,7 +30,10 @@ export const InputNumber = ({
                 onChange={onChange}
                 suffix={suffix}
             />
-            <div className="invalid-feedback">{error}</div>
+            {error && !borderError && (
+                <div className="invalid-feedback">{error}</div>
+            )}
+            <div className="" style={{ fontSize: '12px', color: '#d63939', marginTop: '.25rem' }}>{error}</div>
         </>
     );
 };

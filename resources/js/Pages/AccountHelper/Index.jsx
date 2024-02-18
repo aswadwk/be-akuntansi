@@ -1,12 +1,20 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Layout from '../../Shared/Layout'
 import { Link, useForm } from '@inertiajs/react'
-import { IconPlus } from '@tabler/icons-react'
 import { dateHumanize, toYearMonthDayHourMinute } from '../../Shared/utils'
 import Paginate, { PaginateInfo } from '../../Shared/Paginate'
-import { IconEdit, IconTrash } from '@tabler/icons-react'
+import { IconEdit, IconTrash, IconPlus } from '@tabler/icons-react'
+import { NumericFormat } from 'react-number-format'
+import { debounce } from "lodash";
+import { router } from '@inertiajs/react'
 
 const Index = ({ accountHelpers }) => {
+    const [filters, setFilters] = useState({
+        name: '',
+        per_page: 10,
+        order_by: 'created_at',
+        order: 'desc'
+    });
     const { delete: destroy } = useForm({});
 
     const onDelete = (accountTypeId) => {
@@ -14,6 +22,30 @@ const Index = ({ accountHelpers }) => {
             // Delete it!
             destroy(`/account-helpers/${accountTypeId}`)
         }
+    }
+
+    const debouncedSearch = useRef(
+        debounce((searchFilter) => {
+            router.get('/account-helpers', {
+                ...searchFilter,
+            }, { preserveState: true })
+        }, 500)
+    ).current;
+
+    const firstRender = useRef(true);
+
+    useEffect(() => {
+        if (firstRender.current) {
+            firstRender.current = false;
+            return;
+        }
+
+        debouncedSearch(filters);
+    }, [filters]);
+
+    const onSort = (orderBy) => {
+        const order = filters.order === 'desc' ? 'asc' : 'desc';
+        setFilters({ ...filters, order_by: orderBy, order });
     }
 
     return (
@@ -25,14 +57,25 @@ const Index = ({ accountHelpers }) => {
                             <div className="text-secondary">
                                 Show
                                 <div className="mx-2 d-inline-block">
-                                    <input type="text" className="form-control form-control-sm" value="8" size="3" aria-label="Invoices count" />
+                                    <input
+                                        type="text"
+                                        className="form-control form-control-sm"
+                                        value={filters.per_page}
+                                        size="3"
+                                        onChange={(e) => setFilters({ ...filters, per_page: e.target.value })}
+                                    />
                                 </div>
                                 entries
                             </div>
                             <div className="ms-auto text-secondary">
                                 Search:
                                 <div className="ms-2 d-inline-block">
-                                    <input type="text" className="form-control form-control-sm" aria-label="Search invoice" />
+                                    <input
+                                        type="text"
+                                        className="form-control form-control-sm"
+                                        value={filters.name}
+                                        onChange={(e) => setFilters({ ...filters, name: e.target.value })}
+                                    />
                                 </div>
                             </div>
                         </div>
@@ -42,11 +85,26 @@ const Index = ({ accountHelpers }) => {
                             <thead>
                                 <tr>
                                     <th>Name</th>
-                                    <th>Code</th>
+                                    <th>
+                                        <button
+                                            className="table-sort"
+                                            onClick={() => onSort('code')}
+                                        >
+                                            Code
+                                        </button>
+                                    </th>
                                     <th>Account Type</th>
                                     <th>Type</th>
+                                    <th>Opening Balance</th>
                                     <th>Description</th>
-                                    <th>Created At</th>
+                                    <th>
+                                        <button
+                                            className="table-sort"
+                                            onClick={() => onSort('created_at')}
+                                        >
+                                            Created At
+                                        </button>
+                                    </th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -62,6 +120,16 @@ const Index = ({ accountHelpers }) => {
                                                 </span>
                                             </td>
                                             <td>{accountType.position_normal === "D" ? 'Debit' : 'Credit'}</td>
+                                            <td>
+                                                <NumericFormat
+                                                    displayType="text"
+                                                    thousandSeparator="."
+                                                    decimalScale={2}
+                                                    prefix="Rp. "
+                                                    decimalSeparator=","
+                                                    value={accountType.opening_balance}
+                                                />
+                                            </td>
                                             <td>{accountType.description}</td>
                                             <td>{toYearMonthDayHourMinute(accountType.created_at)}
                                                 <br />

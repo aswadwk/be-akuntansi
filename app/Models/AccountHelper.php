@@ -23,5 +23,6 @@ class AccountHelper extends Model
         'type', // D, C
         'description',
         'created_by',
+        'opening_balance',
     ];
 }

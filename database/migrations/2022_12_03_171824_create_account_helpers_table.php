@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('account_type', 20); // HUTANG', 'PITANG in enlish -> DEBIT, CREDIT
             $table->enum('type', ['D', 'C'])->default('D'); // saldo awal
             $table->text('description')->nullable();
+            $table->decimal('opening_balance', 20, 2)->default(0);
+            $table->decimal('balance', 20, 2)->default(0);
 
             $table->uuid('created_by');
             $table->foreign('created_by')

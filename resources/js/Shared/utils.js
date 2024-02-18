@@ -33,7 +33,8 @@ export function toYearMonthDay(date) {
 export function toIDR(number) {
     if (isNaN(number)) return "IDR 0,00";
 
-    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'IDR' }).format(number).replace("Rp", "IDR");
+
+    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'IDR' }).format(number); // $2,500.00
 }
 
 export function getLastNDays(n = 7) {

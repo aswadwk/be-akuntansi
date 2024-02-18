@@ -28,9 +28,9 @@ class Journal extends Model
         return $this->belongsTo(Division::class);
     }
 
-    public function partner()
+    public function accountHelper()
     {
-        return $this->belongsTo(Partner::class);
+        return $this->belongsTo(AccountHelper::class);
     }
 
     protected function amount(): Attribute

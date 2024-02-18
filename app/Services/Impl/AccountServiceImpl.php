@@ -14,33 +14,29 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class AccountServiceImpl implements AccountService
 {
-    public function search($attr, $id = null)
+    public function search($params, $id = null)
     {
-        $code = $attr['code'] ?? null;
-        $name = $attr['name'] ?? null;
-
         if ($id) {
             return Account::with(['accountType', 'createdBy'])
                 ->find($id);
         }
 
-        if (isset($attr['all'])) {
+        if (isset($params['all'])) {
 
             return Account::with(['accountType', 'createdBy'])->get();
         }
 
-        if ($code) {
-            return Account::with(['accountType', 'createdBy'])->where('code', $code)->first();
-        }
-
-        $account = Account::with(['accountType', 'createdBy']);
-        if ($name) {
-            $account->where('name', 'like', '%' . $name . '%');
-        }
-
-        $account->orderBy('created_at', 'desc');
-
-        return $account->paginate($attrs['per_page'] ?? 10);
+        /** @disregard */
+        return  Account::with(['accountType', 'createdBy'])
+            ->orderBy($params['order_by'] ?? 'created_at', $params['order'] ?? 'desc')
+            ->when(isset($params['code']), function ($query) use ($params) {
+                return $query->where('code', $params['code']);
+            })
+            ->when(isset($params['name']), function ($query) use ($params) {
+                return $query->where('name', 'like', '%' . $params['name'] . '%');
+            })
+            ->paginate($params['per_page'] ?? 10)
+            ->withQueryString();
     }
 
     public function store($attr)

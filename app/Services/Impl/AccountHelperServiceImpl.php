@@ -21,7 +21,9 @@ class AccountHelperServiceImpl implements AccountHelperService
             return $accountHelperQuery->get();
         }
 
-        return $accountHelperQuery->paginate($params['per_page'] ?? 10);
+        return $accountHelperQuery
+            ->orderBy($params['order_by'] ?? 'created_at', $params['order'] ?? 'desc')
+            ->paginate($params['per_page'] ?? 10);
     }
 
     public function getById($accountHelperId)

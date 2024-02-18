@@ -3,19 +3,27 @@ import Layout from '../../Shared/Layout'
 import { useForm } from '@inertiajs/react'
 import Input from '../../Shared/Input'
 import InputSelect from '../../Shared/InputSelect'
+import InputNumber from '../../Shared/InputNumber'
 
 const Create = ({ accountHelper }) => {
 
-    const { data, setData, put, errors, } = useForm({
+    const { data, setData, put, errors, transform } = useForm({
         name: accountHelper.name,
         code: accountHelper.code,
         account_type: accountHelper.account_type,
         type: accountHelper.type || "D",
         description: accountHelper.description || "",
+        opening_balance: accountHelper.opening_balance || 0,
     })
 
     const onSubmit = (e) => {
         e.preventDefault()
+
+        transform((data) => ({
+            ...data,
+            opening_balance: Number(data.opening_balance.toString().replaceAll(',', '').replace('Rp. ', '')),
+        }));
+
         put(`/account-helpers/${accountHelper.id}`)
     }
 
@@ -88,6 +96,17 @@ const FormAddAccountType = ({ onSubmit, data, errors, setData }) => {
                             value={data.type}
                             error={errors.type}
                             label={"Type"}
+                        />
+                    </div>
+                    <div className="mb-3">
+                        <InputNumber
+                            label="Opening Balance"
+                            onChange={e => setData("opening_balance", e.target.value)}
+                            error={errors.opening_balance}
+                            value={data.opening_balance}
+                            placeholder="Balance"
+                            isRequired
+                            prefix="Rp. "
                         />
                     </div>
                     <div className="mb-3">

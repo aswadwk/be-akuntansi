@@ -27,6 +27,7 @@ class UpdateRequest extends FormRequest
             'account_type' => 'required|string|in:debit,credit,project',
             'type' => 'required|string|in:D,C',
             'description' => 'nullable|string|max:255',
+            'opening_balance' => 'nullable|numeric',
         ];
     }
 }

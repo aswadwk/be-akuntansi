@@ -1,30 +1,48 @@
-import React, { useState } from 'react'
+import React from 'react'
 import Select from 'react-select';
 import { NumericFormat } from 'react-number-format';
 import { useForm } from '@inertiajs/react';
+import InputSelectWithSearch from '../../Shared/InputSelectWithSearch';
+import InputDate from '../../Shared/InputDate';
+import { toYearMonthDay } from '../../Shared/utils';
+import InputNumber from '../../Shared/InputNumber';
 
-const initialJournal = {
-    date: '',
-    description: '',
-    journals: [
-        {
-            amount: '',
-            type: '',
-            account_id: '',
-        },
-        {
-            amount: '',
-            type: '',
-            account_id: '',
-        },
-    ],
-};
-
-const Create = ({ accounts }) => {
+const Create = ({ accounts, accountHelpers }) => {
     const [isLoading, setIsLoading] = React.useState(false);
-    const [newJournal, setNewJournal] = useState(initialJournal);
+    const { data, setData, post, transform, errors } = useForm({
+        date: null,
+        description: '',
+        account_helper_id: '',
+        journals: [
+            {
+                amount: '',
+                type: '',
+                account_id: '',
+            },
+            {
+                amount: '',
+                type: '',
+                account_id: '',
+            },
+        ],
+    })
 
-    const { data, setData, post } = useForm({})
+    console.log(errors);
+
+    // {
+    //     "date": "The date field must be a date before or equal to today.",
+    //     "journals.0.amount": "The journals.0.amount field is required.",
+    //     "journals.1.amount": "The journals.1.amount field is required.",
+    //     "journals.0.account_id": "The journals.0.account_id field is required.",
+    //     "journals.1.account_id": "The journals.1.account_id field is required.",
+    //     "journals.0.type": "The journals.0.type field is required.",
+    //     "journals.1.type": "The journals.1.type field is required."
+    // }
+    // log errors jurnals
+
+
+    // errors.journals.0.amount
+    console.log('errors.journals.0.amount', errors['journals.0.amount']);
 
     function sumArray(array) {
         let sum = 0;
@@ -38,7 +56,7 @@ const Create = ({ accounts }) => {
         return sumArray(
             journals
                 .filter((row) => row.type === type)
-                .map((row) => parseInt(row.amount.toString().replace('Rp. ', '').replaceAll('.', ''))),
+                .map((row) => Number(row.amount.toString().replace('Rp. ', '').replaceAll(',', ''))),
         );
     }
 
@@ -47,45 +65,44 @@ const Create = ({ accounts }) => {
     }
 
     const addRow = () => {
-        const newRow = [...newJournal.journals];
+        const newRow = [...data.journals];
+        console.log(newRow);
         newRow.push({
             amount: '',
             type: '',
             account_id: '',
         });
 
-        setNewJournal({ ...newJournal, journals: newRow });
+        console.log(newRow);
+
+        setData({ ...data, journals: newRow });
     };
 
     const deleteRow = (index) => {
-        if (newJournal.journals.length === 2) {
+        if (data.journals.length === 2) {
             alert('Minimal 2 baris');
-            // return enqueueSnackbar('Minimal 2 baris', { variant: 'error' });
         }
 
-        const newRow = [...newJournal.journals];
+        const newRow = [...data.journals];
         newRow.splice(index, 1);
 
-        setNewJournal({ ...newJournal, journals: newRow });
+        setData({ ...data, journals: newRow });
     };
 
-    function handleChangeAmount(event, index, type) {
-        setNewJournal((prevJournal) => {
-            const updatedJournals = prevJournal.journals.map((row, i) => {
+    function handleChangeAmount(value, index, type) {
+        // console.log(value.target.value, index, type);
+        setData({
+            ...data,
+            journals: data.journals.map((row, i) => {
                 if (i === index) {
                     return {
                         ...row,
-                        amount: event.target.value,
+                        amount: value,
                         type: type,
                     };
                 }
                 return row;
-            });
-
-            return {
-                ...prevJournal,
-                journals: updatedJournals,
-            };
+            }),
         });
     }
 
@@ -93,17 +110,25 @@ const Create = ({ accounts }) => {
         event.preventDefault();
 
         setIsLoading(true);
-        const newJournalPost = ({
-            ...newJournal,
-            journals: newJournal.journals.map((row) => ({
+
+        transform((data) => ({
+            ...data,
+            date: toYearMonthDay(data.date),
+            journals: data.journals.map((row) => ({
                 ...row,
-                amount: row.amount.toString().replace('Rp. ', '').replaceAll('.', ''),
+                amount: row.amount.toString().replace('Rp. ', '').replaceAll(',', ''),
             })),
+        }));
+
+        post('/journals', {
+            preserveScroll: true,
+            onSuccess: () => {
+                setIsLoading(false);
+            },
+            onError: () => {
+                setIsLoading(false);
+            }
         });
-
-        setData({ ...newJournalPost });
-
-        post('/journals')
     }
 
     return (
@@ -116,27 +141,41 @@ const Create = ({ accounts }) => {
                     <div className="card-body">
                         <div className="row row-cards">
                             <div className="mb-3 col-sm-4 col-md-2">
-                                <label className="form-label required">Tanggal</label>
-                                <input
-                                    value={newJournal.date}
-                                    onChange={(event) => setNewJournal({ ...newJournal, date: event.target.value })}
-                                    className="form-control"
-                                    required
-                                    type="date"
+                                <InputDate
+                                    format={'yyyy-MM-dd'}
+                                    label="Tanggal"
+                                    value={data.date}
+                                    onChange={(value) => setData({ ...data, date: value })}
+                                    error={errors.date}
+                                    isRequired
+                                />
+                            </div>
+                            <div className="mb-3 col-sm-6 col-md-4">
+                                <InputSelectWithSearch
+                                    label="Kode Bantu"
+                                    placeholder={'Pilih Kode Bantu'}
+                                    options={accountHelpers.map((item) => ({
+                                        label: item.name + ' - ' + item.code,
+                                        value: item.id,
+                                    }))}
+                                    value={data.account_helper_id}
+                                    onChange={(value) => {
+                                        setData({ ...data, account_helper_id: value });
+                                    }}
+                                    error={errors.account_helper_id}
                                 />
                             </div>
                         </div>
-
                         <div className="mb-3">
                             <label className="form-label">Keterangan</label>
                             <textarea
                                 placeholder="Masukkan keterangan"
                                 className="form-control"
                                 rows={2}
-                                onChange={(event) => setNewJournal({ ...newJournal, description: event.target.value })}
-                                value={newJournal.description}
+                                onChange={(event) => setData({ ...data, description: event.target.value })}
+                                value={data.description}
                             >
-                                {newJournal.description}
+                                {data.description}
                             </textarea>
                         </div>
                         <div className="table-responsive" style={{ overflowX: 'unset' }}>
@@ -150,58 +189,48 @@ const Create = ({ accounts }) => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {newJournal.journals.map((journal, index) => (
+                                    {data.journals.map((journal, index) => (
                                         <tr key={index}>
                                             <td>
-                                                <Select
-                                                    className="basic-single"
-                                                    classNamePrefix="select"
-                                                    defaultValue={{
-                                                        label: 'Pilih Akun',
-                                                        value: '',
-                                                    }}
+                                                <InputSelectWithSearch
                                                     options={accounts.map((item) => ({
                                                         label: item.name + ' - ' + item.code,
                                                         value: item.id,
                                                     }))}
-                                                    onChange={(event) => {
-                                                        setNewJournal({
-                                                            ...newJournal,
-                                                            journals: newJournal.journals.map((row, i) => {
+                                                    onChange={(value) => {
+                                                        setData({
+                                                            ...data,
+                                                            journals: data.journals.map((row, i) => {
                                                                 if (i === index) {
                                                                     return {
                                                                         ...row,
-                                                                        account_id: event.value,
+                                                                        account_id: value,
                                                                     };
                                                                 }
                                                                 return row;
                                                             }),
                                                         });
                                                     }}
+                                                    value={journal.account_id}
+                                                    error={`${errors['journals.' + index + '.account_id'] || ''}`}
                                                 />
                                             </td>
                                             <td>
-                                                <NumericFormat
-                                                    className="form-control text-end"
-                                                    allowLeadingZeros
-                                                    decimalScale={0}
-                                                    thousandSeparator="."
-                                                    prefix="Rp. "
-                                                    decimalSeparator=","
+                                                <InputNumber
+                                                    borderError={false}
                                                     value={journal.type === 'D' ? journal.amount : 0}
-                                                    onChange={(event) => handleChangeAmount(event, index, 'D')}
+                                                    onChange={(event) => handleChangeAmount(event.target.value, index, 'D')}
+                                                    error={`${errors['journals.' + index + '.amount'] || ''}`}
+                                                    prefix={'Rp. '}
                                                 />
                                             </td>
                                             <td>
-                                                <NumericFormat
-                                                    className="form-control text-end"
-                                                    allowLeadingZeros
-                                                    decimalScale={0}
-                                                    thousandSeparator="."
-                                                    prefix="Rp. "
-                                                    decimalSeparator=","
+                                                <InputNumber
+                                                    borderError={false}
                                                     value={journal.type === 'C' ? journal.amount : 0}
-                                                    onChange={(event) => handleChangeAmount(event, index, 'C')}
+                                                    onChange={(event) => handleChangeAmount(event.target.value, index, 'C')}
+                                                    error={`${errors['journals.' + index + '.amount'] || ''}`}
+                                                    prefix={'Rp. '}
                                                 />
                                             </td>
                                             <td>
@@ -222,21 +251,21 @@ const Create = ({ accounts }) => {
                                         <td className="text-end me-12">
                                             <NumericFormat
                                                 displayType="text"
-                                                thousandSeparator="."
-                                                decimalScale={0}
+                                                thousandSeparator=","
+                                                decimalScale={2}
                                                 prefix="Rp. "
-                                                decimalSeparator=","
-                                                value={filterType(newJournal.journals, 'D')}
+                                                decimalSeparator="."
+                                                value={filterType(data.journals, 'D')}
                                             />
                                         </td>
                                         <td className="text-end me-2">
                                             <NumericFormat
                                                 displayType="text"
-                                                thousandSeparator="."
-                                                decimalScale={0}
+                                                thousandSeparator=","
+                                                decimalScale={2}
                                                 prefix="Rp. "
-                                                decimalSeparator=","
-                                                value={filterType(newJournal.journals, 'C')}
+                                                decimalSeparator="."
+                                                value={filterType(data.journals, 'C')}
                                             />
                                         </td>
                                         <td></td>
@@ -250,7 +279,7 @@ const Create = ({ accounts }) => {
                             <button type="button" onClick={handleReset} className="btn btn-outline-secondary">
                                 Reset
                             </button>
-                            {filterType(newJournal.journals, 'D') === filterType(newJournal.journals, 'C') ? (
+                            {filterType(data.journals, 'D') === filterType(data.journals, 'C') ? (
                                 <button className="btn btn-primary gap-2" type="submit">
                                     {isLoading && (
                                         <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" />
@@ -258,7 +287,7 @@ const Create = ({ accounts }) => {
                                     Simpan
                                 </button>
                             ) : (
-                                <button className="btn btn-primary" disabled>
+                                <button className="btn btn-primary" disabled type='button'>
                                     Simpan
                                 </button>
                             )}

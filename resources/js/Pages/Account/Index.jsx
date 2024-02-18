@@ -1,11 +1,19 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Layout from "../../Shared/Layout";
 import Paginate, { PaginateInfo } from "../../Shared/Paginate";
 import { Link, useForm } from "@inertiajs/react";
 import { IconTrash, IconEdit } from "@tabler/icons-react";
 import { dateHumanize, toIDR, toYearMonthDayHourMinute } from "../../Shared/utils";
+import { router } from "@inertiajs/react";
+import { debounce } from "lodash";
 
 const Index = ({ accounts }) => {
+    const [filters, setFilters] = useState({
+        name: '',
+        per_page: 10,
+        order_by: 'created_at',
+        order: 'desc'
+    });
 
     const { delete: destroy } = useForm({});
 
@@ -13,6 +21,30 @@ const Index = ({ accounts }) => {
         if (confirm('Are you sure you want to delete this account ?')) {
             destroy(`/accounts/${accountId}`)
         }
+    }
+
+    const debouncedSearch = useRef(
+        debounce((searchFilter) => {
+            router.get('/accounts', {
+                ...searchFilter,
+            }, { preserveState: true })
+        }, 500)
+    ).current;
+
+    const firstRender = useRef(true);
+
+    useEffect(() => {
+        if (firstRender.current) {
+            firstRender.current = false;
+            return;
+        }
+
+        debouncedSearch(filters);
+    }, [filters]);
+
+    const onSort = (orderBy) => {
+        const order = filters.order === 'desc' ? 'asc' : 'desc';
+        setFilters({ ...filters, order_by: orderBy, order });
     }
 
     return (
@@ -24,14 +56,25 @@ const Index = ({ accounts }) => {
                             <div className="text-secondary">
                                 Show
                                 <div className="mx-2 d-inline-block">
-                                    <input type="text" className="form-control form-control-sm" value="8" size="3" aria-label="Invoices count" />
+                                    <input
+                                        type="text"
+                                        className="form-control form-control-sm"
+                                        value={filters.per_page}
+                                        size="3"
+                                        onChange={(e) => setFilters({ ...filters, per_page: e.target.value })}
+                                    />
                                 </div>
                                 entries
                             </div>
                             <div className="ms-auto text-secondary">
                                 Search:
                                 <div className="ms-2 d-inline-block">
-                                    <input type="text" className="form-control form-control-sm" aria-label="Search invoice" />
+                                    <input
+                                        type="text"
+                                        className="form-control form-control-sm"
+                                        value={filters.name}
+                                        onChange={(e) => setFilters({ ...filters, name: e.target.value })}
+                                    />
                                 </div>
                             </div>
                         </div>
@@ -41,12 +84,26 @@ const Index = ({ accounts }) => {
                             <thead>
                                 <tr>
                                     <th>Name</th>
-                                    <th>Code</th>
+                                    <th>
+                                        <button
+                                            className="table-sort"
+                                            onClick={() => onSort('code')}
+                                        >
+                                            Code
+                                        </button>
+                                    </th>
                                     <th>Position Normal</th>
                                     <th>Position Report</th>
                                     <th>Type</th>
                                     <th>Opening Balance</th>
-                                    <th>Created At</th>
+                                    <th>
+                                        <button
+                                            className="table-sort"
+                                            onClick={() => onSort('created_at')}
+                                        >
+                                            Created At
+                                        </button>
+                                    </th>
                                     <th></th>
                                 </tr>
                             </thead>
