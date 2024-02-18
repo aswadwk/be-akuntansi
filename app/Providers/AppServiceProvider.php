@@ -2,10 +2,12 @@
 
 namespace App\Providers;
 
+use App\Services\AccountHelperService;
 use App\Services\AccountService;
 use App\Services\AccountTypeService;
 use App\Services\AuthService;
 use App\Services\DivisionService;
+use App\Services\Impl\AccountHelperServiceImpl;
 use App\Services\Impl\AccountServiceImpl;
 use App\Services\Impl\AccountTypeServiceImpl;
 use App\Services\Impl\AuthServiceImpl;
@@ -53,6 +55,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             JournalService::class,
             JournalServiceImpl::class,
+        );
+
+        $this->app->bind(
+            AccountHelperService::class,
+            AccountHelperServiceImpl::class,
         );
     }
 

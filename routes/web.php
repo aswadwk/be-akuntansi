@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\AccountHelperController;
 use App\Http\Controllers\AccountTypeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
@@ -43,6 +44,15 @@ Route::middleware(['auth', 'user.id'])->group(function () {
         Route::get('/accounts/{accountId}/edit', 'edit');
         Route::put('/accounts/{accountId}', 'update');
         Route::delete('/accounts/{accountId}', 'delete');
+    });
+
+    Route::controller(AccountHelperController::class)->group(function () {
+        Route::get('/account-helpers', 'index')->name('web.accountHelpers.index');
+        Route::get('/account-helpers/create', 'create');
+        Route::post('/account-helpers', 'store');
+        Route::get('/account-helpers/{accountHelperId}/edit', 'edit');
+        Route::put('/account-helpers/{accountHelperId}', 'update');
+        Route::delete('/account-helpers/{accountHelperId}', 'delete');
     });
 
     Route::controller(JournalController::class)->group(function () {

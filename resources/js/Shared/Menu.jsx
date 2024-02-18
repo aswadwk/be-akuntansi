@@ -28,6 +28,9 @@ const Menu = () => {
                 isActive={isActive('/account')}
                 type="dropdown"
             >
+                <Link className="dropdown-item" href="/account-helpers">
+                    Account Helper
+                </Link>
                 <Link className="dropdown-item" href="/account-types">
                     Type
                 </Link>
