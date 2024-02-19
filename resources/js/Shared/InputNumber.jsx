@@ -11,6 +11,7 @@ export const InputNumber = ({
     prefix,
     suffix,
     borderError = true,
+    style = {},
 }) => {
     return (
         <>
@@ -19,6 +20,7 @@ export const InputNumber = ({
             )}
             <NumericFormat
                 className={`form-control ${error && borderError ? "is-invalid" : ""}`}
+                style={style}
                 thousandSeparator={","}
                 decimalSeparator="."
                 allowNegative={false}

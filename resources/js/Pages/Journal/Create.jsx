@@ -25,24 +25,7 @@ const Create = ({ accounts, accountHelpers }) => {
                 account_id: '',
             },
         ],
-    })
-
-    console.log(errors);
-
-    // {
-    //     "date": "The date field must be a date before or equal to today.",
-    //     "journals.0.amount": "The journals.0.amount field is required.",
-    //     "journals.1.amount": "The journals.1.amount field is required.",
-    //     "journals.0.account_id": "The journals.0.account_id field is required.",
-    //     "journals.1.account_id": "The journals.1.account_id field is required.",
-    //     "journals.0.type": "The journals.0.type field is required.",
-    //     "journals.1.type": "The journals.1.type field is required."
-    // }
-    // log errors jurnals
-
-
-    // errors.journals.0.amount
-    console.log('errors.journals.0.amount', errors['journals.0.amount']);
+    });
 
     function sumArray(array) {
         let sum = 0;
@@ -66,14 +49,11 @@ const Create = ({ accounts, accountHelpers }) => {
 
     const addRow = () => {
         const newRow = [...data.journals];
-        console.log(newRow);
         newRow.push({
             amount: '',
             type: '',
             account_id: '',
         });
-
-        console.log(newRow);
 
         setData({ ...data, journals: newRow });
     };
@@ -81,6 +61,8 @@ const Create = ({ accounts, accountHelpers }) => {
     const deleteRow = (index) => {
         if (data.journals.length === 2) {
             alert('Minimal 2 baris');
+
+            return;
         }
 
         const newRow = [...data.journals];
@@ -90,7 +72,6 @@ const Create = ({ accounts, accountHelpers }) => {
     };
 
     function handleChangeAmount(value, index, type) {
-        // console.log(value.target.value, index, type);
         setData({
             ...data,
             journals: data.journals.map((row, i) => {
@@ -217,6 +198,7 @@ const Create = ({ accounts, accountHelpers }) => {
                                             </td>
                                             <td>
                                                 <InputNumber
+                                                    style={{ textAlign: 'right' }}
                                                     borderError={false}
                                                     value={journal.type === 'D' ? journal.amount : 0}
                                                     onChange={(event) => handleChangeAmount(event.target.value, index, 'D')}
@@ -226,6 +208,7 @@ const Create = ({ accounts, accountHelpers }) => {
                                             </td>
                                             <td>
                                                 <InputNumber
+                                                    style={{ textAlign: 'right' }}
                                                     borderError={false}
                                                     value={journal.type === 'C' ? journal.amount : 0}
                                                     onChange={(event) => handleChangeAmount(event.target.value, index, 'C')}
@@ -234,7 +217,11 @@ const Create = ({ accounts, accountHelpers }) => {
                                                 />
                                             </td>
                                             <td>
-                                                <button className="btn btn-outline-danger" onClick={() => deleteRow(index)}>
+                                                <button
+                                                    className="btn btn-outline-danger"
+                                                    onClick={() => deleteRow(index)}
+                                                    type="button"
+                                                >
                                                     -
                                                 </button>
                                             </td>
@@ -244,7 +231,11 @@ const Create = ({ accounts, accountHelpers }) => {
                                 <tfoot>
                                     <tr>
                                         <td>
-                                            <button className="btn btn-outline-primary" onClick={addRow}>
+                                            <button
+                                                className="btn btn-outline-primary"
+                                                onClick={() => addRow()}
+                                                type="button"
+                                            >
                                                 Tambah
                                             </button>
                                         </td>
