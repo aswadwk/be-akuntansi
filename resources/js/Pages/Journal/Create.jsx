@@ -1,5 +1,4 @@
 import React from 'react'
-import Select from 'react-select';
 import { NumericFormat } from 'react-number-format';
 import { useForm } from '@inertiajs/react';
 import InputSelectWithSearch from '../../Shared/InputSelectWithSearch';
@@ -8,8 +7,7 @@ import { toYearMonthDay } from '../../Shared/utils';
 import InputNumber from '../../Shared/InputNumber';
 
 const Create = ({ accounts, accountHelpers }) => {
-    const [isLoading, setIsLoading] = React.useState(false);
-    const { data, setData, post, transform, errors } = useForm({
+    const { data, setData, post, transform, errors, processing } = useForm({
         date: null,
         description: '',
         account_helper_id: '',
@@ -90,8 +88,6 @@ const Create = ({ accounts, accountHelpers }) => {
     async function handleSubmit(event) {
         event.preventDefault();
 
-        setIsLoading(true);
-
         transform((data) => ({
             ...data,
             date: toYearMonthDay(data.date),
@@ -101,15 +97,7 @@ const Create = ({ accounts, accountHelpers }) => {
             })),
         }));
 
-        post('/journals', {
-            preserveScroll: true,
-            onSuccess: () => {
-                setIsLoading(false);
-            },
-            onError: () => {
-                setIsLoading(false);
-            }
-        });
+        post('/journals');
     }
 
     return (
@@ -272,7 +260,7 @@ const Create = ({ accounts, accountHelpers }) => {
                             </button>
                             {filterType(data.journals, 'D') === filterType(data.journals, 'C') ? (
                                 <button className="btn btn-primary gap-2" type="submit">
-                                    {isLoading && (
+                                    {processing && (
                                         <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" />
                                     )}
                                     Simpan

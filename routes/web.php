@@ -9,8 +9,8 @@ use App\Http\Controllers\JournalController;
 use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/test', function () {
-    return view('welcome');
+Route::get('/', function () {
+    return redirect()->route('web.home.index');
 });
 
 Route::controller(AuthController::class)->group(function () {
