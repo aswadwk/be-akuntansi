@@ -3,6 +3,9 @@ import Paginate, { PaginateInfo } from '../../Shared/Paginate'
 import Layout from '../../Shared/Layout'
 import { Link } from '@inertiajs/react'
 import { NumericFormat } from 'react-number-format';
+import { toDayMonthYear } from '../../Shared/utils';
+import { IconEdit } from '@tabler/icons-react';
+import { IconTrash } from '@tabler/icons-react';
 
 const Index = ({ journals }) => {
     const [filters, setFilters] = useState({
@@ -41,12 +44,10 @@ const Index = ({ journals }) => {
                         <table className="table card-table table-vcenter text-nowrap datatable">
                             <thead>
                                 <tr>
-                                    <th>Code</th>
                                     <th>Date</th>
                                     <th>Description</th>
+                                    <th>Account</th>
                                     <th>Account Helper(Kode Bantu)</th>
-                                    <th>Account Debit</th>
-                                    <th>Account Credit</th>
                                     <th colSpan={2} className="w-1 text-center">
                                         Saldo
                                     </th>
@@ -57,14 +58,16 @@ const Index = ({ journals }) => {
                                 {
                                     journals.data.map((journal, index) => (
                                         <tr key={index}>
-                                            <td>{journal?.account?.code}</td>
-                                            <td>{journal.date}</td>
+                                            <td>{toDayMonthYear(journal.date)}</td>
                                             <td>{journal.description}</td>
+                                            <td>
+                                                {journal.account?.name}
+                                                <br />
+                                                <span className='text-secondary'>{journal?.account?.code}</span>
+                                            </td>
                                             <td>
                                                 {journal.account_helper?.name}
                                             </td>
-                                            <td>{journal.type === 'D' ? journal.account?.name : ''}</td>
-                                            <td>{journal.type === 'C' ? journal.account?.name : ''}</td>
                                             <td className="text-end">
                                                 <NumericFormat
                                                     displayType="text"
@@ -86,21 +89,14 @@ const Index = ({ journals }) => {
                                                 />
                                             </td>
                                             <td>
-                                                <Link href={`/journals/${journal.transaction_id}/edit`}>
-                                                    <span className="cursor-pointer">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" className="icon dropdown-item-icon" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1"></path><path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z"></path><path d="M16 5l3 3"></path></svg>
+                                                <div className='d-flex gap-2'>
+                                                    <Link href={`/journals/${journal.transaction_id}/edit`}>
+                                                        <IconEdit className='text-warning' size={18} />
+                                                    </Link>
+                                                    <span className="text-secondary cursor-pointer" onClick={() => onDelete(journal.id)} >
+                                                        <IconTrash className='text-danger' size={18} />
                                                     </span>
-                                                </Link>
-                                                <span className="text-secondary cursor-pointer" onClick={() => onDelete(journal.id)} >
-                                                    <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-trash" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                                        <path d="M4 7l16 0" />
-                                                        <path d="M10 11l0 6" />
-                                                        <path d="M14 11l0 6" />
-                                                        <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
-                                                        <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
-                                                    </svg>
-                                                </span>
+                                                </div>
                                             </td>
                                         </tr>
                                     ))

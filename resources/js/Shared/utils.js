@@ -16,8 +16,15 @@ export function toYearMonth(date) {
     return moment(date).format('YYYY-MM');
 }
 
+// toYearMonthDay // DD-MM-YYYY
+export function toDayMonthYear(date) {
+    date = new Date(date);
+
+    return moment(date).format('DD/MM/YYYY');
+}
+
 // toYearMonthDay // YYYY-MM-DD
-export function toYearMonthDay(date) {
+export function toYearMonthDay(date, separator = '-') {
     if (!date) return '';
 
     date = new Date(date);
@@ -27,7 +34,7 @@ export function toYearMonthDay(date) {
         return '';
     }
 
-    return moment(date).format('YYYY-MM-DD');
+    return moment(date).format(`YYYY${separator}MM${separator}DD`);
 }
 
 export function toIDR(number) {

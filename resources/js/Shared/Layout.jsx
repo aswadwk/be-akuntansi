@@ -3,6 +3,7 @@ import { Sidebar } from "./Sidebar";
 import Navbar from "./Navbar";
 import PageTitle from "./PageTitle";
 import Footer from "./Footer";
+import 'rsuite/dist/rsuite.min.css';
 
 export default function Layout({ children, left, right, pageTitle }) {
     return (

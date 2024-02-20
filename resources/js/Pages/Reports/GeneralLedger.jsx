@@ -1,86 +1,81 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Layout from '../../Shared/Layout'
 import { Link } from '@inertiajs/react'
 import { NumericFormat } from 'react-number-format';
-import Select from 'react-select';
-import Button from '../../Shared/Button';
 import { router } from '@inertiajs/react';
-import { DatePicker } from 'rsuite';
-import addDays from 'date-fns/addDays';
 // Date Picker
-import 'rsuite/dist/rsuite.min.css';
+import { toDayMonthYear, toYearMonthDay } from '../../Shared/utils';
+import InputDate from '../../Shared/InputDate';
+import InputSelectWithSearch from '../../Shared/InputSelectWithSearch';
 
-const GeneralLedger = ({ generalLedger, accounts, filters }) => {
-    const [date, setDate] = useState(filters.to);
+const GeneralLedger = ({ generalLedger, accounts }) => {
+    const [filters, setFilters] = useState({
+        to: new Date(),
+        from: new Date(),
+        account_id: "",
+    });
 
-    const [selectedAccount, setSelectedAccount] = useState(filters.account_id);
+    const handleFilter = ({
+        dateFilter,
+        selectedAccountFilter,
+    }) => {
 
-    const handleFilter = () => {
-        if (date && selectedAccount) {
-            const newDate = date.toISOString().split('T')[0];
-            router.visit(`/reports/general-ledger/${selectedAccount}?to=${newDate}&from=${newDate}`);
+        if (dateFilter && selectedAccountFilter) {
+            const newDate = toYearMonthDay(dateFilter);
+            router.get(
+                `/reports/general-ledger/${selectedAccountFilter}`,
+                {
+                    to: newDate,
+                    from: newDate,
+                },
+                { preserveState: true }
+            );
         }
     }
 
-    const predefinedBottomRanges = [
-        {
-            label: 'Kemarin',
-            value: addDays(new Date(), -1),
-        },
-        {
-            label: 'Hari ini',
-            value: new Date(),
-        },
-    ];
+    const firstRender = useRef(true);
+
+    useEffect(() => {
+        if (firstRender.current) {
+            firstRender.current = false;
+            return;
+        }
+
+        handleFilter({
+            dateFilter: filters.to,
+            selectedAccountFilter: filters.account_id,
+        });
+    }, [filters]);
 
     return (
         <Layout left={'General Ledger (Buku Besar)'} right={<PageTitleRight />}>
             <div className="card">
                 <div className="card-body border-bottom">
                     <div className="row">
-                        <div className="col-md-2 form-group">
-                            <label className="text-muted small mb-1">Filter Tanggal</label>
-                            <div className="input-icon mb-2">
-                                <div className="input-icon mb-2">
-                                    <DatePicker
-                                        onChange={(value) => {
-                                            setDate(value);
-                                        }}
-                                        // value={new Date(date)}
-                                        ranges={predefinedBottomRanges}
-                                        placeholder="Pilih Tanggal"
-                                        style={{ width: 300 }}
-                                    />
-                                </div>
-                            </div>
-                        </div>
+
                         <div className="col-md-3 form-group">
-                            <label className="text-muted small" style={{ marginBottom: '2px' }}>Pilih Akun</label>
-                            <Select
-                                className="basic-single"
-                                classNamePrefix="select"
-                                defaultValue={{
-                                    label: accounts.find((item) => item.id === selectedAccount)?.name ?? 'Pilih Akun',
-                                    value: selectedAccount,
-                                }}
+                            <InputSelectWithSearch
+                                isRequired
+                                label="Pilih Akun"
+                                value={filters.account_id}
+                                onChange={(value) => setFilters({ ...filters, account_id: value })}
                                 options={accounts.map((item) => ({
                                     label: item.name + ' - ' + item.code,
                                     value: item.id,
                                 }))}
-                                onChange={(event) => {
-                                    setSelectedAccount(event.value);
-                                }}
                             />
                         </div>
                         <div className="col-md-3 form-group">
-                            <label className="text-muted small" style={{ marginBottom: '12px' }}></label>
-                            <div>
-                                <Button type='primary' onClick={handleFilter}>
-                                    Filter
-                                </Button>
+                            <div className="input-icon mb-2">
+                                <InputDate
+                                    format={'yyyy-MM-dd'}
+                                    label="Tanggal"
+                                    value={filters.to}
+                                    onChange={(value) => setFilters({ ...filters, to: value })}
+                                    isRequired
+                                />
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -90,7 +85,6 @@ const GeneralLedger = ({ generalLedger, accounts, filters }) => {
                         <table className="table table-vcenter card-table">
                             <thead>
                                 <tr>
-                                    <th>NO</th>
                                     <th>Tanggal</th>
                                     <th>Nama Akun</th>
                                     <th>Keterangan</th>
@@ -108,11 +102,9 @@ const GeneralLedger = ({ generalLedger, accounts, filters }) => {
                                         </td>
                                     </tr>
                                 )}
-
-                                {generalLedger.map((item, index) => (
+                                {generalLedger.map((item) => (
                                     <tr key={item.id}>
-                                        <td>{index + 1}</td>
-                                        <td>{item.date}</td>
+                                        <td>{toDayMonthYear(item.date)}</td>
                                         <td>{item.name}</td>
                                         <td>{item.description}</td>
                                         <td>
