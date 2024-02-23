@@ -51,6 +51,7 @@ class JournalServiceImpl implements JournalService
             $attrTransaction = [
                 'code'    => $transactionCode,
                 'user_id' => auth()->user()->id,
+                'status'  => $attrs['status'] ?? Transaction::STATUS_DRAFT,
             ];
 
             $transaction = app(TransactionService::class)->store($attrTransaction);
@@ -179,6 +180,11 @@ class JournalServiceImpl implements JournalService
 
         try {
             DB::beginTransaction();
+
+            if (isset($params['status'])) {
+                $transaction->status = $params['status'];
+                $transaction->save();
+            }
 
             // delete all journal
             Journal::where('transaction_id', $transactionId)->delete();

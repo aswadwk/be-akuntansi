@@ -61,11 +61,11 @@ const Menu = () => {
                 <Link className="dropdown-item" href="/reports/general-ledger">
                     General Ledger
                 </Link>
-                <Link className="dropdown-item" href="/reports/neraca-lajur">
-                    Neraca Lajur
-                </Link>
                 <Link className="dropdown-item" href="/journals/new">
                     Buku Pembantu
+                </Link>
+                <Link className="dropdown-item" href="/reports/neraca-lajur">
+                    Neraca Lajur
                 </Link>
                 <Link className="dropdown-item" href="/journals/new">
                     Ringkasan Bisnis

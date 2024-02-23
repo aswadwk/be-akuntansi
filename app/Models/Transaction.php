@@ -12,9 +12,14 @@ class Transaction extends Model
 {
     use HasFactory, Uuid, SoftDeletes, Timestamp;
 
+    const STATUS_DRAFT = 'DRAFT';
+    const STATUS_APPROVED = 'APPROVED';
+    const STATUS_REJECTED = 'REJECTED';
+
     protected $fillable = [
         'code',
         'user_id',
+        'status',
     ];
 
     public function journals()

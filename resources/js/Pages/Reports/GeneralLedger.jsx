@@ -142,13 +142,6 @@ const GeneralLedger = ({ generalLedger, accounts }) => {
                             </tbody>
                         </table>
                     </div>
-                    <div className="card-footer d-flex justify-content-between">
-                        <p className="m-0 text-muted">
-                            Showing <span>0</span> of
-                            <span>0</span>
-                            entries
-                        </p>
-                    </div>
                 </div>
             </div>
         </Layout>
