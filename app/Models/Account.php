@@ -31,4 +31,9 @@ class Account extends Model
             get: fn ($value) => + ($value),
         );
     }
+
+    public function journals()
+    {
+        return $this->hasMany(Journal::class, 'account_id', 'id');
+    }
 }

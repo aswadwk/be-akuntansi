@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Account;
+use App\Models\AccountHelper;
 use App\Models\Journal;
 use App\Services\AccountService;
 use Illuminate\Http\Request;
@@ -52,9 +53,6 @@ class ReportController extends Controller
             ->orderBy('date', 'asc')
             ->get();
 
-        // dd($queryGeneralBalance);
-
-
         $generalBalance = [];
         $generalBalance[] = collect([
             'account_id' => $account->id,
@@ -103,5 +101,66 @@ class ReportController extends Controller
                 ],
             ]);
         }
+    }
+
+    public function accountHelper(Request $request, $accountHelperId = null)
+    {
+        $accounts = AccountHelper::all();
+
+        if (!$accountHelperId) {
+            return inertia('Reports/AccountHelper', [
+                'accounts' => $accounts,
+                'journals' => [],
+            ]);
+        }
+
+        $journalWithAccountHelper = Journal::with(['accountHelper'])
+            ->when($request->end_date, function ($query) use ($request) {
+                $query->whereDate('date', '<=', $request->end_date);
+            })
+            ->where('account_helper_id', $accountHelperId)
+            ->orderBy('date', 'asc')
+            ->get();
+
+        $balance = 0;
+
+        $journalWithAccountHelper->each(function ($journal) use (&$balance) {
+            $journal->debit = $journal->type === 'D' ? $journal->amount : 0;
+            $journal->credit = $journal->type === 'C' ? $journal->amount : 0;
+
+            $balance += $journal->type === 'D' ? $journal->amount : -$journal->amount;
+            $journal->balance = $balance;
+        });
+
+        return inertia('Reports/AccountHelper', [
+            'accounts' => $accounts,
+            'journals' => $journalWithAccountHelper,
+        ]);
+    }
+
+    public function worksheet(Request $request)
+    {
+        $accounts = Account::with(['journals'])
+            ->get();
+
+        $debit = 0;
+        $credit = 0;
+
+        $accounts->each(function ($account) use (&$debit, &$credit) {
+            $account->journals->each(function ($journal) use (&$debit, &$credit) {
+                $journal->debit = $journal->type === 'D' ? $journal->amount : 0;
+                $journal->credit = $journal->type === 'C' ? $journal->amount : 0;
+
+                $debit += $journal->debit;
+                $credit += $journal->credit;
+            });
+
+            $account->debit = $debit;
+            $account->credit = $credit;
+        });
+
+        return inertia('Reports/Worksheet', [
+            "accounts" => $accounts,
+        ]);
     }
 }
