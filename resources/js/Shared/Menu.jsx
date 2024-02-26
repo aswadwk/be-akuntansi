@@ -97,6 +97,9 @@ const Menu = () => {
                 isActive={isActive('/settings')}
                 type="dropdown"
             >
+                <Link className="dropdown-item" href="/setting-reports/profit-loss">
+                    Laba Rugi
+                </Link>
                 <Link className="dropdown-item" href="/setting-users">
                     Users
                 </Link>

@@ -7,6 +7,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\JournalController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\SettingReportController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -79,5 +80,11 @@ Route::middleware(['auth', 'user.id'])->group(function () {
         Route::get('/reports/general-ledger/{accountId?}', 'generalLedger');
         Route::get('/reports/account-helper/{accountHelperId?}', 'accountHelper'); // Buku besar
         Route::get('/reports/worksheet', 'worksheet'); // Neraca Lajur
+    });
+
+    // Settings Report
+    Route::controller(SettingReportController::class)->group(function () {
+        Route::get('/setting-reports/profit-loss', 'profitLoss')->name('web.setting-report.profit-loss');
+        Route::post('/setting-reports/profit-loss', 'storeProfitLoss');
     });
 });
