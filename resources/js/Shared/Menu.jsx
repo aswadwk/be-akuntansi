@@ -78,7 +78,7 @@ const Menu = () => {
                 isActive={isActive('/financial-statements')}
                 type="dropdown"
             >
-                <Link className="dropdown-item" href="/financial-statements/profit-loss">
+                <Link className="dropdown-item" href="/reports/profit-loss">
                     Laba Rugi
                 </Link>
                 <Link className="dropdown-item" href="/journals/new">

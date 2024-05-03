@@ -255,13 +255,13 @@ const ProfitLoss = ({ accounts, settings }) => {
                     </div>
                 </div>
 
-                <div className="card mt-3">
+                {/* <div className="card mt-3">
                     <div className="card-body">
                         <pre>
                             {JSON.stringify(data, null, 2)}
                         </pre>
                     </div>
-                </div>
+                </div> */}
             </div>
         </Layout>
     )

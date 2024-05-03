@@ -163,4 +163,12 @@ class ReportController extends Controller
             "accounts" => $accounts,
         ]);
     }
+
+    // Lapaporan Keuangan
+    public function profitLoss()
+    {
+        return inertia('Reports/ProfitLoss', [
+            'accounts' => Account::all(),
+        ]);
+    }
 }

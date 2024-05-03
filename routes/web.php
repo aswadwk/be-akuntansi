@@ -80,6 +80,9 @@ Route::middleware(['auth', 'user.id'])->group(function () {
         Route::get('/reports/general-ledger/{accountId?}', 'generalLedger');
         Route::get('/reports/account-helper/{accountHelperId?}', 'accountHelper'); // Buku besar
         Route::get('/reports/worksheet', 'worksheet'); // Neraca Lajur
+
+        // Laporan Keuangan
+        Route::get('/reports/profit-loss', 'profitLoss'); // Laporan Laba Rugi
     });
 
     // Settings Report
