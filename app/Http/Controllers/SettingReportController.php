@@ -20,7 +20,7 @@ class SettingReportController extends Controller
         return inertia('Setting/Report/ProfitLoss', [
             'accounts' => Account::all(),
             'settings' => $settings->each(function ($setting) {
-                $setting->accounts = json_decode($setting->account_ids);
+                $setting->accounts = explode(',', $setting->account_ids);
                 $setting->section = (int) $setting->order;
             }),
         ]);
@@ -29,19 +29,22 @@ class SettingReportController extends Controller
     public function storeProfitLoss(ProfitLossRequest $request)
     {
 
+
         try {
             DB::beginTransaction();
 
             SettingReport::where('report_type', SettingReport::TYPE_PROFIT_LOSS)->delete();
 
             foreach ($request->settings as $setting) {
+
                 SettingReport::create([
                     'report_type' => SettingReport::TYPE_PROFIT_LOSS,
                     'title' => $setting['title'],
                     'type' => $setting['type'],
                     'sub_title' => $setting['sub_title'] ?? null,
                     'order' => $setting['section'],
-                    'account_ids' => json_encode($setting['accounts']),
+                    // array to string
+                    'account_ids' => implode(',', $setting['accounts']),
                     'created_by' => auth('web')->id()
                 ]);
             }

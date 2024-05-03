@@ -1,9 +1,12 @@
 import React from 'react'
 import Layout from '../../Shared/Layout'
 
-const ProfitLoss = () => {
+const ProfitLoss = ({ accounts }) => {
     return (
         <Layout left={'Laba Rugi'} right={<></>}>
+            <pre>
+                {JSON.stringify(accounts, null, 2)}
+            </pre>
             <div className="card">
                 <div className="table-responsive">
                     <table className="table table-vcenter card-table">

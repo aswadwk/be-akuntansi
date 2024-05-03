@@ -24,7 +24,7 @@ class ProfitLossRequest extends FormRequest
             'settings.*.section' => ['required', 'integer', 'min:1'],
             'settings.*.sub_title' => ['nullable', 'string', 'max:255'],
             'settings.*.type' => ['required', 'string', 'max:255'],
-            'settings.*.accounts' => ['required', 'array']
+            'settings.*.accounts' => ['required', 'array'],
         ];
     }
 }

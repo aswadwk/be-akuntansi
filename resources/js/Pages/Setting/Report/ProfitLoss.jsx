@@ -4,8 +4,7 @@ import Input from '../../../Shared/Input'
 import { useForm } from '@inertiajs/react'
 import InputSelect from '../../../Shared/InputSelect'
 import InputMultiSelectWithSearch from '../../../Shared/InputMultiSelectWithSearch'
-import { IconEdit } from '@tabler/icons-react'
-import { IconTrash } from '@tabler/icons-react'
+import { IconEdit, IconTrash } from '@tabler/icons-react'
 import axios from 'axios'
 
 const randomId = () => {
@@ -22,7 +21,6 @@ const initialData = {
 }
 
 const ProfitLoss = ({ accounts, settings }) => {
-    console.log(settings)
     const [form, setForm] = useState(initialData)
     const [action, setAction] = useState('add')
 
@@ -84,6 +82,9 @@ const ProfitLoss = ({ accounts, settings }) => {
 
     const onSubmit = (e) => {
         e.preventDefault()
+
+        // console.log(data)
+        // return
 
         axios.post("/setting-reports/profit-loss", {
             settings: data

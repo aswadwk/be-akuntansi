@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Account;
 use App\Models\AccountHelper;
 use App\Models\Journal;
+use App\Models\SettingReport;
 use App\Services\AccountService;
 use Illuminate\Http\Request;
 
@@ -167,8 +168,14 @@ class ReportController extends Controller
     // Lapaporan Keuangan
     public function profitLoss()
     {
+        $accountsProfitLoss = SettingReport::where('report_type', SettingReport::TYPE_PROFIT_LOSS)
+            ->get();
+
+        // dd($accountsProfitLoss);
+
+
         return inertia('Reports/ProfitLoss', [
-            'accounts' => Account::all(),
+            'accounts' => $accountsProfitLoss,
         ]);
     }
 }
