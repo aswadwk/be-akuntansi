@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Report\ProfitLossRequest;
 use App\Models\Account;
 use App\Models\AccountHelper;
 use App\Models\Journal;
 use App\Models\SettingReport;
 use App\Services\AccountService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ReportController extends Controller
 {
@@ -166,16 +168,35 @@ class ReportController extends Controller
     }
 
     // Lapaporan Keuangan
-    public function profitLoss()
+    public function profitLoss(ProfitLossRequest $request)
     {
         $accountsProfitLoss = SettingReport::where('report_type', SettingReport::TYPE_PROFIT_LOSS)
             ->get();
 
-        // dd($accountsProfitLoss);
+        $profitLoses = [];
 
+        foreach ($accountsProfitLoss as $account) {
+            // array of object
+            $profitLoses[] = [
+                'title' => $account->title,
+                'type' => $account->type,
+                'account_ids' => $account->account_ids,
+                'journals' => Journal::with(['account',])
+                    ->whereIn(
+                        'account_id',
+                        explode(',', $account->account_ids)
+                    )
+                    ->whereDate('date', '<=', $request->date ?? now())
+                    ->groupBy('account_id')
+                    ->select('account_id', 'date', 'type', 'amount', DB::raw('SUM(amount) as total'))
+                    ->orderBy('date', 'asc')
+                    ->get(),
+            ];
+        }
 
         return inertia('Reports/ProfitLoss', [
             'accounts' => $accountsProfitLoss,
+            'profitLosses' => $profitLoses,
         ]);
     }
 }

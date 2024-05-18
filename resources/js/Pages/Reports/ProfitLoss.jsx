@@ -1,48 +1,106 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Layout from '../../Shared/Layout'
+import { toIDR } from '../../Shared/utils'
+import InputDate from '../../Shared/InputDate';
 
-const ProfitLoss = ({ accounts }) => {
+
+
+const ProfitLoss = ({ accounts, profitLosses }) => {
+
+    const [filters, setFilters] = useState({
+        date: new Date(),
+    });
+
+    function calculateTotal(profitLossesParams, type) {
+        const profit = profitLossesParams.filter((item) => item.type === 'profit');
+        const loss = profitLossesParams.filter((item) => item.type === 'loss');
+
+        // console.log(profit, loss.journals)
+        console.log(profit[0].journals, loss[0].journals)
+
+        const totalProfit = profit[0].journals.reduce((acc, item) => acc + Number(item.total), 0);
+        const totalLoss = loss[0].journals.reduce((acc, item) => acc + Number(item.total), 0);
+
+        if (type === 'profit') return totalProfit;
+
+        if (type === 'loss') return totalLoss;
+
+        return totalProfit - totalLoss;
+    }
+
+
     return (
         <Layout left={'Laba Rugi'} right={<></>}>
-            <pre>
-                {JSON.stringify(accounts, null, 2)}
-            </pre>
-            <div className="card">
+            <div className="card mb-4">
+                <div className="card-body border-bottom">
+                    <div className="row">
+                        <div className="col-md-3 form-group">
+                            <div className="input-icon mb-2">
+                                <InputDate
+                                    format={'yyyy-MM-dd'}
+                                    label="Tanggal"
+                                    value={filters.date}
+                                    onChange={(value) => setFilters({ ...filters, date: value })}
+                                    isRequired
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div className="card overflow-hidden mb-4">
                 <div className="table-responsive">
                     <table className="table table-vcenter card-table">
                         <thead>
                             <tr>
                                 <th>Tanggal</th>
-                                <th>Keterangan</th>
-                                <th>Debet</th>
-                                <th>Kredit</th>
-                                <th>Saldo</th>
-                                {/* <th className="text-center">Aksi</th> */}
+                                <th>
+                                    <div className='d-flex justify-content-between'>
+                                        <span>Keterangan</span>
+                                        <span className='text-end me-5'>Total</span>
+                                    </div>
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
-                            {/* {journals.length === 0 && (
-                                <tr>
-                                    <td colSpan={8} className="text-center">
-                                        Data tidak ditemukan
-                                    </td>
+                            {profitLosses.map((item, index) => (
+                                <tr key={index}>
+                                    <td>{item.title}</td>
+                                    <table className='table'>
+                                        <tbody>
+                                            {item.journals.map((journal) => (
+                                                <tr key={journal.title}>
+                                                    <td className='text-start'>{journal.account.name}</td>
+                                                    <td className='text-end'>{toIDR(journal.total)}</td>
+                                                </tr>
+                                            ))}
+                                            <tr>
+                                                <td>Total</td>
+                                                <td className='text-end'>{
+                                                    toIDR(item.journals.reduce((acc, item) => acc + Number(item.total), 0))
+                                                }</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </tr>
-                            )}
-                            {journals.map((item) => (
-                                <tr key={item.id}>
-                                    <td>{toDayMonthYear(item.date)}</td>
-                                    <td>{item.description}</td>
-                                    <td>{toIDR(item.debit)}</td>
-                                    <td>{toIDR(item.credit)}</td>
-                                    <td>
-                                        {toIDR(item.balance)}
-                                    </td>
-                                </tr>
-                            ))} */}
+                            ))}
+                            <tr>
+                                <td colSpan={1}>Laba Rugi</td>
+                                <td className='text-end'>{
+                                    toIDR(calculateTotal(profitLosses))
+                                }</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
+            {/* <pre>
+                {JSON.stringify(profitLosses, null, 2)}
+            </pre>
+            <pre>
+                {JSON.stringify(accounts, null, 2)}
+            </pre> */}
+
         </Layout>
     )
 }
