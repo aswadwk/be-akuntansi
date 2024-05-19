@@ -171,7 +171,7 @@ class ReportController extends Controller
         ]);
     }
 
-    // Lapaporan Keuangan
+    // Laporan Keuangan
     public function profitLoss(ProfitLossRequest $request)
     {
         $accountsProfitLoss = SettingReport::where('report_type', SettingReport::TYPE_PROFIT_LOSS)
@@ -181,26 +181,78 @@ class ReportController extends Controller
 
         foreach ($accountsProfitLoss as $account) {
             // array of object
+            $accountJournals = Account::with(['journals'])
+                ->whereIn(
+                    'id',
+                    explode(',', $account->account_ids)
+                )
+                ->whereDate('created_at', '<=', $request->date ?? now())
+                ->get();
+
+            $accountJournals->each(function ($accountJournal) {
+
+                $debit = $accountJournal->journals->where('type', 'D')->sum('amount');
+                $credit = $accountJournal->journals->where('type', 'C')->sum('amount');
+
+                $accountJournal->debit = $debit;
+                $accountJournal->credit = $credit;
+
+                $accountJournal->total = $debit - $credit;
+            });
+
             $profitLoses[] = [
                 'title' => $account->title,
                 'type' => $account->type,
                 'account_ids' => $account->account_ids,
-                'journals' => Journal::with(['account',])
-                    ->whereIn(
-                        'account_id',
-                        explode(',', $account->account_ids)
-                    )
-                    ->whereDate('date', '<=', $request->date ?? now())
-                    ->groupBy('account_id')
-                    ->select('account_id', 'date', 'type', 'amount', DB::raw('SUM(amount) as total'))
-                    ->orderBy('date', 'asc')
-                    ->get(),
+                'journals' => $accountJournals,
             ];
         }
 
         return inertia('Reports/ProfitLoss', [
             'accounts' => $accountsProfitLoss,
             'profitLosses' => $profitLoses,
+        ]);
+    }
+
+    public function balanceSheet(Request $request)
+    {
+        $accountsProfitLoss = SettingReport::where('report_type', SettingReport::TYPE_BALANCE_SHEET)
+            ->get();
+
+        $profitLoses = [];
+
+        foreach ($accountsProfitLoss as $account) {
+            // array of object
+            $accountJournals = Account::with(['journals'])
+                ->whereIn(
+                    'id',
+                    explode(',', $account->account_ids)
+                )
+                ->whereDate('created_at', '<=', $request->date ?? now())
+                ->get();
+
+            $accountJournals->each(function ($accountJournal) {
+
+                $debit = $accountJournal->journals->where('type', 'D')->sum('amount');
+                $credit = $accountJournal->journals->where('type', 'C')->sum('amount');
+
+                $accountJournal->debit = $debit;
+                $accountJournal->credit = $credit;
+
+                $accountJournal->total = $debit - $credit;
+            });
+
+            $profitLoses[] = [
+                'title' => $account->title,
+                'type' => $account->type,
+                'account_ids' => $account->account_ids,
+                'journals' => $accountJournals,
+            ];
+        }
+
+        return inertia('Reports/BalanceSheet', [
+            'accounts' => $accountsProfitLoss,
+            'balanceSheets' => $profitLoses,
         ]);
     }
 }

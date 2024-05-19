@@ -83,13 +83,17 @@ Route::middleware(['auth', 'user.id'])->group(function () {
 
         // Laporan Keuangan
         Route::get('/reports/profit-loss', 'profitLoss'); // Laporan Laba Rugi
+        // Neraca
+        Route::get('/reports/balance-sheet', 'balanceSheet');
     });
 
     // Settings Report
     Route::controller(SettingReportController::class)->group(function () {
         Route::get('/setting-reports/profit-loss', 'profitLoss')->name('web.setting-report.profit-loss');
         Route::post('/setting-reports/profit-loss', 'storeProfitLoss');
-        Route::get('/setting-reports', 'profitLoss')->name('web.setting-report.profit-loss');
-        Route::post('/setting-reports', 'storeProfitLoss');
+        // Route::get('/setting-reports', 'profitLoss')->name('web.setting-report.profit-loss');
+        // Route::post('/setting-reports', 'storeProfitLoss');
+        Route::get('/setting-reports/balance-sheet', 'balanceSheet')->name('web.setting-report.balance-sheet');
+        Route::post('/setting-reports/balance-sheet', 'storeBalanceSheet');
     });
 });

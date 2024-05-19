@@ -28,8 +28,6 @@ class SettingReportController extends Controller
 
     public function storeProfitLoss(ProfitLossRequest $request)
     {
-
-
         try {
             DB::beginTransaction();
 
@@ -52,6 +50,52 @@ class SettingReportController extends Controller
             DB::commit();
 
             return redirect()->route('web.setting-report.profit-loss');
+        } catch (\Throwable $th) {
+            DB::rollBack();
+
+            return back()->with('error', $th->getMessage());
+        }
+    }
+
+    public function balanceSheet(Request $request)
+    {
+        $settings = SettingReport::where('report_type', SettingReport::TYPE_BALANCE_SHEET)
+            ->orderBy('order', 'asc')
+            ->get();
+
+        return inertia('Setting/Report/BalanceSheet', [
+            'accounts' => Account::all(),
+            'settings' => $settings->each(function ($setting) {
+                $setting->accounts = explode(',', $setting->account_ids);
+                $setting->section = (int) $setting->order;
+            }),
+        ]);
+    }
+
+    public function storeBalanceSheet(ProfitLossRequest $request)
+    {
+        try {
+            DB::beginTransaction();
+
+            SettingReport::where('report_type', SettingReport::TYPE_BALANCE_SHEET)->delete();
+
+            foreach ($request->settings as $setting) {
+
+                SettingReport::create([
+                    'report_type' => SettingReport::TYPE_BALANCE_SHEET,
+                    'title' => $setting['title'],
+                    'type' => $setting['type'],
+                    'sub_title' => $setting['sub_title'] ?? null,
+                    'order' => $setting['section'],
+                    // array to string
+                    'account_ids' => implode(',', $setting['accounts']),
+                    'created_by' => auth('web')->id()
+                ]);
+            }
+
+            DB::commit();
+
+            return redirect()->route('web.setting-report.balance-sheet');
         } catch (\Throwable $th) {
             DB::rollBack();
 

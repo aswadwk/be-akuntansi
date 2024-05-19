@@ -84,7 +84,7 @@ const Menu = () => {
                 <Link className="dropdown-item" href="/journals/new">
                     Ekuitas
                 </Link>
-                <Link className="dropdown-item" href="/financial-statements/balance-sheet">
+                <Link className="dropdown-item" href="/reports/balance-sheet">
                     Neraca
                 </Link>
                 <Link className="dropdown-item" href="/journals/new">
@@ -99,6 +99,9 @@ const Menu = () => {
             >
                 <Link className="dropdown-item" href="/setting-reports/profit-loss">
                     Laba Rugi
+                </Link>
+                <Link className="dropdown-item" href="/setting-reports/balance-sheet">
+                    Neraca
                 </Link>
                 <Link className="dropdown-item" href="/setting-users">
                     Users

@@ -1,90 +1,11 @@
-import React, { useState } from 'react'
 import Layout from '../../../Shared/Layout'
-import Input from '../../../Shared/Input'
-import { useForm } from '@inertiajs/react'
-import InputSelect from '../../../Shared/InputSelect'
-import InputMultiSelectWithSearch from '../../../Shared/InputMultiSelectWithSearch'
-import { IconEdit, IconTrash } from '@tabler/icons-react'
 import axios from 'axios'
-
-const randomId = () => {
-    return Math.random().toString(36).substr(2, 9);
-}
-
-const initialData = {
-    id: randomId(),
-    title: "",
-    section: 1,
-    sub_title: "",
-    type: "",
-    accounts: [],
-}
+import FormSettingReport from './Form'
 
 const ProfitLoss = ({ accounts, settings }) => {
-    const [form, setForm] = useState(initialData)
-    const [action, setAction] = useState('add')
 
-    const { data, setData, post, errors, transform } = useForm(settings || [])
 
-    const handleAdd = () => {
-        if (action === 'add') {
-
-            const newRows = [...data];
-
-            newRows.push(form);
-
-            setData(newRows)
-
-            setForm({
-                ...initialData,
-                id: randomId(),
-                section: form.section + 1
-            })
-
-            return
-        }
-
-        if (action === 'edit') {
-            const newRows = data.map((item) => {
-                if (item.id === form.id) {
-
-                    return {
-                        ...form,
-                        accounts: form.accounts.map((account) => account),
-                        section: parseInt(form.section),
-                        sub_title: form.sub_title,
-                        type: form.type,
-                        title: form.title,
-                    }
-                }
-
-                return item
-            })
-
-            setData(newRows)
-
-            setForm(initialData)
-
-            setAction('add')
-        }
-    }
-
-    const handleDelete = (id) => {
-        const newRows = data.filter((item) => item.id !== id)
-
-        setData(newRows)
-    }
-
-    const handleEdit = (item) => {
-        setAction('edit')
-        setForm(item)
-    }
-
-    const onSubmit = (e) => {
-        e.preventDefault()
-
-        // console.log(data)
-        // return
+    const onSubmit = (data) => {
 
         axios.post("/setting-reports/profit-loss", {
             settings: data
@@ -104,7 +25,13 @@ const ProfitLoss = ({ accounts, settings }) => {
 
     return (
         <Layout left={'Setting / Laba Rugi'} right={<></>}>
-            <div className="col-12">
+            <FormSettingReport
+                accounts={accounts}
+                settings={settings}
+                onSubmit={onSubmit}
+            />
+
+            {/* <div className="col-12">
                 <div className="card">
                     <div className="card-body">
                         <div className='row row-cards'>
@@ -255,15 +182,7 @@ const ProfitLoss = ({ accounts, settings }) => {
                         </button>
                     </div>
                 </div>
-
-                {/* <div className="card mt-3">
-                    <div className="card-body">
-                        <pre>
-                            {JSON.stringify(data, null, 2)}
-                        </pre>
-                    </div>
-                </div> */}
-            </div>
+            </div> */}
         </Layout>
     )
 }

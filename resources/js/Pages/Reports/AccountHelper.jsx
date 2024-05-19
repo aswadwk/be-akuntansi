@@ -43,7 +43,7 @@ const AccountHelper = ({ accounts, journals }) => {
     }, [filters]);
 
     return (
-        <Layout left={'Buku Besar'} right={<></>}>
+        <Layout left={'Buku Pembantu'} right={<></>}>
             <div className="card">
                 <div className="card-body border-bottom">
                     <div className="row">

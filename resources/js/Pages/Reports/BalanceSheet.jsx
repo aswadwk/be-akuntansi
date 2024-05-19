@@ -5,15 +5,15 @@ import InputDate from '../../Shared/InputDate';
 
 
 
-const ProfitLoss = ({ accounts, profitLosses }) => {
+const BalanceSheet = ({ accounts, balanceSheets }) => {
 
     const [filters, setFilters] = useState({
         date: new Date(),
     });
 
-    function calculateTotal(profitLossesParams, type) {
-        const profit = profitLossesParams.filter((item) => item.type === 'profit');
-        const loss = profitLossesParams.filter((item) => item.type === 'loss');
+    function calculateTotal(balanceSheetsParams, type) {
+        const profit = balanceSheetsParams.filter((item) => item.type === 'profit');
+        const loss = balanceSheetsParams.filter((item) => item.type === 'loss');
 
         // console.log(profit, loss.journals)
         console.log(profit[0].journals, loss[0].journals)
@@ -60,7 +60,7 @@ const ProfitLoss = ({ accounts, profitLosses }) => {
                             </tr>
                         </thead>
                         <tbody>
-                            {profitLosses.map((item, index) => (
+                            {balanceSheets.map((item, index) => (
                                 <>
                                     <tr>
                                         <td colspan="4">{item.title}</td>
@@ -93,58 +93,21 @@ const ProfitLoss = ({ accounts, profitLosses }) => {
                         </tbody>
                         <tfoot>
                             <tr>
-                                <td colspan="2" style={{ background: 'bisque' }}>Laba Rugi</td>
-                                <td className='text-end' style={{ background: 'bisque' }}>{toIDR(calculateTotal(profitLosses))}</td>
+                                <td colspan="2" style={{ background: 'bisque' }}>JUMLAH AKTIVA</td>
+                                <td className='text-end' style={{ background: 'bisque' }}>{toIDR(calculateTotal(balanceSheets, "profit"))}</td>
+                                <td style={{ background: 'bisque' }}></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" style={{ background: 'bisque' }}>JUMLAH PASSIVA</td>
+                                <td className='text-end' style={{ background: 'bisque' }}>{toIDR(calculateTotal(balanceSheets, "loss"))}</td>
                                 <td style={{ background: 'bisque' }}></td>
                             </tr>
                         </tfoot>
                     </table>
-                    {/* <table className="table table-vcenter card-table">
-                        <thead>
-                            <tr>
-                                <th>Akun</th>
-                                <th>
-                                    <div className='d-flex justify-content-between'>
-                                        <span>Keterangan</span>
-                                        <span className='text-end me-5'>Total</span>
-                                    </div>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {profitLosses.map((item, index) => (
-                                <tr key={index}>
-                                    <td>{item.title}</td>
-                                    <table className='table'>
-                                        <tbody>
-                                            {item.journals.map((journal) => (
-                                                <tr key={journal.title}>
-                                                    <td className='text-start'>{journal.account.name}</td>
-                                                    <td className='text-end'>{toIDR(journal.total)}</td>
-                                                </tr>
-                                            ))}
-                                            <tr>
-                                                <td>Total</td>
-                                                <td className='text-end'>{
-                                                    toIDR(item.journals.reduce((acc, item) => acc + Number(item.total), 0))
-                                                }</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </tr>
-                            ))}
-                            <tr>
-                                <td colSpan={1}>Laba Rugi</td>
-                                <td className='text-end'>{
-                                    toIDR(calculateTotal(profitLosses))
-                                }</td>
-                            </tr>
-                        </tbody>
-                    </table> */}
                 </div>
             </div>
             {/* <pre>
-                {JSON.stringify(profitLosses, null, 2)}
+                {JSON.stringify(balanceSheets, null, 2)}
             </pre>
             <pre>
                 {JSON.stringify(accounts, null, 2)}
@@ -154,4 +117,4 @@ const ProfitLoss = ({ accounts, profitLosses }) => {
     )
 }
 
-export default ProfitLoss
+export default BalanceSheet
