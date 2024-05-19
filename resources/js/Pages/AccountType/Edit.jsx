@@ -8,7 +8,7 @@ const Create = ({ accountType }) => {
     const { data, setData, put, errors, } = useForm({
         name: accountType?.name,
         code: accountType?.code,
-        position_normal: accountType?.position_normal,
+        // position_normal: accountType?.position_normal,
         description: accountType?.description,
     })
 
@@ -57,7 +57,7 @@ const FormAddAccountType = ({ onSubmit, data, errors, setData }) => {
                             value={data.code}
                         />
                     </div>
-                    <div className="mb-3">
+                    {/* <div className="mb-3">
                         <InputSelect placeholder={"Posisi Normal"} options={[
                             { label: "Debit", value: "D" },
                             { label: "Credit", value: "C" },
@@ -67,7 +67,7 @@ const FormAddAccountType = ({ onSubmit, data, errors, setData }) => {
                             error={errors.position_normal}
                             label={"Posisi Normal"}
                         />
-                    </div>
+                    </div> */}
                     <div className="mb-3">
                         <Input
                             label="Description"

@@ -146,20 +146,24 @@ class ReportController extends Controller
         $accounts = Account::with(['journals'])
             ->get();
 
-        $debit = 0;
-        $credit = 0;
+        // sum debit and credit for journals and set to account
+        $accounts->each(function ($account) {
+            $account->debit = (float)$account->journals->where('type', 'D')->sum('amount');
+            $account->credit = (float)$account->journals->where('type', 'C')->sum('amount');
 
-        $accounts->each(function ($account) use (&$debit, &$credit) {
-            $account->journals->each(function ($journal) use (&$debit, &$credit) {
-                $journal->debit = $journal->type === 'D' ? $journal->amount : 0;
-                $journal->credit = $journal->type === 'C' ? $journal->amount : 0;
+            if ($account->position_report === Account::REPORT_POSITION_BALANCE_SHEET) {
+                $account->balance_sheet_debit = $account->debit;
+                $account->balance_sheet_credit = $account->credit;
+                $account->profit_loss_debit = 0;
+                $account->profit_loss_credit = 0;
+            }
 
-                $debit += $journal->debit;
-                $credit += $journal->credit;
-            });
-
-            $account->debit = $debit;
-            $account->credit = $credit;
+            if ($account->position_report === Account::REPORT_POSITION_PROFIT_LOSS) {
+                $account->profit_loss_debit = $account->debit;
+                $account->profit_loss_credit = $account->credit;
+                $account->balance_sheet_debit = 0;
+                $account->balance_sheet_credit = 0;
+            }
         });
 
         return inertia('Reports/Worksheet', [

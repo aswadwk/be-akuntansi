@@ -2,10 +2,11 @@ import React, { useEffect, useRef, useState } from 'react'
 import Layout from '../../Shared/Layout'
 import InputSelectWithSearch from '../../Shared/InputSelectWithSearch'
 import InputDate from '../../Shared/InputDate'
-import { toYearMonthDay } from '../../Shared/utils'
+import { toIDR, toYearMonthDay } from '../../Shared/utils'
 import { router } from '@inertiajs/react'
 
 const Worksheet = ({ accounts }) => {
+    console.log(accounts)
 
     const [filters, setFilters] = useState({
         end_date: new Date(),
@@ -89,9 +90,68 @@ const Worksheet = ({ accounts }) => {
                                     <tr key={item.id}>
                                         <td>{item.code}</td>
                                         <td>{item.name}</td>
+                                        <td className='text-end'>{toIDR(item.balance_sheet_debit)}</td>
+                                        <td className='text-end'>{toIDR(item.balance_sheet_credit)}</td>
+                                        <td className='text-end'>{toIDR(item.profit_loss_debit)}</td>
+                                        <td className='text-end'>{toIDR(item.profit_loss_credit)}</td>
+                                        <td className='text-end'>{toIDR(item.debit)}</td>
+                                        <td className='text-end'>{toIDR(item.credit)}</td>
                                     </tr>
                                 ))}
                             </tbody>
+                            <tfoot>
+                                <tr style={{ background: 'bisque' }}>
+                                    <td colSpan={2} className="text-end">
+                                        Total
+                                    </td>
+                                    <td className="text-end">
+                                        {toIDR(accounts.reduce((acc, item) => acc + Number(item.balance_sheet_debit), 0))}
+                                    </td>
+                                    <td className="text-end">
+                                        {toIDR(accounts.reduce((acc, item) => acc + Number(item.balance_sheet_credit), 0))}
+                                    </td>
+                                    <td className="text-end">
+                                        {toIDR(accounts.reduce((acc, item) => acc + Number(item.profit_loss_debit), 0))}
+                                    </td>
+                                    <td className="text-end">
+                                        {toIDR(accounts.reduce((acc, item) => acc + Number(item.profit_loss_credit), 0))}
+                                    </td>
+                                    <td className="text-end">
+                                        {toIDR(accounts.reduce((acc, item) => acc + Number(item.debit), 0))}
+                                    </td>
+                                    <td className="text-end">
+                                        {toIDR(accounts.reduce((acc, item) => acc + Number(item.credit), 0))}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colSpan={3} className="text-end"></td>
+                                    <td className="text-end">Laba / Rugi</td>
+
+                                    <td className="text-end" style={{ background: 'bisque' }}>
+                                        -
+                                    </td>
+                                    <td className="text-end" style={{ background: 'bisque' }}>
+                                        0
+                                    </td>
+                                    <td className="text-end" style={{ background: 'bisque' }}>
+                                        -
+                                    </td>
+                                    <td className="text-end" style={{ background: 'bisque' }}>
+                                        0
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colSpan={5} className="text-center"></td>
+                                    <td className="text-center">Balance</td>
+
+                                    <td className="text-end" style={{ background: 'bisque' }}>
+                                        0
+                                    </td>
+                                    <td className="text-end" style={{ background: 'bisque' }}>
+                                        0
+                                    </td>
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
                 </div>

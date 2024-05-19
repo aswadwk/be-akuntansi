@@ -43,7 +43,7 @@ const Index = ({ accountTypes }) => {
                                 <tr>
                                     <th>Name</th>
                                     <th>Code</th>
-                                    <th>Position Normal</th>
+                                    {/* <th>Position Normal</th> */}
                                     <th>Description</th>
                                     <th>Created At</th>
                                     <th></th>
@@ -55,7 +55,7 @@ const Index = ({ accountTypes }) => {
                                         <tr key={index}>
                                             <td>{accountType.name}</td>
                                             <td>{accountType.code}</td>
-                                            <td>{accountType.position_normal === "D" ? 'Debit' : 'Credit'}</td>
+                                            {/* <td>{accountType.position_normal === "D" ? 'Debit' : 'Credit'}</td> */}
                                             <td>{accountType.description}</td>
                                             <td>{toYearMonthDayHourMinute(accountType.created_at)}
                                                 <br />

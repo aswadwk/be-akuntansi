@@ -149,8 +149,8 @@ class ReportController extends Controller
         }
 
         foreach ($_neraca_lajur as $a) {
-            $a->DEBET += $a->type === 'D' ? $a->balance : 0;
-            $a->CREDIT += $a->type === 'C' ? $a->balance : 0;
+            // $a->DEBET += $a->type === 'D' ? $a->balance : 0;
+            // $a->CREDIT += $a->type === 'C' ? $a->balance : 0;
         }
 
         if ($_neraca_lajur)

@@ -89,5 +89,7 @@ Route::middleware(['auth', 'user.id'])->group(function () {
     Route::controller(SettingReportController::class)->group(function () {
         Route::get('/setting-reports/profit-loss', 'profitLoss')->name('web.setting-report.profit-loss');
         Route::post('/setting-reports/profit-loss', 'storeProfitLoss');
+        Route::get('/setting-reports', 'profitLoss')->name('web.setting-report.profit-loss');
+        Route::post('/setting-reports', 'storeProfitLoss');
     });
 });
