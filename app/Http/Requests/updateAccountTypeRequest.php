@@ -26,7 +26,7 @@ class updateAccountTypeRequest extends FormRequest
         return [
             'code' => 'nullable|string',
             'name' => 'nullable|string',
-            'position_normal' => 'nullable|in:D,C',
+            // 'position_normal' => 'nullable|in:D,C',
             'description' => 'nullable|string',
         ];
     }

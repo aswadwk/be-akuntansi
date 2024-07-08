@@ -7,6 +7,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\JournalController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\SettingReportController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -64,7 +66,34 @@ Route::middleware(['auth', 'user.id'])->group(function () {
         Route::delete('/journals/{transactionId}', 'delete');
     });
 
+    // Settings
+    Route::controller(UserController::class)->group(function () {
+        Route::get('/setting-users', 'index')->name('web.users.index');
+        Route::get('/setting-users/create', 'create');
+        Route::post('/setting-users', 'store');
+        Route::get('/setting-users/{userId}/edit', 'edit');
+        Route::put('/setting-users/{userId}', 'update');
+        Route::delete('/setting-users/{userId}', 'delete');
+    });
+
     Route::controller(ReportController::class)->group(function () {
         Route::get('/reports/general-ledger/{accountId?}', 'generalLedger');
+        Route::get('/reports/account-helper/{accountHelperId?}', 'accountHelper'); // Buku besar
+        Route::get('/reports/worksheet', 'worksheet'); // Neraca Lajur
+
+        // Laporan Keuangan
+        Route::get('/reports/profit-loss', 'profitLoss'); // Laporan Laba Rugi
+        // Neraca
+        Route::get('/reports/balance-sheet', 'balanceSheet');
+    });
+
+    // Settings Report
+    Route::controller(SettingReportController::class)->group(function () {
+        Route::get('/setting-reports/profit-loss', 'profitLoss')->name('web.setting-report.profit-loss');
+        Route::post('/setting-reports/profit-loss', 'storeProfitLoss');
+        // Route::get('/setting-reports', 'profitLoss')->name('web.setting-report.profit-loss');
+        // Route::post('/setting-reports', 'storeProfitLoss');
+        Route::get('/setting-reports/balance-sheet', 'balanceSheet')->name('web.setting-report.balance-sheet');
+        Route::post('/setting-reports/balance-sheet', 'storeBalanceSheet');
     });
 });

@@ -28,6 +28,7 @@ class AddJournalRequest extends FormRequest
             'description' => 'nullable|string',
             'journals' => 'required|array',
             'account_helper_id'  => 'nullable|string',
+            'status'             => 'nullable|string|in:DRAFT,APPROVED,REJECTED',
 
             'journals.*.amount'      => 'required|numeric',
             'journals.*.account_id'  => 'required|string',

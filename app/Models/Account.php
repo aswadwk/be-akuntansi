@@ -13,6 +13,9 @@ class Account extends Model
 {
     use HasFactory, Uuid, SoftDeletes, Timestamp;
 
+    const REPORT_POSITION_BALANCE_SHEET = 'balance sheet';  // Neraca
+    const REPORT_POSITION_PROFIT_LOSS = 'profit and loss';  // Laba Rugi
+
     public $guarded = [];
 
     public function accountType()
@@ -30,5 +33,10 @@ class Account extends Model
         return Attribute::make(
             get: fn ($value) => + ($value),
         );
+    }
+
+    public function journals()
+    {
+        return $this->hasMany(Journal::class, 'account_id', 'id');
     }
 }

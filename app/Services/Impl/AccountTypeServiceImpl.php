@@ -76,9 +76,9 @@ class AccountTypeServiceImpl implements AccountTypeService
             $accountType->name = $attr['name'];
         }
 
-        if (isset($attr['position_normal'])) {
-            $accountType->position_normal = $attr['position_normal'];
-        }
+        // if (isset($attr['position_normal'])) {
+        //     $accountType->position_normal = $attr['position_normal'];
+        // }
 
         if (isset($attr['description'])) {
             $accountType->description = $attr['description'];

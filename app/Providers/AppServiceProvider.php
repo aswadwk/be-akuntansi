@@ -16,6 +16,7 @@ use App\Services\Impl\JournalServiceImpl;
 use App\Services\Impl\TransactionServiceImpl;
 use App\Services\JournalService;
 use App\Services\TransactionService;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 
@@ -71,5 +72,13 @@ class AppServiceProvider extends ServiceProvider
         if (!$this->app->environment('local')) {
             URL::forceScheme('https');
         }
+
+        // event db query
+        DB::listen(function ($query) {
+            if (config('app.debug')) {
+                info("Query: " . $query->sql);
+                info($query->bindings);
+            }
+        });
     }
 }

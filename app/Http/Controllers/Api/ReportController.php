@@ -149,8 +149,8 @@ class ReportController extends Controller
         }
 
         foreach ($_neraca_lajur as $a) {
-            $a->DEBET += $a->type === 'D' ? $a->balance : 0;
-            $a->CREDIT += $a->type === 'C' ? $a->balance : 0;
+            // $a->DEBET += $a->type === 'D' ? $a->balance : 0;
+            // $a->CREDIT += $a->type === 'C' ? $a->balance : 0;
         }
 
         if ($_neraca_lajur)
@@ -161,7 +161,7 @@ class ReportController extends Controller
 
     public function buku_pembantu($id)
     {
-
+        // dd($id);
         $buku_pembantu = DB::select("SELECT
         p.id,
         j.date,
@@ -176,18 +176,19 @@ class ReportController extends Controller
         END AS CREDIT
         FROM
             `journals` AS j
-        INNER JOIN partners AS p
+        INNER JOIN account_helpers AS p
         ON
-            j.partners_id = p.id
+            j.account_helper_id = p.id
         WHERE
-            j.partners_id IS NOT NULL
+            j.account_helper_id IS NOT NULL
             AND j.deleted_at IS NULL
             AND p.id = '$id'
-            AND j.account_id IN(
-            SELECT id
-            FROM accounts
-            WHERE account_type_id = '113000' OR account_type_id = '211000'
-        )");
+        --     AND j.account_id IN(
+        --     SELECT id
+        --     FROM accounts
+        --     WHERE account_type_id = '113000' OR account_type_id = '211000'
+        -- )
+        ");
 
         $saldo = 0;
         foreach ($buku_pembantu as $item) {

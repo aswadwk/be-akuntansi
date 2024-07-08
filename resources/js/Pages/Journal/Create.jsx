@@ -5,9 +5,11 @@ import InputSelectWithSearch from '../../Shared/InputSelectWithSearch';
 import InputDate from '../../Shared/InputDate';
 import { toYearMonthDay } from '../../Shared/utils';
 import InputNumber from '../../Shared/InputNumber';
+import InputSelect from '../../Shared/InputSelect';
 
 const Create = ({ accounts, accountHelpers }) => {
     const { data, setData, post, transform, errors, processing } = useForm({
+        status: 'APPROVED',
         date: null,
         description: '',
         account_helper_id: '',
@@ -117,6 +119,22 @@ const Create = ({ accounts, accountHelpers }) => {
                                     onChange={(value) => setData({ ...data, date: value })}
                                     error={errors.date}
                                     isRequired
+                                />
+                            </div>
+                            <div className="mb-3 col-sm-6 col-md-2">
+                                <InputSelect
+                                    isRequired
+                                    label="Status"
+                                    placeholder={'Pilih Status'}
+                                    options={[
+                                        { label: 'Approve', value: "APPROVED" },
+                                        { label: 'Draft', value: "DRAFT" },
+                                    ]}
+                                    value={data.status}
+                                    onChange={(event) => {
+                                        setData({ ...data, status: event.target.value });
+                                    }}
+                                    error={errors.status}
                                 />
                             </div>
                             <div className="mb-3 col-sm-6 col-md-4">
@@ -254,22 +272,31 @@ const Create = ({ accounts, accountHelpers }) => {
                         </div>
                     </div>
                     <div className="card-footer text-end">
-                        <div className="d-flex gap-2 justify-content-end">
-                            <button type="button" onClick={handleReset} className="btn btn-outline-secondary">
-                                Reset
+                        <div className="d-flex justify-content-between">
+                            <button type="button" onClick={
+                                () => {
+                                    window.history.back();
+                                }
+                            } className="btn btn-outline-secondary">
+                                Cancel
                             </button>
-                            {filterType(data.journals, 'D') === filterType(data.journals, 'C') ? (
-                                <button className="btn btn-primary gap-2" type="submit">
-                                    {processing && (
-                                        <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" />
-                                    )}
-                                    Simpan
+                            <div className='d-flex gap-2 justify-content-between'>
+                                <button type="button" onClick={handleReset} className="btn btn-outline-warning">
+                                    Reset
                                 </button>
-                            ) : (
-                                <button className="btn btn-primary" disabled type='button'>
-                                    Simpan
-                                </button>
-                            )}
+                                {filterType(data.journals, 'D') === filterType(data.journals, 'C') ? (
+                                    <button className="btn btn-primary gap-2" type="submit">
+                                        {processing && (
+                                            <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" />
+                                        )}
+                                        Simpan
+                                    </button>
+                                ) : (
+                                    <button className="btn btn-primary" disabled type='button'>
+                                        Simpan
+                                    </button>
+                                )}
+                            </div>
                         </div>
                     </div>
                 </form>

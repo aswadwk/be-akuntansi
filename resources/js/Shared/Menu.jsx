@@ -4,6 +4,7 @@ import { IconDatabase, IconNotebook, IconReport } from '@tabler/icons-react';
 import { usePage } from '@inertiajs/react'
 import { IconHome } from "@tabler/icons-react";
 import MenuItem from "./MenuItem";
+import { IconSettings } from "@tabler/icons-react";
 
 
 
@@ -61,11 +62,11 @@ const Menu = () => {
                 <Link className="dropdown-item" href="/reports/general-ledger">
                     General Ledger
                 </Link>
-                <Link className="dropdown-item" href="/reports/neraca-lajur">
-                    Neraca Lajur
-                </Link>
-                <Link className="dropdown-item" href="/journals/new">
+                <Link className="dropdown-item" href="/reports/account-helper">
                     Buku Pembantu
+                </Link>
+                <Link className="dropdown-item" href="/reports/worksheet">
+                    Neraca Lajur
                 </Link>
                 <Link className="dropdown-item" href="/journals/new">
                     Ringkasan Bisnis
@@ -77,18 +78,33 @@ const Menu = () => {
                 isActive={isActive('/financial-statements')}
                 type="dropdown"
             >
-                <Link className="dropdown-item" href="/financial-statements/balance-sheet">
-
-                    Neraca
-                </Link>
-                <Link className="dropdown-item" href="/financial-statements/profit-loss">
+                <Link className="dropdown-item" href="/reports/profit-loss">
                     Laba Rugi
+                </Link>
+                <Link className="dropdown-item" href="/journals/new">
+                    Ekuitas
+                </Link>
+                <Link className="dropdown-item" href="/reports/balance-sheet">
+                    Neraca
                 </Link>
                 <Link className="dropdown-item" href="/journals/new">
                     Arus Kas
                 </Link>
-                <Link className="dropdown-item" href="/journals/new">
-                    Ekuitas
+            </MenuItem>
+            <MenuItem
+                title="Settings"
+                icon={<IconSettings />}
+                isActive={isActive('/settings')}
+                type="dropdown"
+            >
+                <Link className="dropdown-item" href="/setting-reports/profit-loss">
+                    Laba Rugi
+                </Link>
+                <Link className="dropdown-item" href="/setting-reports/balance-sheet">
+                    Neraca
+                </Link>
+                <Link className="dropdown-item" href="/setting-users">
+                    Users
                 </Link>
             </MenuItem>
         </ul>

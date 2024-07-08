@@ -26,7 +26,7 @@ class AccountTypeRequest extends FormRequest
         return [
             'name' => 'required|string|min:3|max:255',
             'code' => 'required|string|min:3|max:255',
-            'position_normal' => 'required|in:D,C',
+            // 'position_normal' => 'required|in:D,C',
             'description' => 'nullable|string|min:3',
             'user_id' => 'nullable|string'
         ];

@@ -52,7 +52,6 @@ const GeneralLedger = ({ generalLedger, accounts }) => {
             <div className="card">
                 <div className="card-body border-bottom">
                     <div className="row">
-
                         <div className="col-md-3 form-group">
                             <InputSelectWithSearch
                                 isRequired
@@ -80,7 +79,7 @@ const GeneralLedger = ({ generalLedger, accounts }) => {
                 </div>
             </div>
             <div className="card mt-3">
-                <div className="card-body border-bottom py-3">
+                <div className="card-body border-bottom p-0">
                     <div className="table-responsive">
                         <table className="table table-vcenter card-table">
                             <thead>
@@ -141,13 +140,6 @@ const GeneralLedger = ({ generalLedger, accounts }) => {
                                 ))}
                             </tbody>
                         </table>
-                    </div>
-                    <div className="card-footer d-flex justify-content-between">
-                        <p className="m-0 text-muted">
-                            Showing <span>0</span> of
-                            <span>0</span>
-                            entries
-                        </p>
                     </div>
                 </div>
             </div>
